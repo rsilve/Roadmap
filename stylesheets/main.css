@@ -1,0 +1,229 @@
+html {
+    height: 100%;
+}
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #FFF;
+    color: #555;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+.toolbar {
+    position: fixed;
+    background: white;
+    border-bottom: 1px solid #BBB;
+    width: 100%;
+    height: 40px;
+    z-index: 2;
+}
+.toolbar-container {
+    padding: 8px 40px;
+}
+
+.toolbar-container:after {
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.clearfix:after {
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.timebar {
+    position: fixed;
+    background: white;
+    border-bottom: 1px solid #BBB;
+    padding-top: 40px;
+    width: 100%;
+    z-index: 1;
+}
+
+.TimeBar-Prev{
+    float: left;
+    width: 50%;
+    text-align: center;
+    cursor: pointer;
+}
+.TimeBar-Prev:hover,  .TimeBar-Next:hover {
+    background-color: #EEE;
+}
+
+.TimeBar-Next{
+    float: left;
+    width: 50%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.TimeBar-Ticks {
+    min-width: 2400px;
+    padding-left: 40px;
+}
+.timebar .month {
+    float: left;
+    width: 80px;
+    max-width: 80px;
+    font-size: 10px;
+}
+
+.timebar .startyear {
+    font-weight: bold
+}
+.timebar .quarter {
+    text-decoration: underline;
+}
+
+.grid-content{
+    background-color: transparent;
+    background-image: linear-gradient(90deg,  transparent 49%,  rgba(0,0,0,.1) 50%, transparent 51%, transparent);
+    min-height: 100%;
+    background-size: 80px 80px;
+    padding: 0;
+    margin: 0;
+}
+
+#project-list {
+    padding : 80px 0px;
+}
+
+
+
+.ProjectList {
+   list-style-type: none;
+   margin: 0;
+   padding: 0;
+}
+
+
+.Project {
+    position : relative;
+    padding: 8px 42px 18px 42px;
+}
+
+.Project:nth-child(odd) {
+    background-color: rgba(230,230,230,.5);
+}
+
+
+.Project:hover {
+    background-color: rgba(215,215,215,.5);
+}
+
+.Project .row-over {
+    display: none;
+}
+.Project:hover .row-over {
+    display: block;
+}
+
+
+.Project-Name {
+    padding-right: 8px;
+}
+.project-name-edit {
+    color: #AAA;
+    font-size: 0.8em;
+}
+
+.Project-timebar {
+    height: 8px;
+    background-color: rgba(91, 192, 222, 0.7);
+    width: 8px;
+    margin-left: 40px;
+}
+
+
+.Project-Description-Text {
+    width: 550px;
+    height: 150px;
+    border-radius: 3px;
+    margin-left: 8px;
+    border-color: #ccc;
+}
+
+
+.Project-Attendees {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.Project-Attendee {
+    display: inline-block;
+    border-radius: 5px;
+    background-color: rgba(91, 192, 222, 0.7);
+    padding: 0 8px 0 8px;
+    margin-right: 12px;
+}
+
+.Project-Attendee > .delete-icon {
+    width: 8px;
+    position: relative;
+    padding-left: 12px;
+    padding-right: 0px;
+}
+.Project-Attendee > .delete-icon:after {
+    color: white;
+}
+
+.Project-delete.delete-icon {
+    left: 20px;
+    top : 7px;
+}
+
+.delete-icon {
+    position: absolute;
+    padding: 0 5px;
+    cursor: pointer;
+}
+.delete-icon:after {
+    font-size: 10px;
+    font-weight: bold;
+    content : "✕";
+    color: #ccc;
+}
+
+
+.collapse-panel.collapse-panel-close {
+    display: none;
+}
+.collapse-panel.collapse-panel-open {
+    display: block;
+}
+.collapse-toggle {
+    font-family: 'FontAwesome';
+    position: absolute;
+    padding: 0 5px;
+    cursor: pointer;
+    left: 20px;
+}
+.collapse-toggle.collapse-toggle-close:after {
+    font-size: 12px;
+    font-weight: bold;
+    content : "\f101";
+    color: #ccc;
+}
+.collapse-toggle.collapse-toggle-open:after {
+    font-size: 12px;
+    font-weight: bold;
+    content : "\f103";
+    color: #ccc;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.pull-right {
+    float: right;
+}
+
+.pull-left {
+    float: left;
+}
+

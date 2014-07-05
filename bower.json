@@ -1,0 +1,26 @@
+{
+  "name": "RoadmapV2",
+  "version": "0.0.0",
+  "authors": [
+    "Robert Silve <robert@silve.net>"
+  ],
+  "main": "index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "~0.10.0",
+    "eventEmitter": "~4.2.7",
+    "momentjs": "~2.7.0",
+    "toastr": "~2.0.3",
+    "font-awesome": "~4.1.0",
+    "normalize.css": "~3.0.1",
+    "requirejs": "~2.1.14"
+  }
+}
