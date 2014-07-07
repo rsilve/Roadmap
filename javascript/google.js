@@ -3,7 +3,28 @@
  */
 
 
-define(["jquery",  "actions/ProjectActions" ], function($, actions) {
+(function (factory) {
+
+    // Enable multiple loading tool
+
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(["when", "rest", "actions/ProjectActions"],  factory);
+    } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+        // Node js
+        var when = require("when");
+        var rest = require("rest");
+        var actions = require("actions/ProjectActions")
+
+        module.exports = factory(when, rest, actions)
+    } else {
+        // Browser globals
+    }
+})(function(when, rest, actions) {
+
+
+    // Rest client
+    var client = rest;
 
     // constants for google api
     var clientId = '914287465512-b14fug3f6kgg1a1t1bm6srvq0d6q5l63.apps.googleusercontent.com';
@@ -14,31 +35,32 @@ define(["jquery",  "actions/ProjectActions" ], function($, actions) {
     // auth object is deferred
     // use it before each request to be sure that
     // auth process is completed
-    var auth = $.Deferred();
-    // start the authorization process
-    gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, function(result) {
-        if (result && !result.error) {
-            auth.resolve(gapi.auth.getToken());
-        } else {
-           actions.authFailed();
-           auth.reject("Not authorized")
-        }
+    var auth = when.promise(function(resolve, reject, notify) {
+        // start the authorization process
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, function (result) {
+            if (result && !result.error) {
+                resolve(gapi.auth.getToken());
+            } else {
+                actions.authFailed();
+                reject("Not authorized")
+            }
+        });
     });
 
     // helper to create ajax request
     function request(c) {
         c = c || {};
-        c.type = c.method || "GET";
-        c.url = google_api +  c.path;
+        c.method = c.method || "GET";
+        c.path = google_api +  c.path;
+        c.entity = c.data;
 
         return auth.then(function (auth) {
             c.headers = {
                 // this header is required by google api
-                "Authorization": auth.token_type + " " + auth.access_token
+                "Authorization": auth.token_type + " " + auth.access_token,
+                "Content-Type" :  "application/json"
             };
-            c.contentType = "application/json";
-            c.dataType = 'json';
-            return $.ajax(c)
+            return client(c)
         });
     };
 

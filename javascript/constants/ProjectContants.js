@@ -3,7 +3,20 @@
  * These constants are used to identify actions
  */
 
-define([], function() {
+(function (factory) {
+
+    // Enable multiple loading tool
+
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([], factory);
+    } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+        // Node js
+        module.exports = factory()
+    } else {
+        // Browser globals
+    }
+})(function() {
 
     return {
         PROJECT_CREATE: "PROJECT_CREATE",

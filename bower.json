@@ -21,6 +21,9 @@
     "toastr": "~2.0.3",
     "font-awesome": "~4.1.0",
     "normalize.css": "~3.0.1",
-    "requirejs": "~2.1.14"
+    "requirejs": "~2.1.14",
+    "jasmine": "~2.0.0",
+    "when": "~3.3.1",
+    "rest": "~1.1.1"
   }
 }

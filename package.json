@@ -1,0 +1,32 @@
+{
+  "name": "Roadmap",
+  "version": "0.0.0",
+  "description": "Roadmap Dojo Coding --------------------",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-connect": "^0.8.0",
+    "grunt-contrib-nodeunit": "^0.4.1"
+  },
+  "devDependencies": {
+    "jquery": "^2.1.1",
+    "when": "^3.3.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rsilve/Roadmap.git"
+  },
+  "author": "robert@silve.net",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rsilve/Roadmap/issues"
+  },
+  "homepage": "https://github.com/rsilve/Roadmap"
+}

@@ -11,7 +11,22 @@
  */
 
 
-define(["jquery"], function($){
+(function (factory) {
+
+    // Enable multiple loading tool
+
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(["when"], factory);
+    } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+        // Node js
+        var when = require("when")
+        module.exports = factory(when)
+    } else {
+        // Browser globals
+    }
+})( function(when){
+
 
     // Base object dispatcher
     function Dispatcher() {
@@ -34,31 +49,36 @@ define(["jquery"], function($){
         this._callbacks.forEach(function(callback) {
             self._addPromise(callback, payload);
         });
-        return $.when.apply(null, this._promises).then(null, function(reason) {
+        return when.all(this._promises).catch(function(reason) {
             self._recovers.forEach(function (callback) {
-                self._addPromiseRecover(callback, reason);
+                self._addPromiseRecover(callback, reason, payload);
             });
-            return $.when.apply(null, self._recoverPromises)
+            if (self._recoverPromises.length > 0) {
+                return when.all(self._recoverPromises)
+            } else {
+                return when.reject(reason)
+            }
+
         })
     };
 
     // helper : when an action is fired transform a callback in promise
     Dispatcher.prototype._addPromise = function(callback, payload) {
-        var deferred = callback(payload)
-        this._promises.push(deferred);
+        var promise = callback(payload);
+        this._promises.push(promise);
     };
 
     // helper : transform a callback in promise that will be use to recover after
     // failed process
     Dispatcher.prototype._addPromiseRecover = function(callback, payload) {
-
-        var deferred = new $.Deferred()
-        if (callback(payload)) {
-            deferred.resolve(payload);
-        } else {
-            deferred.reject(new Error('Dispatcher callback unsuccessful'));
-        }
-        this._recoverPromises.push(deferred);
+        var promise = when.promise(function(resolve, reject, notify) {
+            if (callback(payload)) {
+                resolve(payload);
+            } else {
+                reject(new Error('Dispatcher callback unsuccessful'));
+            }
+        });
+       this._recoverPromises.push(promise);
     };
 
     // helper : before dispatch an action clear all promises
@@ -109,29 +129,32 @@ define(["jquery"], function($){
         promiseIndexes.forEach(function(index) {
             selectedPromises.push(self._promises[index]);
         });
-        return $.when.apply(null, selectedPromises).then(callback);
+
+        return when.all(selectedPromises).then(callback);
     };
 
 
     // Allow a store to do something after an error occured
     Dispatcher.prototype.waitForError = function( /*function*/ callback) {
         this._recovers.push(callback)
-        return $.Deferred().resolve()
+        return when.resolve();
     };
 
     // Allow a store to create a deferred process
-    Dispatcher.prototype.defer = function(callback) {
-        var deferred = new $.Deferred()
-        if (callback()) {
-            deferred.resolve();
-        } else {
-            deferred.reject(new Error('Dispatcher callback unsuccessful'));
-        }
-        return deferred;
+    // callback must return true (for resolve) or false (to reject)
+    Dispatcher.prototype.defer = function(/*function*/ callback) {
+        return when.promise(function(resolve, reject, notify) {
+            if (callback()) {
+                resolve(true);
+            } else {
+                reject(new Error('Dispatcher callback unsuccessful'));
+            }
+        });
     };
 
-    // Helper for creating a deferred that don nothing and alwyas resolve
-    Dispatcher.prototype.noop = function() { return new $.Deferred().resolve() }
+    // Helper for creating a deferred that do nothing and always resolve
+    Dispatcher.prototype.noop = function(value) { return when.resolve(value)};
+
 
     return Dispatcher
 

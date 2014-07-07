@@ -2,7 +2,23 @@
  * This module list all possible actions in the app
  */
 
-define(["dispatcher/AppDispatcher", "constants/ProjectContants"], function(dispatcher, constants) {
+
+(function (factory) {
+
+    // Enable multiple loading tool
+
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(["dispatcher/AppDispatcher", "constants/ProjectContants"], factory);
+    } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+        // Node js
+        var dispatcher = require("../dispatcher/AppDispatcher");
+        var constants = require("../constants/ProjectContants");
+        module.exports = factory(dispatcher, constants)
+    } else {
+        // Browser globals
+    }
+})(function(dispatcher, constants) {
 
     return  {
         // create a project given is name

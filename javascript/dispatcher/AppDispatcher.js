@@ -2,7 +2,21 @@
  * This module implement a dispatcher
  */
 
-define(["dispatcher/Dispatcher"], function(Dispatcher){
+(function (factory) {
+
+    // Enable multiple loading tool
+
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(["dispatcher/Dispatcher"], factory);
+    } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+        // Node js
+        var Dispatcher = require("../dispatcher/Dispatcher")
+        module.exports = factory(Dispatcher)
+    } else {
+        // Browser globals
+    }
+})(function(Dispatcher){
 
     function AppDispatcher() {}
 
@@ -48,4 +62,4 @@ define(["dispatcher/Dispatcher"], function(Dispatcher){
 
     return new AppDispatcher();
 
-})
+});

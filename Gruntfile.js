@@ -9,6 +9,10 @@ module.exports = function(grunt) {
                 }
             }
         },
+        // Before generating any new files, remove any previously-created files.
+        clean: {
+            tests: ['tmp']
+        },
         // Unit tests.
         nodeunit: {
             tests: ['test/*_test.js']
@@ -17,6 +21,9 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+
+    grunt.registerTask('test', ['clean', 'nodeunit']);
     grunt.registerTask('default', ['connect']);
 };
 
