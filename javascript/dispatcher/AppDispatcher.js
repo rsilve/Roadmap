@@ -28,13 +28,8 @@
      * as a view action.  Another variant here could be handleServerAction.
      * @param  {object} action The data coming from the view.
      */
-    AppDispatcher.prototype.handleViewAction = function(action) {
-       this.dispatch({
-            source: 'VIEW_ACTION',
-            action: action
-        }).catch(function(reason) {
-           console.log(reason)
-       })
+    AppDispatcher.prototype.handleViewAction = function(/* object */ action) {
+       return this.dispatch(action)
     };
 
     // helper for register map of callbacks
@@ -51,10 +46,9 @@
     AppDispatcher.prototype.registerCallbacks = function(callbacks) {
         var self = this;
         return this.register(function(payload) {
-            var action = payload.action;
-            if (callbacks[action.actionType])
-              return callbacks[action.actionType](action);
-            else
+            if (callbacks[payload.actionType]) {
+                return callbacks[payload.actionType](payload)
+            } else
               return self.noop();
         })
     };

@@ -42,14 +42,9 @@
         return this._callbacks.length - 1; // index
     };
 
-    // method for dispatch an action to the stores
-    Dispatcher.prototype.dispatch = function(payload) {
-        this._clearPromises();
-        var self = this;
-        this._callbacks.forEach(function(callback) {
-            self._addPromise(callback, payload);
-        });
-        return when.all(this._promises).catch(function(reason) {
+    // helper factory for error recovery callback
+    var recover = function(self, payload) {
+        return function (reason) {
             self._recovers.forEach(function (callback) {
                 self._addPromiseRecover(callback, reason, payload);
             });
@@ -59,8 +54,20 @@
                 return when.reject(reason)
             }
 
-        })
+        }
     };
+    // method for dispatch an action to the stores
+    Dispatcher.prototype.dispatch = function(payload) {
+        this._clearPromises();
+        var self = this;
+        this._callbacks.forEach(function(callback) {
+            self._addPromise(callback, payload);
+        });
+        return when.all(this._promises).catch(recover(self, payload))
+    };
+
+
+
 
     // helper : when an action is fired transform a callback in promise
     Dispatcher.prototype._addPromise = function(callback, payload) {
@@ -87,6 +94,14 @@
         this._recovers = [];
         this._recoverPromises = [];
 
+    };
+
+    // helper : clear all callback registered (for testing purpose)
+    Dispatcher.prototype.clearAll = function() {
+        this._callbacks = [];
+        this._recovers = [];
+        this._promises = [];
+        this._recoverPromises = [];
     };
 
     /**
@@ -152,8 +167,10 @@
         });
     };
 
-    // Helper for creating a deferred that do nothing and always resolve
-    Dispatcher.prototype.noop = function(value) { return when.resolve(value)};
+    // Helper for creating a deferred that always resolve
+    Dispatcher.prototype.noop = function(value) { return when.resolve(value) };
+    // Helper for creating a deferred that always reject
+    Dispatcher.prototype.fail = function(value) { return when.reject(value) };
 
 
     return Dispatcher
