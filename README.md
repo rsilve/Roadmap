@@ -1,5 +1,6 @@
-Roadmap Dojo Coding
+Roadmap Dojo Coding [![Build Status](https://travis-ci.org/rsilve/Roadmap.svg?branch=master)](https://travis-ci.org/rsilve/Roadmap)
 --------------------
+
 
 
 This project intend to propose an example implementation of the 
