@@ -18,18 +18,7 @@ exports.tests = {
         })
 
     },
-    handleViewActionWithFail : function(test) {
-        test.expect(1);
-        dispatcher.register(function(p) {
-            return dispatcher.fail("error")
-        });
-        dispatcher.handleViewAction({name : "test"}).catch(function(v){
-            test.equal("error", v, 'dispatch return error');
-        }).finally(function() {
-            test.done();
-        })
 
-    },
     registerCallbacks : function(test) {
         test.expect(1);
         var callbacks = {

@@ -1,7 +1,7 @@
 
 
-define(["react-with-addons","components/Project", "stores/ProjectStore","stores/TimeStore"],
-    function(React, Project, ProjectStore, TimeStore) {
+define(["react-with-addons","components/Project", "stores/ProjectStore","stores/TimeStore", "stores/CalendarStore"],
+    function(React, Project, ProjectStore, TimeStore, CalendarStore) {
 
 
     var startSort = function(a, b) {
@@ -19,10 +19,12 @@ define(["react-with-addons","components/Project", "stores/ProjectStore","stores/
             this._onChange();
             ProjectStore.addChangeListener(this._onChange);
             TimeStore.addChangeListener(this._onChange);
+            CalendarStore.addChangeListener(this._onChange);
         },
         componentWillUnmount: function() {
             ProjectStore.removeChangeListener(this._onChange);
             TimeStore.removeChangeListener(this._onChange);
+            CalendarStore.removeChangeListener(this._onChange);
         },
         _onChange: function() {
             var self = this

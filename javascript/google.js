@@ -65,46 +65,56 @@
     }
 
     // request for getting events list
-    var events =  function() {
-        return request({method: 'GET', path: "/calendars/lkeiu3l7esjg84u49pb87gp4as@group.calendar.google.com/events"});
+    var events = function(calendar) { //lkeiu3l7esjg84u49pb87gp4as@group.calendar.google.com
+        return request({method: 'GET', path: "/calendars/"+calendar+"/events"});
     };
 
     // request for creating a new event
     // data is a JSON string
-    var createEvent = function(data) {
+    var createEvent = function(calendar, data) {
         return request({
             method: 'POST',
-            path: "/calendars/lkeiu3l7esjg84u49pb87gp4as@group.calendar.google.com/events",
+            path: "/calendars/"+calendar+"/events",
             data : data
         });
     };
 
     // request for delete an event
-    var deleteEvent = function(id) {
+    var deleteEvent = function(calendar, id) {
         return request({
             method: 'DELETE',
-            path: "/calendars/lkeiu3l7esjg84u49pb87gp4as@group.calendar.google.com/events/"+id
+            path: "/calendars/"+calendar+"/events/"+id
         });
     };
 
 
     // request for update an event
     // data is a JSON string
-    var updateEvent = function(id, data) {
+    var updateEvent = function(calendar, id, data) {
         return request({
             method: 'PUT',
-            path: "/calendars/lkeiu3l7esjg84u49pb87gp4as@group.calendar.google.com/events/"+id,
+            path: "/calendars/"+calendar+"/events/"+id,
             data: data
         });
     };
 
 
     // Expose API
-    return {
-        events: events,
-        createEvent : createEvent,
-        deleteEvent : deleteEvent,
-        updateEvent : updateEvent
+    return function(calendar) {
+        if (calendar)
+            return {
+                events: function() { return events(calendar) },
+                createEvent: function(data) { return createEvent(calendar, data) },
+                deleteEvent: function(id) { return deleteEvent(calendar, id) },
+                updateEvent: function(id, data) { return updateEvent(calendar, id, data) }
+            };
+        else
+            return {
+                events: function() { return when.reject("Calendar ID needed") },
+                createEvent:  function() { return when.reject("Calendar ID needed") },
+                deleteEvent:  function() { return when.reject("Calendar ID needed") },
+                updateEvent:  function() { return when.reject("Calendar ID needed") }
+            };
     };
 
 });

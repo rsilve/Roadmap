@@ -118,6 +118,13 @@
             dispatcher.handleViewAction({
                 actionType: constants.AUTH_FAILED
             });
+        },
+        // Set Calendar
+        setCalendar : function(id) {
+            dispatcher.handleViewAction({
+                actionType: constants.SET_CALENDAR,
+                id : id
+            });
         }
     }
 

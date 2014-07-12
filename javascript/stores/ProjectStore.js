@@ -4,12 +4,20 @@
  */
 
 
-define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Store", "stores/ProjectHelper", "constants/ProjectContants", "google"],
-    function($, moment, toastr, dispatcher, Store, projectHelper, constants, google) {
+define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Store", "stores/ProjectHelper", "constants/ProjectContants", "google", "stores/CalendarStore"],
+    function($, moment, toastr, dispatcher, Store, projectHelper, constants, google, CalendarStore) {
 
         /*
          * Here we define the Project class
          */
+
+        function googleCalendar() {
+            var c = CalendarStore.getCalendar();
+            if (c)
+                return google(c);
+            else
+                return google(undefined)
+        }
 
         var _projects = {};
         var _filter = null;
@@ -65,7 +73,7 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
                 _projects = {};
                 console.warn(err);
             };
-            return google.events().then(initProjects).catch(errorHandler)
+            return googleCalendar().events().then(initProjects).catch(errorHandler)
 
         }
 
@@ -88,7 +96,7 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
                 start: moment(),
                 end: moment().add("month", 1)
             };
-            return google.createEvent(projectHelper.serialize(item)) // JSON.stringify(serialize(item)),
+            return googleCalendar().createEvent(projectHelper.serialize(item)) // JSON.stringify(serialize(item)),
                  .then(function() {
                 return getProjects();
             });
@@ -98,7 +106,7 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
         // delete a project
         // return a promise of project list
         function destroy(id) {
-            return google.deleteEvent(id).then(function() {
+            return googleCalendar().deleteEvent(id).then(function() {
                 return getProjects();
             });
             //delete _projects[id];
@@ -155,7 +163,7 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
         // send a project to google for update
         // return a promise of project list
         function updateProject(project) {
-            return google.updateEvent(project.id, projectHelper.serialize(project)) //JSON.stringify(serialize(project))
+            return googleCalendar().updateEvent(project.id, projectHelper.serialize(project)) //JSON.stringify(serialize(project))
             .then(function() {
                 return getProjects();
             });

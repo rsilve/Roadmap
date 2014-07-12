@@ -29,7 +29,7 @@
      * @param  {object} action The data coming from the view.
      */
     AppDispatcher.prototype.handleViewAction = function(/* object */ action) {
-       return this.dispatch(action)
+       return this.dispatch(action).catch(function(err) { console.log(err) })
     };
 
     // helper for register map of callbacks

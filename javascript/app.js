@@ -30,8 +30,8 @@ require.config({
     noGlobal: true
 });
 
-require(["react-with-addons", "momentjs", "components/ProjectList", "components/ProjectToolbar", "components/Timebar", "google", "stores/MessageStore"],
-    function(React, moment, ProjectList, ProjectToolbar, TimeBar ) {
+require(["react-with-addons", "momentjs", "components/ProjectList", "components/ProjectToolbar", "components/Timebar", "components/CalendarChooser", "google", "stores/MessageStore"],
+    function(React, moment, ProjectList, ProjectToolbar, TimeBar, CalendarChooser ) {
 
         React.renderComponent(
             ProjectList({}),
@@ -47,6 +47,12 @@ require(["react-with-addons", "momentjs", "components/ProjectList", "components/
             TimeBar({date: moment()}),
             document.getElementById('time-bar')
         );
+
+        React.renderComponent(
+            CalendarChooser({}),
+            document.getElementById('chooser')
+        );
+
 
     });
 
