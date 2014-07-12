@@ -16,7 +16,7 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
 
         function ProjectStore() {
             var self = this
-            getProjects().then(function() {self.emitChange()})
+            getProjects().then(self.emitChange)
         }
 
         ProjectStore.prototype = new Store()
@@ -66,9 +66,9 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
             };
             var errorHandler = function(err) {
                 _projects = {};
-                console.log(err);
+                console.warn(err);
             };
-            return google.events().then(initProjects, errorHandler)
+            return google.events().then(initProjects).catch(errorHandler)
 
         }
 

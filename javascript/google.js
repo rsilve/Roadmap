@@ -9,22 +9,20 @@
 
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(["when", "rest", "actions/ProjectActions"],  factory);
+        define(["when", "rest", "rest/interceptor/mime", "actions/ProjectActions"],  factory);
     } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
         // Node js
         var when = require("when");
         var rest = require("rest");
+        var mime = require("rest/interceptor/mime");
         var actions = require("actions/ProjectActions")
 
-        module.exports = factory(when, rest, actions)
+        module.exports = factory(when, rest, mime, actions)
     } else {
         // Browser globals
     }
-})(function(when, rest, actions) {
+})(function(when, rest, mime, actions) {
 
-
-    // Rest client
-    var client = rest;
 
     // constants for google api
     var clientId = '914287465512-b14fug3f6kgg1a1t1bm6srvq0d6q5l63.apps.googleusercontent.com';
@@ -60,7 +58,9 @@
                 "Authorization": auth.token_type + " " + auth.access_token,
                 "Content-Type" :  "application/json"
             };
-            return client(c)
+            return rest.wrap(mime)(c).then(function(r) {
+                return r.entity
+            })
         });
     };
 

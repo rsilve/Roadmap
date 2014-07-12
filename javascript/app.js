@@ -18,10 +18,6 @@ requirejs.config({
         {
             name : "rest",
             main: "rest"
-        },
-        {
-            name : "mime",
-            main: "mime"
         }
     ],
 	
@@ -35,7 +31,7 @@ require.config({
 });
 
 require(["react-with-addons", "momentjs", "components/ProjectList", "components/ProjectToolbar", "components/Timebar", "google", "stores/MessageStore"],
-    function(React, moment, ProjectList, ProjectToolbar, TimeBar, google) {
+    function(React, moment, ProjectList, ProjectToolbar, TimeBar ) {
 
         React.renderComponent(
             ProjectList({}),
