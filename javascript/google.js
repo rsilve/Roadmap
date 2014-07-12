@@ -45,7 +45,7 @@
         });
     });
 
-    // helper to create ajax request
+    // helper to create  request
     function request(c) {
         c = c || {};
         c.method = c.method || "GET";
@@ -62,7 +62,7 @@
                 return r.entity
             })
         });
-    };
+    }
 
     // request for getting events list
     var events =  function() {

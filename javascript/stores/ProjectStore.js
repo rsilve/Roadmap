@@ -4,8 +4,8 @@
  */
 
 
-define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Store", "constants/ProjectContants", "google"],
-    function($, moment, toastr, dispatcher, Store, constants, google) {
+define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Store", "stores/ProjectHelper", "constants/ProjectContants", "google"],
+    function($, moment, toastr, dispatcher, Store, projectHelper, constants, google) {
 
         /*
          * Here we define the Project class
@@ -15,11 +15,11 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
         var _filter = null;
 
         function ProjectStore() {
-            var self = this
+            var self = this;
             getProjects().then(self.emitChange)
         }
 
-        ProjectStore.prototype = new Store()
+        ProjectStore.prototype = new Store();
 
         // return the promise of a filtered project list
         ProjectStore.prototype.getFiltered = function(){
@@ -35,9 +35,6 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
         };
 
 
-        ProjectStore.prototype.getAll = function(){
-            return _projects
-        };
         ProjectStore.prototype.size = function(){
             var size = 0;
             for (var p in _projects)
@@ -60,7 +57,7 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
                 _projects = {};
                 if (data.items !== undefined)
                     data.items.forEach(function(item) {
-                        _projects[item.id] = deserialize(item)
+                        _projects[item.id] = projectHelper.deserialize(item)
                     });
                 return _projects
             };
@@ -72,32 +69,6 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
 
         }
 
-        // local json to Google json
-        function serialize(item) {
-            return {
-                id : item.id,
-                summary : item.name,
-                start : { date : item.start.format("YYYY-MM-DD") },
-                end : { date : item.end.format("YYYY-MM-DD") },
-                attendees : item.attendees || [],
-                reminders : { overrides : [] },
-                sequence: item.sequence,
-                description: item.description
-            };
-        }
-
-        // google json to local json
-        function deserialize(item) {
-            return {
-                id : item.id,
-                name : item.summary,
-                start : moment(item.start.date),
-                end : moment(item.end.date),
-                sequence: item.sequence,
-                description: item.description,
-                attendees : item.attendees || []
-            };
-        }
 
         // return wether or not a project match the given filter
         function filter(project, filter) {
@@ -117,7 +88,7 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
                 start: moment(),
                 end: moment().add("month", 1)
             };
-            return google.createEvent(JSON.stringify(serialize(item))) // JSON.stringify(serialize(item)),
+            return google.createEvent(projectHelper.serialize(item)) // JSON.stringify(serialize(item)),
                  .then(function() {
                 return getProjects();
             });
@@ -142,7 +113,7 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
                 if (attendee.email.toLocaleUpperCase() === email.toLocaleUpperCase()) {
                     attendeeToDelete = index;
                 }
-            })
+            });
             delete attendees[attendeeToDelete];
             _projects[id].attendees = attendees;
             return updateProject(_projects[id])
@@ -184,7 +155,7 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
         // send a project to google for update
         // return a promise of project list
         function updateProject(project) {
-            return google.updateEvent(project.id, JSON.stringify(serialize(project))) //JSON.stringify(serialize(project))
+            return google.updateEvent(project.id, projectHelper.serialize(project)) //JSON.stringify(serialize(project))
             .then(function() {
                 return getProjects();
             });
@@ -255,37 +226,37 @@ define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Stor
         callbacks[constants.PROJECT_UPDATE_NAME] = function(action) {
             var name = action.name.trim();
             if (name !== '')
-                return updateName(action.id, name).always(store.emitChange());
+                return updateName(action.id, name).finally(store.emitChange());
         };
         callbacks[constants.PROJECT_UPDATE_DESCRIPTION] = function(action) {
             var desc = action.description.trim();
             if (desc !== '')
-                return updateDescription(action.id, desc).always(store.emitChange());
+                return updateDescription(action.id, desc).finally(store.emitChange());
         };
         callbacks[constants.PROJECT_UPDATE_START] = function(action) {
             var start = action.start;
             if (start)
-                return updateStart(action.id, start).always(store.emitChange())
+                return updateStart(action.id, start).finally(store.emitChange())
         };
         callbacks[constants.PROJECT_UPDATE_END] = function(action) {
             var end = action.end;
             if (end) {
-                return updateEnd(action.id, end).always(store.emitChange())
+                return updateEnd(action.id, end).finally(store.emitChange())
             }
         };
         callbacks[constants.PROJECT_REMOVE_ATTENDEE] = function(action) {
             if (action.id && action.email) {
-                return removeAttendee(action.id, action.email).always(store.emitChange())
+                return removeAttendee(action.id, action.email).finally(store.emitChange())
             }
         };
         callbacks[constants.PROJECT_ADD_ATTENDEE] = function(action) {
             if (action.id && action.email) {
-                return addAttendee(action.id, action.email).always(store.emitChange())
+                return addAttendee(action.id, action.email).finally(store.emitChange())
             }
         };
         callbacks[constants.PROJECT_UPDATE_ATTENDEE] = function(action) {
             if (action.id && action.oldEmail && action.email) {
-                return updateAttendee(action.id, action.oldEmail , action.email).always(store.emitChange())
+                return updateAttendee(action.id, action.oldEmail , action.email).finally(store.emitChange())
             }
         };
         callbacks[constants.PROJECT_FILTER] = function(action) {
