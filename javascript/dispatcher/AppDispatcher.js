@@ -32,7 +32,7 @@
        this.dispatch({
             source: 'VIEW_ACTION',
             action: action
-        }).fail(function(reason) {
+        }).catch(function(reason) {
            console.log(reason)
        })
     };
