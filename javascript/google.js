@@ -65,7 +65,7 @@
     }
 
     // request for getting events list
-    var events = function(calendar) { //lkeiu3l7esjg84u49pb87gp4as@group.calendar.google.com
+    var events = function(calendar) {
         return request({method: 'GET', path: "/calendars/"+calendar+"/events"});
     };
 
@@ -98,6 +98,14 @@
         });
     };
 
+    // request for getting calendarList
+    var calendarList = function() {
+        return request({
+            method: 'GET',
+            path: "/users/me/calendarList"
+        });
+    };
+
 
     // Expose API
     return function(calendar) {
@@ -113,7 +121,8 @@
                 events: function() { return when.reject("Calendar ID needed") },
                 createEvent:  function() { return when.reject("Calendar ID needed") },
                 deleteEvent:  function() { return when.reject("Calendar ID needed") },
-                updateEvent:  function() { return when.reject("Calendar ID needed") }
+                updateEvent:  function() { return when.reject("Calendar ID needed") },
+                calendarList:  function() { return calendarList() }
             };
     };
 

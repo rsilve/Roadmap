@@ -10,6 +10,54 @@ body {
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
+
+.chooser {
+    position: relative;
+    z-index: 10;
+}
+
+.calendar-chooser{
+    display: none;
+    position: absolute;
+    top : 0;
+    left : 20px;
+    background-color: white;
+    border: 1px solid #BBB;
+    padding: 8px;
+}
+
+.calendar-chooser.calendar-need-select {
+    display: block;
+}
+
+.calendar-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0px;
+    padding-left: 8px;
+    padding-top: 4px;
+}
+
+.calendar {
+    cursor: pointer;
+    padding: 2px;
+}
+
+.calendar:hover {
+   background-color: #ddd;
+}
+
+.calendar-selected {
+    text-decoration: underline;
+}
+
+.calendar-reset {
+    padding: 2px 8px 0 0;
+    font-size: 1.4em;
+    margin-left: -30px;
+    cursor: pointer;
+}
+
 .toolbar {
     position: fixed;
     background: white;

@@ -125,6 +125,12 @@
                 actionType: constants.SET_CALENDAR,
                 id : id
             });
+        },
+        // Reset Calendar
+        resetCalendar : function() {
+            dispatcher.handleViewAction({
+                actionType: constants.RESET_CALENDAR
+            });
         }
     }
 
