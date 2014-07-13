@@ -30,7 +30,7 @@ require.config({
     noGlobal: true
 });
 
-require(["react-with-addons", "momentjs", "components/ProjectList", "components/ProjectToolbar", "components/Timebar", "components/CalendarChooser", "google", "stores/MessageStore"],
+require(["react-with-addons", "momentjs", "components/ProjectList", "components/ProjectToolbar", "components/TimeBar", "components/CalendarChooser", "google", "stores/MessageStore"],
     function(React, moment, ProjectList, ProjectToolbar, TimeBar, CalendarChooser ) {
 
         React.renderComponent(
