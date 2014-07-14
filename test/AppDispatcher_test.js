@@ -1,4 +1,4 @@
-var dispatcher = require("../javascript/dispatcher/AppDispatcher")
+var dispatcher = require("../javascript/react/dispatcher/AppDispatcher")
 
 exports.tests = {
     setUp: function (done) {

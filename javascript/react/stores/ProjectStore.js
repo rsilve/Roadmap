@@ -4,8 +4,8 @@
  */
 
 
-define(["jquery", "momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Store", "stores/ProjectHelper", "constants/ProjectContants", "google", "stores/CalendarStore"],
-    function($, moment, toastr, dispatcher, Store, projectHelper, constants, google, CalendarStore) {
+define(["momentjs", "toastr", "dispatcher/AppDispatcher", "stores/Store", "stores/ProjectHelper", "constants/ProjectContants", "google", "stores/CalendarStore"],
+    function(moment, toastr, dispatcher, Store, projectHelper, constants, google, CalendarStore) {
 
         /*
          * Here we define the Project class

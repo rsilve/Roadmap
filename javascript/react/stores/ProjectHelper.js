@@ -7,7 +7,7 @@
         define(["momentjs"], factory);
     } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
         // Node js
-        var moment = require("../../bower_components/momentjs/moment")
+        var moment = require("../../../bower_components/momentjs/moment")
         module.exports = factory(moment)
     } else {
         // Browser globals

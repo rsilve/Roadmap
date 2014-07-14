@@ -1,4 +1,4 @@
-var helper = require("../javascript/stores/ProjectHelper");
+var helper = require("../javascript/react/stores/ProjectHelper");
 var moment = require("../bower_components/momentjs/moment");
 
 exports.tests = {

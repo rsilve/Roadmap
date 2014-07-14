@@ -1,7 +1,6 @@
 requirejs.config({
 	paths: {
         "EventEmitter": "../bower_components/eventEmitter/EventEmitter",
-        "jquery": "../bower_components/jquery/dist/jquery",
         "momentjs": "../bower_components/momentjs/moment",
         "react": "../bower_components/react/react",
         "react-with-addons": "../bower_components/react/react-with-addons",

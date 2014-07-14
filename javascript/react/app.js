@@ -1,14 +1,13 @@
 requirejs.config({
 	paths: {
-        "EventEmitter": "../bower_components/eventEmitter/EventEmitter",
-        "jquery": "../bower_components/jquery/dist/jquery",
-        "momentjs": "../bower_components/momentjs/moment",
-        "react": "../bower_components/react/react",
-        "react-with-addons": "../bower_components/react/react-with-addons",
-        "toastr": "../bower_components/toastr/toastr",
-        "when": "../bower_components/when",
-        "rest": "../bower_components/rest",
-        "mime": "../bower_components/rest/interceptor"
+        "EventEmitter": "../../bower_components/eventEmitter/EventEmitter",
+        "momentjs": "../../bower_components/momentjs/moment",
+        "react": "../../bower_components/react/react",
+        "react-with-addons": "../../bower_components/react/react-with-addons",
+        "jquery": "../../bower_components/jquery/dist/jquery",
+        "toastr": "../../bower_components/toastr/toastr",
+        "when": "../../bower_components/when",
+        "rest": "../../bower_components/rest"
 	},
     "packages": [
         {
