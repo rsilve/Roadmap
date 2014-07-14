@@ -1,8 +1,8 @@
 define([
-    'app', "dispatcher/AppDispatcher"
-], function (app, dispatcher) {
+    "dispatcher/AppDispatcher"
+], function (dispatcher) {
 
-    app.factory('dispatcher', function () {
+    return function () {
         return dispatcher
-    });
+    };
 });

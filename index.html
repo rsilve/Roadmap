@@ -12,7 +12,7 @@
         <script type="text/javascript" src="//apis.google.com/js/client.js"></script>
 
     </head>
-    <body>
+    <body class="ng-cloak">
         <div class="chooser">
             <div id="chooser"></div>
         </div>
@@ -22,7 +22,10 @@
         <div class="timebar">
             <div id="time-bar"></div>
         </div>
-        <div class="grid-content"><div id="project-list"></div></div>
+        <div class="grid-content">
+            <div ng-controller="ProjectList">
+                <br><br><br><br>{{hello}}
+            </div></div>
 
         <script data-main="javascript/roadmap" src="bower_components/requirejs/require.js"></script>
     </body>

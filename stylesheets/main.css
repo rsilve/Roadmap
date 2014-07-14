@@ -10,6 +10,10 @@ body {
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
+.ng-cloak {
+    display: none;
+}
+
 
 .chooser {
     position: relative;
