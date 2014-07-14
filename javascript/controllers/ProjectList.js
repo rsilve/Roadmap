@@ -1,7 +1,12 @@
 define([], function () {
 
-    return function ($scope) {
-        $scope.hello = "Hello"
+    return function ($scope, ProjectStore) {
 
+        $scope.hello = ProjectStore.hello();
+
+
+        $scope.$on(ProjectStore.id, function() {
+            $scope.hello = ProjectStore.hello();
+        })
     };
 });

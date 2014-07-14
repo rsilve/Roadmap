@@ -5,5 +5,5 @@ define([
 
     /* controllers hub */
     return angular.module('Roadmap.controllers', [])
-        .controller('ProjectList', ['$scope', ProjectList]);
+        .controller('ProjectList', ['$scope', 'ProjectStore', ProjectList]);
 });
