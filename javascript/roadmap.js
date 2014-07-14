@@ -1,4 +1,15 @@
+requirejs.config({
+    paths: {
+        angular: '../bower_components/angular/angular'
+    },
+    shim: {
+        'angular' : {'exports' : 'angular'}
+    }
+});
 
-// base module
-var App = angular.module("Roadmap",[]);
+require( ['angular', 'app'], function(angular, app) {
+    angular.element(document).ready(function() {
+        angular.bootstrap(document, ['Roadmap']);
+    });
+});
 

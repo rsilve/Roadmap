@@ -8,14 +8,11 @@
         <link rel="stylesheet" href='bower_components/font-awesome/css/font-awesome.css'/>
         <link rel="stylesheet" media="screen" href="stylesheets/main.css">
 
-        <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-        <script type="text/javascript" src="javascript/roadmap.js"></script>
-
         <!-- Needed for google api -->
         <script type="text/javascript" src="//apis.google.com/js/client.js"></script>
 
     </head>
-    <body ng-app="Roadmap">
+    <body>
         <div class="chooser">
             <div id="chooser"></div>
         </div>
@@ -27,6 +24,7 @@
         </div>
         <div class="grid-content"><div id="project-list"></div></div>
 
+        <script data-main="javascript/roadmap" src="bower_components/requirejs/require.js"></script>
     </body>
 </html>
 
