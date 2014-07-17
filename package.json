@@ -10,7 +10,8 @@
     "http-server": "^0.6.1",
     "karma": "^0.12.17",
     "karma-cli": "0.0.4",
-    "karma-junit-reporter": "^0.2.2"
+    "karma-junit-reporter": "^0.2.2",
+    "karma-requirejs": "^0.2.2"
   },
   "scripts": {
     "postinstall": "bower install",
