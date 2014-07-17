@@ -1,7 +1,7 @@
 define([
     'angular',
     'services/dispatcher',
-    'services/Google'
+    'services/Google',
     'services/ProjectStore'
 ], function (angular, dispatcher, Google, ProjectStore) {
 
