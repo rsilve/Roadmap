@@ -3,6 +3,7 @@ define([
 ], function (when, rest, mime) {
 
     return function () {
+        console.info("Loading Google Service")
         // constants for google api
         var clientId = '914287465512-b14fug3f6kgg1a1t1bm6srvq0d6q5l63.apps.googleusercontent.com';
         var apiKey = 'AIzaSyCNen5JjpKBaXRgg0oUeD1HpTnfORZY9pw';

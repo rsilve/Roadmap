@@ -3,7 +3,7 @@ define([
 ], function (Store) {
 
     return function ($scope, $timeout) {
-        console.log("ProjectStore Init")
+        console.info("Loading ProjectStore Service")
 
         var hello = "hello robert";
 
