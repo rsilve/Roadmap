@@ -67,7 +67,7 @@ define([
         dispatcher.registerCallbacks(callbacks);
 
         // finally do some call for init
-        google().calendarList().then(setCalendarList).then(store.emitChange());
+        google().calendarList().then(setCalendarList).then(store.emitChange()).catch(function(err) { console.log(err) });
 
 
 

@@ -1,16 +1,6 @@
-
 /*
- * This module define a dispatcher
- * A dispatcher mainly *register* callback from stores
- * When an action is fired, it is send to ALL callback.
- * If the callback know something about the action type it can do something
- *
- * The processing of action is sequential :
- * action are receive and dispatch one by one by only ONE dispatcher in the app.
- * When dispatched, the process could be async because all callback are transform in
- * promises
+ * This module implement a dispatcher
  */
-
 
 (function (factory) {
 
@@ -26,8 +16,7 @@
     } else {
         // Browser globals
     }
-})( function(when){
-
+})(function(when){
 
     // Base object dispatcher
     function Dispatcher() {
@@ -173,7 +162,36 @@
     // Helper for creating a deferred that always reject
     Dispatcher.prototype.fail = function(value) { return when.reject(value) };
 
+    /**
+     * A bridge function between the views and the dispatcher, marking the action
+     * as a view action.  Another variant here could be handleServerAction.
+     * @param  {object} action The data coming from the view.
+     */
+    Dispatcher.prototype.handleViewAction = function(/* object */ action) {
+        return this.dispatch(action).catch(function(err) { console.log(err) })
+    };
 
-    return Dispatcher
-
+    // helper for register map of callbacks
+    /* var callbacks = {
+     *     action1 : function(payload) {
+     *      return disaptcher.defer(...) // a classic action encapsulate in defer
+     *    },
+     *    action2 : function(payload) {
+     *      return $.ajax(..) // async action
+     *    }
+     * }
+     * dispatcher.registerCallbacks(callbacks)
+     */
+    Dispatcher.prototype.registerCallbacks = function(callbacks) {
+        var self = this;
+        return this.register(function(payload) {
+            if (callbacks[payload.actionType]) {
+                return callbacks[payload.actionType](payload)
+            } else
+                return self.noop();
+        })
+    };
+	
+	return Dispatcher
+  
 });

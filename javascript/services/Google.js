@@ -20,19 +20,21 @@ define([
                     resolve(gapi.auth.getToken());
                 } else {
                     //actions.authFailed();
-                    reject("Not authorized")
+                    reject("Google said : Not authorized")
                 }
             });
         });
 
         // helper to create  request
         function request(c) {
+			console.debug("Send reqest " + c.path)
             c = c || {};
             c.method = c.method || "GET";
             c.path = google_api +  c.path;
             c.entity = c.data;
 
             return auth.then(function (auth) {
+				console.debug("Got Google auth "+auth.access_token)
                 c.headers = {
                     // this header is required by google api
                     "Authorization": auth.token_type + " " + auth.access_token,

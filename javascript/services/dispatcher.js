@@ -1,9 +1,9 @@
 define([
-    "dispatcher/AppDispatcher"
-], function (dispatcher) {
+    "dispatcher/Dispatcher"
+], function (Dispatcher) {
 
     return function () {
         console.info("Loading Dispatcher Service")
-        return dispatcher
+        return new Dispatcher()
     };
 });

@@ -13,8 +13,8 @@
 
     </head>
     <body ng-app="Roadmap" class="ng-cloak">
-        <div class="chooser">
-            <div id="chooser"></div>
+        <div class="chooser" ng-controller="CalendarChooser">
+            <div id="chooser">{{list}}</div>
         </div>
         <div class="toolbar">
             <div class="toolbar-container"><div id="project-toolbar"></div></div>
