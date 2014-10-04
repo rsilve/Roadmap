@@ -16,6 +16,7 @@ define([], function () {
     function Store($scope) {
         this.$scope = $scope;
         this.id = guid();
+		this.dispatchIndex = -1;
     }
     Store.prototype.emitChange = function() {
         console.debug("Emit "+this.id);

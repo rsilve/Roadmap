@@ -1,7 +1,8 @@
 define([
     'stores/Store',
-	'stores/ProjectHelper'
-], function (Store, projectHelper) {
+	'stores/ProjectHelper',
+	'Constants'
+], function (Store,  projectHelper, constants) {
 
 	
     return function ($scope, dispatcher, google, CalendarStore) {
@@ -36,6 +37,19 @@ define([
             return googleCalendar().events().then(initProjects).catch(errorHandler)
 
         }
+		
+		
+		
+        // helper for saving a  project in dispatcher
+        var saveProject = function(p) {
+            return function() {
+				console.debug("Save project " +  p.name)
+                return googleCalendar().updateEvent(p.id, projectHelper.serialize(p)).then(function() {
+                	return getProjects();
+            	}); 
+            }
+        };
+		
 
 			
 		// Store Object 
@@ -50,6 +64,14 @@ define([
 		
 		// Store instance
         var store = new ProjectStore();
+        var callbacks = {};
+        callbacks[constants.PROJECT_SAVE] = function(action) {
+			return dispatcher.defer(saveProject(action.project)).then(store.emitChange())
+        };
+      
+        // register the callbacks
+        store.dispatchIndex = dispatcher.registerCallbacks(callbacks);
+		
 		console.info("Loading ProjectStore Service " + store.id)
         return store;
     };

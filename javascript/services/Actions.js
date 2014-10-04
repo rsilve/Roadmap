@@ -24,6 +24,13 @@ define([
 	            });
 	        },
 	        // create a project given is name
+	        saveProject: function (project) {
+	            dispatcher.handleViewAction({
+	                actionType: constants.PROJECT_SAVE,
+	                project: project
+	            });
+	        },
+	        // create a project given is name
 	        create: function (name) {
 	            dispatcher.handleViewAction({
 	                actionType: constants.PROJECT_CREATE,

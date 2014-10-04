@@ -46,7 +46,7 @@ define([], function () {
 		
 		// edit projet
 		$scope.editProject = function(project) {
-			actions.editProject(project)
+			actions.editProject(angular.copy(project))
 		}
     };
 });

@@ -110,14 +110,14 @@ define([], function () {
 	     * StoreB, a circular dependency will occur, but no error will be thrown.
 	     * A more robust Dispatcher would issue a warning in this scenario.
 	     */
-	    Dispatcher.prototype.waitFor = function(/*Array*/ promiseIndexes, /*function*/ callback) {
+	    Dispatcher.prototype.waitFor = function(/*Array*/ promiseIndexes) {
 	        var selectedPromises = [];
 	        var self = this
 	        promiseIndexes.forEach(function(index) {
 	            selectedPromises.push(self._promises[index]);
 	        });
 
-	        return $q.all(selectedPromises).then(callback);
+	        return $q.all(selectedPromises);
 	    };
 
 

@@ -4,7 +4,7 @@ define([
 ], function (Store, constants) {
 
 	
-    return function ($scope, dispatcher) {
+    return function ($scope, dispatcher, ProjectStore) {
 	
 		var project = undefined;
 			
@@ -44,7 +44,12 @@ define([
         callbacks[constants.PROJECT_EDIT_CANCEL] = function(action) {
             return dispatcher.defer(resetProject).then(store.emitChange())
         };
-
+        callbacks[constants.PROJECT_SAVE] = function(action) {
+			return dispatcher.waitFor([ProjectStore.dispatchIndex])
+			.then(dispatcher.defer(resetProject))
+			.then(store.emitChange())
+        };
+        
         // register the callbacks
         dispatcher.registerCallbacks(callbacks);
 		

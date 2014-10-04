@@ -11,8 +11,8 @@ define([], function () {
 
         // update the data
         $scope.$on(ProjectEditorStore.id, function() {
-			console.log("eee")
-            setState($scope, ProjectEditorStore)
+			console.log("update")
+			setState($scope, ProjectEditorStore)
         })
        
 		// interaction handler
@@ -20,6 +20,11 @@ define([], function () {
 		// cancel edition
 		$scope.cancel = function() {
 			actions.cancelEditProject();
+		}
+		
+		// save edition
+		$scope.save = function() {
+			actions.saveProject(angular.copy($scope.project));
 		}
     };
 });

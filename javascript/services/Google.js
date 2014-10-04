@@ -27,7 +27,7 @@ define([], function () {
 
         // helper to create  request
         function request(c) {
-			console.debug("Send reqest " + c.path)
+			console.debug("Send request " + c.path)
             c = c || {};
             c.method = c.method || "GET";
             c.url = google_api +  c.path;

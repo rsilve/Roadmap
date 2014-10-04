@@ -28,7 +28,7 @@ define([
 	.factory("CalendarStore", ['$rootScope', 'dispatcher', 'google',  CalendarStore])
 	.factory("ProjectStore", ['$rootScope', 'dispatcher', 'google', 'CalendarStore', ProjectStore])
 	.factory("TimeStore", ['$rootScope', 'dispatcher', TimeStore])
-	.factory("ProjectEditorStore", ['$rootScope', 'dispatcher', ProjectEditorStore])
+	.factory("ProjectEditorStore", ['$rootScope', 'dispatcher', 'ProjectStore', ProjectEditorStore])
 	
 
 	angular.module('Roadmap.components', [])

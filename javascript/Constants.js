@@ -1,6 +1,7 @@
 define([], function() {
 
     return {
+        PROJECT_SAVE: "PROJECT_SAVE",
         PROJECT_EDIT: "PROJECT_EDIT",
         PROJECT_EDIT_CANCEL: "PROJECT_EDIT_CANCEL",
         PROJECT_CREATE: "PROJECT_CREATE",
