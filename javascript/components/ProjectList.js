@@ -7,13 +7,16 @@ define([], function () {
                 })
 	}
 	
-    return function ($scope, ProjectStore) {
+    return function ($scope, ProjectStore, CalendarStore) {
 
         // Get the data
        //setState($scope, ProjectStore)
 
         // update the data
         $scope.$on(ProjectStore.id, function() {
+            setState($scope, ProjectStore)
+        })
+        $scope.$on(CalendarStore.id, function() {
             setState($scope, ProjectStore)
         })
     };

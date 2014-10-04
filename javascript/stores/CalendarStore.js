@@ -34,7 +34,7 @@ define([
         // helper for choosing a calendar in dispatcher
         var setCalendar = function(id) {
             return function() {
-				console.debug("Choose calendar " + calendar.summary)
+				console.debug("Choose calendar " + id)
                 calendar = id;
                 return true; // needed fo dispatcher
             }
@@ -72,7 +72,7 @@ define([
 		.then(setCalendarList)
 		.then(function() { store.emitChange() })
 		.catch(function(err) { console.log(err) });
-
+		
         console.info("Loading CalendarStore Service "+store.id)
 		
         return store;

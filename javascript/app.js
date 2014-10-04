@@ -26,7 +26,7 @@ define([
 	
 
 	angular.module('Roadmap.components', [])
-    .controller('ProjectList', ['$scope', 'ProjectStore', ProjectList])
+    .controller('ProjectList', ['$scope', 'ProjectStore','CalendarStore', ProjectList])
     .controller('ProjectToolbar', ['$scope', 'actions', ProjectToolbar])
     .controller('CalendarChooser', ['$scope', 'CalendarStore', 'actions', CalendarChooser])
 

@@ -40,8 +40,7 @@ define([], function () {
                     "Content-Type" :  "application/json"
                 };
                 return $http(c).then(function(r) {
-					console.log(r)
-                    return r.data
+					return r.data
                 })
             });
         }
@@ -100,10 +99,10 @@ define([], function () {
                 };
             else
                 return {
-                    events: function() { return when.reject("Calendar ID needed") },
-                    createEvent:  function() { return when.reject("Calendar ID needed") },
-                    deleteEvent:  function() { return when.reject("Calendar ID needed") },
-                    updateEvent:  function() { return when.reject("Calendar ID needed") },
+                    events: function() { return $q.reject("Calendar ID needed") },
+                    createEvent:  function() { return $q.reject("Calendar ID needed") },
+                    deleteEvent:  function() { return $q.reject("Calendar ID needed") },
+                    updateEvent:  function() { return $q.reject("Calendar ID needed") },
                     calendarList:  function() { return calendarList() }
                 };
         };

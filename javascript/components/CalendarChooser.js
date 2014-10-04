@@ -13,9 +13,7 @@ define([], function () {
         
         // update the data
         $scope.$on(CalendarStore.id, function() {
-			console.log("Calender Store changed")
 			setState($scope, CalendarStore)
-			console.log($scope)
         })	
 
 		// Interaction handlers

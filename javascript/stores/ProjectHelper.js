@@ -1,4 +1,4 @@
-define([], function (){
+define(["momentjs"], function (moment){
 	
     return {
            // local json to Google json
