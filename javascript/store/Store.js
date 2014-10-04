@@ -18,7 +18,7 @@ define([], function () {
         this.id = guid();
     }
     Store.prototype.emitChange = function() {
-        console.log("Emit "+this.id);
+        console.debug("Emit "+this.id);
         this.$scope.$broadcast(this.id)
     };
 

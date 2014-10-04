@@ -11,13 +11,23 @@
         <!-- Needed for google api -->
         <script type="text/javascript" src="//apis.google.com/js/client.js"></script>
 
+        <script data-main="javascript/roadmap" src="bower_components/requirejs/require.js"></script>
+
     </head>
-    <body ng-app="Roadmap" class="ng-cloak">
+    <body class="ng-cloak">
         <div class="chooser" ng-controller="CalendarChooser">
-            <div id="chooser">{{list}}</div>
+            <div id="chooser" class="calendar-chooser" ng-class="classNeedCalendar">
+				<ul class="calendar-list" >
+					<li ng-repeat="calendar in list" class="calendar" ng-click="choose(calendar)">{{calendar.summary}}</li>
+				</ul>
+			</div>
         </div>
         <div class="toolbar">
-            <div class="toolbar-container"><div id="project-toolbar"></div></div>
+            <div class="toolbar-container" ng-controller="ProjectToolbar">
+				<div id="project-toolbar">
+					<i class="fa fa-list-ul calendar-reset" ng-click="calendarReset()"></i>
+				</div>
+			</div>
         </div>
         <div class="timebar">
             <div id="time-bar"></div>
@@ -27,7 +37,6 @@
                 <br><br><br><br>{{hello}}
             </div></div>
 
-        <script data-main="javascript/roadmap" src="bower_components/requirejs/require.js"></script>
     </body>
 </html>
 
