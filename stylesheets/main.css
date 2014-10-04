@@ -154,7 +154,7 @@ body {
 
 .Project {
     position : relative;
-    padding: 8px 42px 18px 42px;
+    padding: 10px 42px 10px 42px;
 }
 
 .Project:nth-child(odd) {
@@ -226,6 +226,33 @@ body {
 .Project-delete.delete-icon {
     left: 20px;
     top : 7px;
+}
+
+.ProjectEditor {
+	position: absolute;
+	top : 0;
+	left: 20px;
+	z-index: 10;
+	background-color: white;
+    border: 1px solid #BBB;
+    padding: 8px;
+}
+
+.ProjectEditor h4 {
+	margin: 0;
+	padding-bottom: 8px;
+}
+
+.ProjectEditor input {
+	width: 480px;
+}
+
+.ProjectEditor-Button {
+	padding-top: 8px;
+}
+
+.ProjectEditor-Button button + button {
+	margin-right: 6px;
 }
 
 .delete-icon {

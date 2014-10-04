@@ -140,9 +140,17 @@ define([], function () {
 	    };
 
 	    // Helper for creating a deferred that always resolve
-	    Dispatcher.prototype.noop = function(value) { return $q.resolve(value) };
+	    Dispatcher.prototype.noop = function(value) { 
+			var d = $q.defer();
+			d.resolve(value)
+			return d.promise
+		};
 	    // Helper for creating a deferred that always reject
-	    Dispatcher.prototype.fail = function(value) { return $q.reject(value) };
+	    Dispatcher.prototype.fail = function(value) { 
+			var d = $q.defer();
+			d.reject(value)
+			return d.promise
+		};
 
 	    /**
 	     * A bridge function between the views and the dispatcher, marking the action

@@ -3,7 +3,7 @@ define([], function () {
 	function setState($scope, CalendarStore) {
         $scope.list = CalendarStore.getCalendarList();
         $scope.calendar = CalendarStore.getCalendar();
-		$scope.classNeedCalendar = $scope.calendar ? "calendar-not-need-select" : "calendar-need-select";
+		$scope.classNeedCalendar = $scope.calendar  ? "calendar-not-need-select" : "calendar-need-select";
 	}
 
     return function ($scope, CalendarStore, actions) {
