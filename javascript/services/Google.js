@@ -1,9 +1,7 @@
-define([
-    "when", "rest", "rest/interceptor/mime"
-], function (when, rest, mime) {
+define([], function () {
 
-    return function () {
-        console.info("Loading Google Service")
+    return function ($q, $http) {
+		console.info("Loading Google Service")
         // constants for google api
         var clientId = '914287465512-b14fug3f6kgg1a1t1bm6srvq0d6q5l63.apps.googleusercontent.com';
         var apiKey = 'AIzaSyCNen5JjpKBaXRgg0oUeD1HpTnfORZY9pw';
@@ -13,35 +11,37 @@ define([
         // auth object is deferred
         // use it before each request to be sure that
         // auth process is completed
-        var auth = when.promise(function(resolve, reject, notify) {
-            // start the authorization process
-            gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, function (result) {
-                if (result && !result.error) {
-                    resolve(gapi.auth.getToken());
-                } else {
-                    //actions.authFailed();
-                    reject("Google said : Not authorized")
-                }
-            });
-        });
+		var auth = (function() {
+			var deferred = $q.defer();
+	        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, function (result) {
+	            if (result && !result.error) {
+	                deferred.resolve(gapi.auth.getToken());
+	            } else {
+	                //actions.authFailed();
+	                deferred.reject("Google said : Not authorized")
+	            }
+	        });
+	        return deferred.promise
+		})()
+		
 
         // helper to create  request
         function request(c) {
 			console.debug("Send reqest " + c.path)
             c = c || {};
             c.method = c.method || "GET";
-            c.path = google_api +  c.path;
-            c.entity = c.data;
-
-            return auth.then(function (auth) {
+            c.url = google_api +  c.path;
+            
+			return auth.then(function (auth) {
 				console.debug("Got Google auth "+auth.access_token)
                 c.headers = {
                     // this header is required by google api
                     "Authorization": auth.token_type + " " + auth.access_token,
                     "Content-Type" :  "application/json"
                 };
-                return rest.wrap(mime)(c).then(function(r) {
-                    return r.entity
+                return $http(c).then(function(r) {
+					console.log(r)
+                    return r.data
                 })
             });
         }

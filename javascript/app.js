@@ -3,8 +3,8 @@ define([
 	'services/dispatcher',
 	'services/Actions',
     'services/Google',
-	'store/CalendarStore',
-    'store/ProjectStore', 
+	'stores/CalendarStore',
+    'stores/ProjectStore', 
 	'components/CalendarChooser',
 	'components/ProjectToolbar',
     'components/ProjectList' 
@@ -16,14 +16,14 @@ define([
     // Declare app level module which depends on filters, and services
 
 	angular.module('Roadmap.services', [])
-    .factory("google", Google)
-    .factory("dispatcher",  Dispatcher)
+    .factory("google", ['$q', '$http', Google])
+    .factory("dispatcher", ['$q', Dispatcher])
     .factory("actions", ['dispatcher', Actions])
 
 	angular.module('Roadmap.stores', [])
-	.factory("ProjectStore", ['$rootScope', '$timeout', ProjectStore])
 	.factory("CalendarStore", ['$rootScope', 'dispatcher', 'google',  CalendarStore])
-    
+	.factory("ProjectStore", ['$rootScope', 'dispatcher', 'google', 'CalendarStore', ProjectStore])
+	
 
 	angular.module('Roadmap.components', [])
     .controller('ProjectList', ['$scope', 'ProjectStore', ProjectList])
