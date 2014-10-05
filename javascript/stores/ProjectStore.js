@@ -28,7 +28,7 @@ define([
                     data.items.forEach(function(item) {
                         _projects[item.id] = projectHelper.deserialize(item)
                     });
-                return _projects
+				return _projects
             };
             var errorHandler = function(err) {
                 _projects = {};
@@ -42,12 +42,13 @@ define([
 		
         // helper for saving a  project in dispatcher
         var saveProject = function(p) {
-            return function() {
-				console.debug("Save project " +  p.name)
-                return googleCalendar().updateEvent(p.id, projectHelper.serialize(p)).then(function() {
-                	return getProjects();
-            	}); 
-            }
+            console.debug("Save project " +  p.name)
+			if (p.id) {
+				// It's an update
+	            return googleCalendar().updateEvent(p.id, projectHelper.serialize(p)).then(getProjects())				
+			} else {
+				return googleCalendar().createEvent(projectHelper.serialize(p)).then(getProjects())		
+			}
         };
 		
 
@@ -64,9 +65,9 @@ define([
 		
 		// Store instance
         var store = new ProjectStore();
-        var callbacks = {};
+		var callbacks = {};
         callbacks[constants.PROJECT_SAVE] = function(action) {
-			return dispatcher.defer(saveProject(action.project)).then(store.emitChange())
+			return saveProject(action.project).then(store.emitChange())
         };
       
         // register the callbacks

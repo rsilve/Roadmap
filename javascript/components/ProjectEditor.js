@@ -6,12 +6,8 @@ define([], function () {
 	
     return function ($scope, actions, ProjectEditorStore) {
 
-        // Get the data
-       //setState($scope, ProjectStore)
-
         // update the data
         $scope.$on(ProjectEditorStore.id, function() {
-			console.log("update")
 			setState($scope, ProjectEditorStore)
         })
        

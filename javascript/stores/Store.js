@@ -19,8 +19,12 @@ define([], function () {
 		this.dispatchIndex = -1;
     }
     Store.prototype.emitChange = function() {
-        console.debug("Emit "+this.id);
-        this.$scope.$broadcast(this.id)
+		var self = this;
+		return function() {
+	        console.debug("Emit "+self.id);
+	        self.$scope.$broadcast(self.id)
+		}
+		
     };
 
     return Store

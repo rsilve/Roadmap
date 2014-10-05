@@ -1,7 +1,7 @@
 define([
     'stores/Store',
 	'Constants',
-	'momentjs'
+	'moment'
 ], function (Store, constants, moment) {
 
 	
@@ -44,13 +44,13 @@ define([
 		// Store instance
         var store = new TimeStore();
 		var callbacks = {}
-        // on next period action move to the next quarter
+		 // on next period action move to the next quarter
         callbacks[constants.TIME_NEXT_PERIOD] = function() {
-            return dispatcher.defer(next).then(store.emitChange())
+            return dispatcher.defer(next).then( store.emitChange())
         };
         // on previous period action move to the previous quarter
         callbacks[constants.TIME_PREV_PERIOD] = function() {
-           return dispatcher.defer(prev).then(store.emitChange());
+           return dispatcher.defer(prev).then( store.emitChange());
         };
 
         // register and store the reference of this register

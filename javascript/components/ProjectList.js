@@ -1,4 +1,4 @@
-define([], function () {
+define(["moment"], function (moment) {
 
 	function setState($scope, ProjectStore) {
         ProjectStore.getProjects()

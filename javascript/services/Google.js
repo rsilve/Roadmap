@@ -17,7 +17,6 @@ define([], function () {
 	            if (result && !result.error) {
 	                deferred.resolve(gapi.auth.getToken());
 	            } else {
-	                //actions.authFailed();
 	                deferred.reject("Google said : Not authorized")
 	            }
 	        });
@@ -33,16 +32,17 @@ define([], function () {
             c.url = google_api +  c.path;
             
 			return auth.then(function (auth) {
-				console.debug("Got Google auth "+auth.access_token)
+				//console.debug("Got Google auth "+auth.access_token)
                 c.headers = {
                     // this header is required by google api
                     "Authorization": auth.token_type + " " + auth.access_token,
                     "Content-Type" :  "application/json"
                 };
-                return $http(c).then(function(r) {
-					return r.data
-                })
-            });
+                return $http(c)
+            }).then(function(r) { 
+				console.debug("request result", r)
+				return r.data 
+			});
         }
 
         // request for getting events list

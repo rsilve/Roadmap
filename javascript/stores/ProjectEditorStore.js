@@ -1,7 +1,8 @@
 define([
     'stores/Store',
-	'Constants'
-], function (Store, constants) {
+	'Constants',
+	"moment"
+], function (Store, constants, moment) {
 
 	
     return function ($scope, dispatcher, ProjectStore) {
@@ -32,12 +33,22 @@ define([
 			project = undefined;
             return true; // needed fo dispatcher
         };
+
+        // helper for create project
+        var createProject = function() {
+			console.debug("Create new project")
+			project = {
+				start : moment(),
+				end : moment().add(1, "month")
+			};
+            return true; // needed fo dispatcher
+        };
 		
 		
 		
 		// Store instance
         var store = new ProjectEditorStore();
-        var callbacks = {};
+		var callbacks = {};
         callbacks[constants.PROJECT_EDIT] = function(action) {
             return dispatcher.defer(setProject(action.project)).then(store.emitChange())
         };
@@ -46,8 +57,11 @@ define([
         };
         callbacks[constants.PROJECT_SAVE] = function(action) {
 			return dispatcher.waitFor([ProjectStore.dispatchIndex])
-			.then(dispatcher.defer(resetProject))
+			.then(resetProject)
 			.then(store.emitChange())
+        };
+        callbacks[constants.PROJECT_CREATE] = function(action) {
+            return dispatcher.defer(createProject).then(store.emitChange())
         };
         
         // register the callbacks

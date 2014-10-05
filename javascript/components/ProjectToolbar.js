@@ -19,6 +19,10 @@ define([], function () {
 		$scope.calendarReset = function() {
 			actions.resetCalendar();
 		}
-
+		// create project
+		$scope.createProject = function() {
+			actions.createProject();
+		}
+		
     };
 });

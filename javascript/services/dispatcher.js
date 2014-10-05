@@ -31,12 +31,14 @@ define([], function () {
 	    };
 	    // method for dispatch an action to the stores
 	    Dispatcher.prototype.dispatch = function(payload) {
+			console.debug("Dispatch started")
 	        this._clearPromises();
 	        var self = this;
 	        this._callbacks.forEach(function(callback) {
 	            self._addPromise(callback, payload);
 	        });
-	        return $q.all(this._promises).catch(recover(self, payload))
+			return $q.all(this._promises).catch(recover(self, payload))
+			.then(function(){console.debug("Dispatch completed")})
 	    };
 
 

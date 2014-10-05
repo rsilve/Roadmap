@@ -31,10 +31,9 @@ define([
 	            });
 	        },
 	        // create a project given is name
-	        create: function (name) {
+	        createProject: function () {
 	            dispatcher.handleViewAction({
 	                actionType: constants.PROJECT_CREATE,
-	                name: name
 	            });
 	        },
 	        // delete a project

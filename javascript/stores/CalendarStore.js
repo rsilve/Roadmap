@@ -56,7 +56,7 @@ define([
 
 
         var store = new CalendarStore();
-        var callbacks = {};
+		var callbacks = {};
         callbacks[constants.SET_CALENDAR] = function(action) {
             return dispatcher.defer(setCalendar(action.id)).then(store.emitChange())
         };
@@ -70,7 +70,7 @@ define([
         // finally do some call for init
         google().calendarList()
 		.then(setCalendarList)
-		.then(function() { store.emitChange() })
+		.then(store.emitChange())
 		.catch(function(err) { console.log(err) });
 		
         console.info("Loading CalendarStore Service "+store.id)

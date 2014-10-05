@@ -2,14 +2,18 @@ requirejs.config({
     paths: {
         "angular": 		'../bower_components/angular/angular',
         "jquery": 		"../bower_components/jquery/dist/jquery",
-        "momentjs": 	"../bower_components/momentjs/moment",
+        "moment": 		"../bower_components/momentjs/moment",
         "toastr": 		"../bower_components/toastr/toastr",
     },
     
     shim: {
-        'angular' : {'exports' : 'angular'},
-		'momentjs': {'exports' : 'moment'}
-    }
+        'angular' : {'exports' : 'angular'}
+    },
+	config: {
+	        moment: {
+	            noGlobal: true
+	        }
+	    }
 });
 
 require( ['angular', 'app'], function(angular, app) {
