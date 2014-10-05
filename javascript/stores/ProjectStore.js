@@ -51,7 +51,14 @@ define([
 			}
         };
 		
-
+        
+        // helper for delete a  project 
+        var deleteProject = function(p) {
+            console.debug("Delete project " +  p.name)
+			return googleCalendar().deleteEvent(p.id).then(getProjects())				
+        };
+		
+		
 			
 		// Store Object 
         function ProjectStore() {}
@@ -68,6 +75,9 @@ define([
 		var callbacks = {};
         callbacks[constants.PROJECT_SAVE] = function(action) {
 			return saveProject(action.project).then(store.emitChange())
+        };
+        callbacks[constants.PROJECT_DESTROY] = function(action) {
+			return deleteProject(action.project).then(store.emitChange())
         };
       
         // register the callbacks

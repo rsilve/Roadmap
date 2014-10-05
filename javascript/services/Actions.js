@@ -37,11 +37,10 @@ define([
 	            });
 	        },
 	        // delete a project
-	        destroy: function (id, name) {
+	        deleteProject: function (project) {
 	            dispatcher.handleViewAction({
 	                actionType: constants.PROJECT_DESTROY,
-	                id: id,
-	                name : name
+	                project : project
 	            });
 	        },
 	        // filtering the project list

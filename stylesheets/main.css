@@ -243,8 +243,11 @@ body {
 	padding-bottom: 8px;
 }
 
-.ProjectEditor input {
+.ProjectEditor input[type=text] {
 	width: 480px;
+}
+.ProjectEditor input[type=date] {
+	width: 10em;
 }
 
 .ProjectEditor-Button {

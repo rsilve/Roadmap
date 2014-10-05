@@ -60,9 +60,15 @@ define([
 			.then(resetProject)
 			.then(store.emitChange())
         };
+        callbacks[constants.PROJECT_DESTROY] = function(action) {
+			return dispatcher.waitFor([ProjectStore.dispatchIndex])
+			.then(resetProject)
+			.then(store.emitChange())
+        };
         callbacks[constants.PROJECT_CREATE] = function(action) {
             return dispatcher.defer(createProject).then(store.emitChange())
         };
+      
         
         // register the callbacks
         dispatcher.registerCallbacks(callbacks);

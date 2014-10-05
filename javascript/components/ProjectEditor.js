@@ -18,9 +18,14 @@ define([], function () {
 			actions.cancelEditProject();
 		}
 		
-		// save edition
+		// save project
 		$scope.save = function() {
 			actions.saveProject(angular.copy($scope.project));
+		}
+		
+		// delete project
+		$scope.delete = function() {
+			actions.deleteProject(angular.copy($scope.project));
 		}
     };
 });

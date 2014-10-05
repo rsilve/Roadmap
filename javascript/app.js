@@ -1,5 +1,6 @@
 define([
     'angular', 
+	'directives/pikaday',
 	'services/dispatcher',
 	'services/Actions',
     'services/Google',
@@ -12,7 +13,7 @@ define([
 	'components/Timebar',
     'components/ProjectList', 
     'components/ProjectEditor' 
-], function (angular, 
+], function (angular, PikadayDirective,
 	Dispatcher, Actions, Google,
 	CalendarStore, ProjectStore , TimeStore, ProjectEditorStore,
 	CalendarChooser, ProjectToolbar, Timebar, ProjectList, ProjectEditor) {
@@ -38,7 +39,12 @@ define([
     .controller('Timebar', ['$scope', 'actions', 'TimeStore', Timebar])
     .controller('ProjectEditor', ['$scope', 'actions', 'ProjectEditorStore', ProjectEditor])
     
-    return angular.module('Roadmap', ['Roadmap.services', 'Roadmap.stores', "Roadmap.components"])
+	angular.module('Roadmap.directives', [])
+	.directive('pikaday', PikadayDirective)
+	
+	
+	
+    return angular.module('Roadmap', ['Roadmap.services', 'Roadmap.stores', "Roadmap.components", 'Roadmap.directives'])
     
 	
 

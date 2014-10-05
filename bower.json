@@ -21,6 +21,7 @@
     "font-awesome": "~4.2.0",
     "normalize.css": "~3.0.1",
     "requirejs": "~2.1.14",
-    "jasmine": "~2.0.0"
+    "jasmine": "~2.0.0",
+    "pikaday": "~1.2.0"
   }
 }
