@@ -13,10 +13,11 @@ define([], function () {
         // auth process is completed
 		var auth = (function() {
 			var deferred = $q.defer();
-	        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, function (result) {
+	        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, function (result) {
 	            if (result && !result.error) {
 	                deferred.resolve(gapi.auth.getToken());
 	            } else {
+					console.warn(result)
 	                deferred.reject("Google said : Not authorized")
 	            }
 	        });
