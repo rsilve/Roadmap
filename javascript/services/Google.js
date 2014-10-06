@@ -13,6 +13,8 @@ define([], function () {
         // auth process is completed
 		var auth = (function() {
 			var deferred = $q.defer();
+			// User need to unblock authorization popup
+			// for this method work
 	        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, function (result) {
 	            if (result && !result.error) {
 	                deferred.resolve(gapi.auth.getToken());
