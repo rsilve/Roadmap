@@ -1,4 +1,4 @@
-define([], function () {
+define(['Constants'], function (constants) {
 
 	function setState($scope, CalendarStore) {
         $scope.list = CalendarStore.getCalendarList();
@@ -21,6 +21,7 @@ define([], function () {
 		// select calendar
 		$scope.choose = function(calendar) {
 			actions.setCalendar(calendar.id);
+			$scope.$emit("dispatcher", constants.SET_CALENDAR, { calendar : calendar.id })
 		}
 
     };

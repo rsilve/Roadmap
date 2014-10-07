@@ -56,12 +56,12 @@ define([
             return dispatcher.defer(resetProject).then(store.emitChange())
         };
         callbacks[constants.PROJECT_SAVE] = function(action) {
-			return dispatcher.waitFor([ProjectStore.dispatchIndex])
+			return dispatcher.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_SAVE]])
 			.then(resetProject)
 			.then(store.emitChange())
         };
         callbacks[constants.PROJECT_DESTROY] = function(action) {
-			return dispatcher.waitFor([ProjectStore.dispatchIndex])
+			return dispatcher.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
 			.then(resetProject)
 			.then(store.emitChange())
         };

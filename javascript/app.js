@@ -22,7 +22,7 @@ define([
 
 	angular.module('Roadmap.services', [])
     .factory("google", ['$q', '$http', Google])
-    .factory("dispatcher", ['$q', Dispatcher])
+    .factory("dispatcher", ['$rootScope', '$q', Dispatcher])
     .factory("actions", ['dispatcher', Actions])
 
 	angular.module('Roadmap.stores', [])

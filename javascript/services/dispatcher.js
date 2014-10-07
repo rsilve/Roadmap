@@ -1,6 +1,12 @@
 define([], function () {
 
-    return function ($q) {
+    return function ($rootScope, $q) {
+		
+		$rootScope.$on("dispatcher", function(event, /* string */ actionType, /* object */ payload ) {
+			payload.actionType = actionType
+            dispatcher.handleViewAction(payload;
+		})
+		
 		// Base object dispatcher
 	    function Dispatcher() {
 	        this._callbacks = [];

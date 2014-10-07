@@ -72,17 +72,13 @@ define([
 		
 		// Store instance
         var store = new ProjectStore();
-		var callbacks = {};
-        callbacks[constants.PROJECT_SAVE] = function(action) {
-			return saveProject(action.project).then(store.emitChange())
-        };
-        callbacks[constants.PROJECT_DESTROY] = function(action) {
-			return deleteProject(action.project).then(store.emitChange())
-        };
-      
-        // register the callbacks
-        store.dispatchIndex = dispatcher.registerCallbacks(callbacks);
+		store.bind(constants.PROJECT_SAVE, function(payload) {
+			return saveProject(action.project)
+        }).bind(constants.PROJECT_DESTROY, function(payload) {
+			return deleteProject(action.project)
+        };)
 		
+        
 		console.info("Loading ProjectStore Service " + store.id)
         return store;
     };
