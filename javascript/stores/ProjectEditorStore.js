@@ -5,7 +5,7 @@ define([
 ], function (Store, constants, moment) {
 
 	
-    return function ($scope, dispatcher, ProjectStore) {
+    return function (dispatcher, ProjectStore) {
 	
 		var project = undefined;
 			
