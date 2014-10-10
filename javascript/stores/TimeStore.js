@@ -13,7 +13,7 @@ define([
 		// Store Object 
         function TimeStore() {}
 		// inherit from Store for events method
-        TimeStore.prototype = new Store($scope)
+        TimeStore.prototype = new Store($scope, dispatcher)
 		
 		// get the projects list
         TimeStore.prototype.getProjects = function() {
@@ -43,20 +43,15 @@ define([
 
 		// Store instance
         var store = new TimeStore();
-		var callbacks = {}
-		 // on next period action move to the next quarter
-        callbacks[constants.TIME_NEXT_PERIOD] = function() {
-            return dispatcher.defer(next).then( store.emitChange())
-        };
-        // on previous period action move to the previous quarter
-        callbacks[constants.TIME_PREV_PERIOD] = function() {
-           return dispatcher.defer(prev).then( store.emitChange());
-        };
-
-        // register and store the reference of this register
-        // useful to use the wait feature of the dispatcher
-        store.dispatchIndex = dispatcher.registerCallbacks(callbacks);
+		store.bind(constants.TIME_NEXT_PERIOD, function() {
+			// on next period action move to the next quarter
+			return dispatcher.defer(next)
+        }).bind(constants.TIME_PREV_PERIOD, function() {
+			// on previous period action move to the previous quarter
+			return dispatcher.defer(prev)
+        })
 		
+       
 		console.info("Loading TimeStore Service " + store.id)
         return store;
     };

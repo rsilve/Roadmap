@@ -20,7 +20,7 @@ define(['Constants'], function (constants) {
 		
 		// select calendar
 		$scope.choose = function(calendar) {
-			actions.setCalendar(calendar.id);
+			//actions.setCalendar(calendar.id);
 			$scope.$emit("dispatcher", constants.SET_CALENDAR, { calendar : calendar.id })
 		}
 

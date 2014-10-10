@@ -1,4 +1,4 @@
-define(["moment"], function (moment) {
+define(["moment","Constants"], function (moment, constants) {
 
 	function setState($scope, ProjectStore) {
         ProjectStore.getProjects()
@@ -46,7 +46,7 @@ define(["moment"], function (moment) {
 		
 		// edit projet
 		$scope.editProject = function(project) {
-			actions.editProject(angular.copy(project))
+			$scope.$emit("dispatcher", constants.PROJECT_EDIT, {project : angular.copy(project)})
 		}
     };
 });

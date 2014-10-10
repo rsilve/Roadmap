@@ -12,7 +12,7 @@ define([
 		// Store Object 
         function ProjectEditorStore() {}
 		// inherit from Store for events method
-        ProjectEditorStore.prototype = new Store($scope)
+        ProjectEditorStore.prototype = new Store($scope, dispatcher)
 		
         // Simple accessor use by components for read the project
         ProjectEditorStore.prototype.getProject = function() {
@@ -48,30 +48,22 @@ define([
 		
 		// Store instance
         var store = new ProjectEditorStore();
-		var callbacks = {};
-        callbacks[constants.PROJECT_EDIT] = function(action) {
-            return dispatcher.defer(setProject(action.project)).then(store.emitChange())
-        };
-        callbacks[constants.PROJECT_EDIT_CANCEL] = function(action) {
-            return dispatcher.defer(resetProject).then(store.emitChange())
-        };
-        callbacks[constants.PROJECT_SAVE] = function(action) {
-			return dispatcher.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_SAVE]])
+		store.bind(constants.PROJECT_EDIT, function(payload) {
+			return dispatcher.defer(setProject(payload.project))
+        }).bind(constants.PROJECT_EDIT_CANCEL, function() {
+			return dispatcher.defer(resetProject)
+        }).bind(constants.PROJECT_SAVE, function() {
+			return dispatcher
+			.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_SAVE]])
+			.then(resetProject)	
+        }).bind(constants.PROJECT_DESTROY, function() {
+			return dispatcher
+			.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
 			.then(resetProject)
-			.then(store.emitChange())
-        };
-        callbacks[constants.PROJECT_DESTROY] = function(action) {
-			return dispatcher.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
-			.then(resetProject)
-			.then(store.emitChange())
-        };
-        callbacks[constants.PROJECT_CREATE] = function(action) {
-            return dispatcher.defer(createProject).then(store.emitChange())
-        };
-      
-        
-        // register the callbacks
-        dispatcher.registerCallbacks(callbacks);
+        }).bind(constants.PROJECT_CREATE, function() {
+			return dispatcher.defer(createProject)
+        })
+		
 		
 		console.info("Loading ProjectEditorStore Service " + store.id)
         return store;

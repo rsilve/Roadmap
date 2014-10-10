@@ -63,7 +63,7 @@ define([
 		// Store Object 
         function ProjectStore() {}
 		// inherit from Store for events method
-        ProjectStore.prototype = new Store($scope)
+        ProjectStore.prototype = new Store($scope, dispatcher)
 		
 		// get the projects list
         ProjectStore.prototype.getProjects = function() {
@@ -73,10 +73,10 @@ define([
 		// Store instance
         var store = new ProjectStore();
 		store.bind(constants.PROJECT_SAVE, function(payload) {
-			return saveProject(action.project)
+			return saveProject(payload.project)
         }).bind(constants.PROJECT_DESTROY, function(payload) {
-			return deleteProject(action.project)
-        };)
+			return deleteProject(payload.project)
+        })
 		
         
 		console.info("Loading ProjectStore Service " + store.id)

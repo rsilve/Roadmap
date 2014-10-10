@@ -1,27 +1,17 @@
-define([], function () {
+define(['Constants'], function (constants) {
 
-	function setState($scope) {
-	}
 
     return function ($scope, actions) {
 			
-        // Get the data
-        //setState($scope)
-        
-        // update the data
-        //$scope.$on(CalendarStore.id, function() {
-		//	setState($scope)
-        //})	
-
 		// Interaction handlers
 		
 		// unselect current calendar
 		$scope.calendarReset = function() {
-			actions.resetCalendar();
+			$scope.$emit("dispatcher", constants.RESET_CALENDAR)
 		}
 		// create project
 		$scope.createProject = function() {
-			actions.createProject();
+			$scope.$emit("dispatcher", constants.PROJECT_CREATE)
 		}
 		
     };

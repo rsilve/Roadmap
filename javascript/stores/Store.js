@@ -13,10 +13,11 @@ define([], function () {
     })();
 
 
-    function Store($scope) {
+    function Store($scope, dispatcher) {
         this.$scope = $scope;
         this.id = guid();
 		this.dispatchIndex = {};
+		this.dispatcher = dispatcher;
 
     }
     Store.prototype.emitChange = function() {
@@ -29,13 +30,24 @@ define([], function () {
     };
 	Store.prototype.bind = function(/* string */ event, /* function */ callback, /* boolean */ emitDisabled) {
 		if (emitDisabled) {
-			this.dispatchIndex[event] = dispatcher.register(callback);
+			var f = function(payload) {
+	            if (payload.actionType === event) {
+	                return callback(payload)
+	            } else
+	                return self.dispatcher.noop();
+				
+			}
+			this.dispatchIndex[event] = this.dispatcher.register(callback);
 		} else {
 			var self = this;
 			var f = function(payload) {
-				return callback(payload).then(self.emitChange())
+	            if (payload.actionType === event) {
+	                return callback(payload).then(self.emitChange())
+	            } else
+	                return self.dispatcher.noop();
+				
 			}
-			this.dispatchIndex[event] = dispatcher.register(f);
+			this.dispatchIndex[event] = this.dispatcher.register(f);
 		}
 		return this;
 	}

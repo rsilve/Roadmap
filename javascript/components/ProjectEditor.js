@@ -1,4 +1,4 @@
-define([], function () {
+define(["Constants"], function (constants) {
 
 	function setState($scope, ProjectEditorStore) {
         $scope.project = ProjectEditorStore.getProject()
@@ -15,17 +15,17 @@ define([], function () {
 		
 		// cancel edition
 		$scope.cancel = function() {
-			actions.cancelEditProject();
+			$scope.$emit("dispatcher", constants.PROJECT_EDIT_CANCEL)
 		}
 		
 		// save project
 		$scope.save = function() {
-			actions.saveProject(angular.copy($scope.project));
+			$scope.$emit("dispatcher", constants.PROJECT_SAVE, {project : angular.copy($scope.project)})
 		}
 		
 		// delete project
 		$scope.delete = function() {
-			actions.deleteProject(angular.copy($scope.project));
+			$scope.$emit("dispatcher", constants.PROJECT_DESTROY, {project : angular.copy($scope.project)})
 		}
     };
 });

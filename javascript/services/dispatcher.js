@@ -2,10 +2,6 @@ define([], function () {
 
     return function ($rootScope, $q) {
 		
-		$rootScope.$on("dispatcher", function(event, /* string */ actionType, /* object */ payload ) {
-			payload.actionType = actionType
-            dispatcher.handleViewAction(payload;
-		})
 		
 		// Base object dispatcher
 	    function Dispatcher() {
@@ -165,32 +161,23 @@ define([], function () {
 	     * as a view action.  Another variant here could be handleServerAction.
 	     * @param  {object} action The data coming from the view.
 	     */
-	    Dispatcher.prototype.handleViewAction = function(/* object */ action) {
-	        return this.dispatch(action).catch(function(err) { console.warn(err) })
+	    Dispatcher.prototype.handleViewAction = function(/* object */ payload) {
+	        return this.dispatch(payload).catch(function(err) { console.warn(err) })
 	    };
 
-	    // helper for register map of callbacks
-	    /* var callbacks = {
-	     *     action1 : function(payload) {
-	     *      return disaptcher.defer(...) // a classic action encapsulate in defer
-	     *    },
-	     *    action2 : function(payload) {
-	     *      return $.ajax(..) // async action
-	     *    }
-	     * }
-	     * dispatcher.registerCallbacks(callbacks)
-	     */
-	    Dispatcher.prototype.registerCallbacks = function(callbacks) {
-	        var self = this;
-	        return this.register(function(payload) {
-	            if (callbacks[payload.actionType]) {
-	                return callbacks[payload.actionType](payload)
-	            } else
-	                return self.noop();
-	        })
-	    };
-		
+	   
         console.info("Loading Dispatcher Service")
-        return new Dispatcher()
+		
+		
+		var dispatcher = new Dispatcher()
+		
+		$rootScope.$on("dispatcher", function(event, /* string */ actionType, /* object */ payload ) {
+			payload = payload || {};
+			payload.actionType = actionType;
+            dispatcher.handleViewAction(payload);
+		})
+		
+		
+        return dispatcher;
     };
 });

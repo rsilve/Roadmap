@@ -15,7 +15,7 @@ define([
 
         // This store inherit from Store
         function CalendarStore() {}
-        CalendarStore.prototype = new Store($scope);
+        CalendarStore.prototype = new Store($scope, dispatcher);
 
         // Simple accessor use by components for read the calendar Id
         CalendarStore.prototype.getCalendar = function() {
@@ -56,17 +56,12 @@ define([
 
 
         var store = new CalendarStore();
-		var callbacks = {};
-        callbacks[constants.SET_CALENDAR] = function(action) {
-            return dispatcher.defer(setCalendar(action.id)).then(store.emitChange())
-        };
-        callbacks[constants.RESET_CALENDAR] = function(action) {
-            return dispatcher.defer(resetCalendar).then(store.emitChange())
-        };
-
-        // register the callbacks
-        dispatcher.registerCallbacks(callbacks);
-
+		store.bind(constants.SET_CALENDAR, function(payload) {
+			return dispatcher.defer(setCalendar(payload.calendar))
+        }).bind(constants.RESET_CALENDAR, function(payload) {
+			return dispatcher.defer(resetCalendar)
+        })
+		
         // finally do some call for init
         google().calendarList()
 		.then(setCalendarList)

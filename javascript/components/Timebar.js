@@ -1,4 +1,4 @@
-define([], function () {
+define(['Constants'], function (constants)  {
 
 	function setState($scope, TimeStore) {
 		$scope.start = TimeStore.getStart();
@@ -34,12 +34,12 @@ define([], function () {
 		
 		// time forward
 		$scope.previousQuarter = function() {
-			actions.previousPeriod();
+			$scope.$emit("dispatcher", constants.TIME_PREV_PERIOD)
 		}
 
 		// time forward
 		$scope.nextQuarter = function() {
-			actions.nextPeriod();
+			$scope.$emit("dispatcher", constants.TIME_NEXT_PERIOD)
 		}
 
     };
