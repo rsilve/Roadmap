@@ -21,7 +21,6 @@ body {
 }
 
 .calendar-chooser{
-    display: none;
     position: absolute;
     top : 0;
     left : 20px;
@@ -30,9 +29,6 @@ body {
     padding: 8px;
 }
 
-.calendar-chooser.calendar-need-select {
-    display: block;
-}
 
 .calendar-list {
     list-style-type: none;

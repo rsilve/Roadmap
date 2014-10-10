@@ -12,7 +12,7 @@ define([
 		// Store Object 
         function ProjectEditorStore() {}
 		// inherit from Store for events method
-        ProjectEditorStore.prototype = new Store($scope, dispatcher)
+        ProjectEditorStore.prototype = new Store(dispatcher)
 		
         // Simple accessor use by components for read the project
         ProjectEditorStore.prototype.getProject = function() {

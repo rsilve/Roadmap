@@ -5,7 +5,7 @@ define([
 ], function (Store,  projectHelper, constants) {
 
 	
-    return function ($scope, dispatcher, google, CalendarStore) {
+    return function (dispatcher, google, CalendarStore) {
 		
 		// store projects here
 		var _projects = {};
@@ -63,11 +63,11 @@ define([
 		// Store Object 
         function ProjectStore() {}
 		// inherit from Store for events method
-        ProjectStore.prototype = new Store($scope, dispatcher)
+        ProjectStore.prototype = new Store(dispatcher)
 		
 		// get the projects list
         ProjectStore.prototype.getProjects = function() {
-        	return getProjects();
+        	return _projects;
         }
 		
 		// Store instance
@@ -76,6 +76,8 @@ define([
 			return saveProject(payload.project)
         }).bind(constants.PROJECT_DESTROY, function(payload) {
 			return deleteProject(payload.project)
+        }).bind(constants.SET_CALENDAR, function(payload) {
+			return getProjects()
         })
 		
         

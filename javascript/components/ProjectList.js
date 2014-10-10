@@ -1,10 +1,7 @@
 define(["moment","Constants"], function (moment, constants) {
 
 	function setState($scope, ProjectStore) {
-        ProjectStore.getProjects()
-            	.then(function(projects) {
-                    $scope.projects = projects
-                })
+        $scope.projects = ProjectStore.getProjects;
 	}
 	
 	// helper for compute timeline style
@@ -24,19 +21,11 @@ define(["moment","Constants"], function (moment, constants) {
 	    };
 	
 	
-    return function ($scope, actions, ProjectStore, CalendarStore, TimeStore) {
+    return function ($scope, ProjectStore, CalendarStore, TimeStore) {
 
-        // Get the data
-       //setState($scope, ProjectStore)
+        // Init
+        setState($scope, ProjectStore)
 
-        // update the data
-        $scope.$on(ProjectStore.id, function() {
-            setState($scope, ProjectStore)
-        })
-        $scope.$on(CalendarStore.id, function() {
-            setState($scope, ProjectStore)
-        })
-		
 		// interaction handler
 		
 		// return style for project time line

@@ -1,7 +1,7 @@
 define(['Constants'], function (constants) {
 
 
-    return function ($scope, actions) {
+    return function ($scope) {
 			
 		// Interaction handlers
 		

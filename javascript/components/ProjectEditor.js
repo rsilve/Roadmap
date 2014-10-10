@@ -1,16 +1,14 @@
 define(["Constants"], function (constants) {
 
 	function setState($scope, ProjectEditorStore) {
-        $scope.project = ProjectEditorStore.getProject()
+        $scope.project = ProjectEditorStore.getProject
 	}
 	
-    return function ($scope, actions, ProjectEditorStore) {
+    return function ($scope, ProjectEditorStore) {
 
-        // update the data
-        $scope.$on(ProjectEditorStore.id, function() {
-			setState($scope, ProjectEditorStore)
-        })
-       
+       	// Init
+		setState($scope, ProjectEditorStore);
+		
 		// interaction handler
 		
 		// cancel edition
@@ -20,12 +18,12 @@ define(["Constants"], function (constants) {
 		
 		// save project
 		$scope.save = function() {
-			$scope.$emit("dispatcher", constants.PROJECT_SAVE, {project : angular.copy($scope.project)})
+			$scope.$emit("dispatcher", constants.PROJECT_SAVE, {project : angular.copy($scope.project())})
 		}
 		
 		// delete project
 		$scope.delete = function() {
-			$scope.$emit("dispatcher", constants.PROJECT_DESTROY, {project : angular.copy($scope.project)})
+			$scope.$emit("dispatcher", constants.PROJECT_DESTROY, {project : angular.copy($scope.project())})
 		}
     };
 });

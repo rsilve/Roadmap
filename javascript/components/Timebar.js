@@ -1,35 +1,16 @@
 define(['Constants'], function (constants)  {
 
 	function setState($scope, TimeStore) {
-		$scope.start = TimeStore.getStart();
-		$scope.months = [];
-		for (var i = 0; i < 24; i ++) {
-			// $scope.start is a momentjs
-            var d = $scope.start.clone().add(i, "month");
-			var month = { label : d.format("MMM") }
-			if (d.month() == 0) {
-                month.label = d.format("MMM YYYY");
-                month.meta += " startyear"
-            }
-            if (d.month() % 3 == 0) {
-                month.label = d.format("MMM YYYY");
-                month.meta += " quarter"
-            }
-			
-            $scope.months.push(month );
-        }
+		$scope.start = TimeStore.getStart;
+		$scope.months = TimeStore.getMonths;
 	}
 
-    return function ($scope, actions, TimeStore) {
+    return function ($scope, TimeStore) {
 			
-        // Get the data
+        // Init
         setState($scope, TimeStore)
         
-        // update the data
-        $scope.$on(TimeStore.id, function() {
-			setState($scope, TimeStore)
-        })	
-
+      
 		// Interaction handlers
 		
 		// time forward

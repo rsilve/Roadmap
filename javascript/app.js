@@ -2,8 +2,7 @@ define([
     'angular', 
 	'directives/pikaday',
 	'services/dispatcher',
-	'services/Actions',
-    'services/Google',
+	'services/Google',
 	'stores/CalendarStore',
     'stores/ProjectStore', 
     'stores/TimeStore', 
@@ -14,7 +13,7 @@ define([
     'components/ProjectList', 
     'components/ProjectEditor' 
 ], function (angular, PikadayDirective,
-	Dispatcher, Actions, Google,
+	Dispatcher, Google,
 	CalendarStore, ProjectStore , TimeStore, ProjectEditorStore,
 	CalendarChooser, ProjectToolbar, Timebar, ProjectList, ProjectEditor) {
 
@@ -23,21 +22,20 @@ define([
 	angular.module('Roadmap.services', [])
     .factory("google", ['$q', '$http', Google])
     .factory("dispatcher", ['$rootScope', '$q', Dispatcher])
-    .factory("actions", ['dispatcher', Actions])
-
+    
 	angular.module('Roadmap.stores', [])
-	.factory("CalendarStore", ['$rootScope', 'dispatcher', 'google',  CalendarStore])
-	.factory("ProjectStore", ['$rootScope', 'dispatcher', 'google', 'CalendarStore', ProjectStore])
-	.factory("TimeStore", ['$rootScope', 'dispatcher', TimeStore])
-	.factory("ProjectEditorStore", ['$rootScope', 'dispatcher', 'ProjectStore', ProjectEditorStore])
+	.factory("CalendarStore", ['dispatcher', 'google',  CalendarStore])
+	.factory("ProjectStore", ['dispatcher', 'google', 'CalendarStore', ProjectStore])
+	.factory("TimeStore", ['dispatcher', TimeStore])
+	.factory("ProjectEditorStore", ['dispatcher', 'ProjectStore', ProjectEditorStore])
 	
 
 	angular.module('Roadmap.components', [])
-    .controller('ProjectList', ['$scope', 'actions', 'ProjectStore','CalendarStore', 'TimeStore', ProjectList])
-    .controller('ProjectToolbar', ['$scope', 'actions', ProjectToolbar])
-    .controller('CalendarChooser', ['$scope', 'CalendarStore', 'actions', CalendarChooser])
-    .controller('Timebar', ['$scope', 'actions', 'TimeStore', Timebar])
-    .controller('ProjectEditor', ['$scope', 'actions', 'ProjectEditorStore', ProjectEditor])
+    .controller('ProjectList', ['$scope',  'ProjectStore','CalendarStore', 'TimeStore', ProjectList])
+    .controller('ProjectToolbar', ['$scope',  ProjectToolbar])
+    .controller('CalendarChooser', ['$scope', 'CalendarStore', CalendarChooser])
+    .controller('Timebar', ['$scope', 'TimeStore', Timebar])
+    .controller('ProjectEditor', ['$scope', 'ProjectEditorStore', ProjectEditor])
     
 	angular.module('Roadmap.directives', [])
 	.directive('pikaday', PikadayDirective)

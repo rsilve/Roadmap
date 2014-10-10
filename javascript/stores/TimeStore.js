@@ -4,35 +4,59 @@ define([
 	'moment'
 ], function (Store, constants, moment) {
 
+	// helper for compute month list
+	var updateMonths = function(start) {
+		var z = []
+		for (var i = 0; i < 24; i ++) {
+			// $scope.start is a momentjs
+            var d = start.clone().add(i, "month");
+			var month = { label : d.format("MMM") }
+			if (d.month() == 0) {
+                month.label = d.format("MMM YYYY");
+                month.meta += " startyear"
+            }
+            if (d.month() % 3 == 0) {
+                month.label = d.format("MMM YYYY");
+                month.meta += " quarter"
+            }
+		
+           z.push(month );
+        }
+		return z;
+	}
+
 	
-    return function ($scope, dispatcher) {
+    return function (dispatcher) {
 		
 	    // init the start date to the begining of the current year
 	    var start = moment().startOf('year');
-			
+		var months = updateMonths(start);	
+		
 		// Store Object 
         function TimeStore() {}
 		// inherit from Store for events method
-        TimeStore.prototype = new Store($scope, dispatcher)
-		
-		// get the projects list
-        TimeStore.prototype.getProjects = function() {
-        	return getProjects();
-        }
+        TimeStore.prototype = new Store(dispatcher)
 		
         // Simple accessor use by components for read the time reference
         TimeStore.prototype.getStart = function() {
             return start
         };
-
+        // Simple accessor use by components for read the months list
+        TimeStore.prototype.getMonths = function() {
+            return months
+        };
+       
+		
         // helper go to next quarter
         var next = function() {
             start.quarter(start.quarter() + 1);
+			months = updateMonths(start);
             return true; // need for dispatcher
         };
         // helper go to previous quarter
         var prev = function() {
-            start.subtract("month", 3);
+            start.subtract(3, "month");
+			months = updateMonths(start);
             return true; // need for dispatcher
         };
 
