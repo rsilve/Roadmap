@@ -3,7 +3,7 @@ define([
     'Constants'
 ], function (Store, constants) {
 
-    return function (dispatcher, google) {
+    return function (scope, dispatcher, google) {
         /*
          * Here we define the CalendarStore class
          */
@@ -15,7 +15,7 @@ define([
 
         // This store inherit from Store
         function CalendarStore() {}
-        CalendarStore.prototype = new Store(dispatcher);
+        CalendarStore.prototype = new Store(scope, dispatcher);
 
         // Simple accessor use by components for read the calendar Id
         CalendarStore.prototype.getCalendar = function() {
@@ -65,6 +65,7 @@ define([
         // finally do some call for init
         google().calendarList()
 		.then(setCalendarList)
+		.then(store.emitChange())
 		.catch(function(err) { console.log(err) });
 		
         console.info("Loading CalendarStore Service "+store.id)

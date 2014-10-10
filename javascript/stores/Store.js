@@ -13,22 +13,40 @@ define([], function () {
     })();
 
 
-    function Store( dispatcher) {
+    function Store($scope, dispatcher) {
+        this.$scope = $scope;
         this.id = guid();
 		this.dispatchIndex = {};
 		this.dispatcher = dispatcher;
 
     }
-   Store.prototype.bind = function(/* string */ event, /* function */ callback) {
+    Store.prototype.emitChange = function() {
 		var self = this;
-		var f = function(payload) {
-            if (payload.actionType === event) {
-                return callback(payload)
-            } else
-                return self.dispatcher.noop();
-			
+		return function() {
+			console.debug("Emit ", self.id)
+	        self.$scope.$broadcast(self.id)
 		}
-		this.dispatchIndex[event] = this.dispatcher.register(f)
+		
+    };
+	Store.prototype.bind = function(/* string */ event, /* function */ callback, /* boolean */ emitDisabled) {
+		var self = this;
+		if (emitDisabled) {
+			var f = function(payload) {
+				if (event === payload.actionType)
+				 	return callback(payload)
+				else 
+					return self.dispatcher.noop()
+			}
+			this.dispatchIndex[event] = this.dispatcher.register(callback);
+		} else {
+			var f = function(payload) {
+				if (event === payload.actionType)
+				 	return callback(payload).then(self.emitChange())
+				else 
+					return self.dispatcher.noop()
+			}
+			this.dispatchIndex[event] = this.dispatcher.register(f);
+		}
 		return this;
 	}
 

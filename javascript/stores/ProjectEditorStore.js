@@ -5,14 +5,14 @@ define([
 ], function (Store, constants, moment) {
 
 	
-    return function (dispatcher, ProjectStore) {
+    return function (scope, dispatcher, ProjectStore) {
 	
 		var project = undefined;
 			
 		// Store Object 
         function ProjectEditorStore() {}
 		// inherit from Store for events method
-        ProjectEditorStore.prototype = new Store(dispatcher)
+        ProjectEditorStore.prototype = new Store(scope, dispatcher)
 		
         // Simple accessor use by components for read the project
         ProjectEditorStore.prototype.getProject = function() {

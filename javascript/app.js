@@ -24,10 +24,10 @@ define([
     .factory("dispatcher", ['$rootScope', '$q', Dispatcher])
     
 	angular.module('Roadmap.stores', [])
-	.factory("CalendarStore", ['dispatcher', 'google',  CalendarStore])
-	.factory("ProjectStore", ['dispatcher', 'google', 'CalendarStore', ProjectStore])
-	.factory("TimeStore", ['dispatcher', TimeStore])
-	.factory("ProjectEditorStore", ['dispatcher', 'ProjectStore', ProjectEditorStore])
+	.factory("CalendarStore", ['$rootScope','dispatcher', 'google',  CalendarStore])
+	.factory("ProjectStore", ['$rootScope','dispatcher', 'google', 'CalendarStore', ProjectStore])
+	.factory("TimeStore", ['$rootScope','dispatcher', TimeStore])
+	.factory("ProjectEditorStore", ['$rootScope','dispatcher', 'ProjectStore', ProjectEditorStore])
 	
 
 	angular.module('Roadmap.components', [])

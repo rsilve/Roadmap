@@ -1,15 +1,18 @@
 define(['Constants'], function (constants)  {
 
-	function setState($scope, TimeStore) {
-		$scope.start = TimeStore.getStart;
-		$scope.months = TimeStore.getMonths;
-	}
-
     return function ($scope, TimeStore) {
+		
+		var setState = function() {
+			$scope.start = TimeStore.getStart();
+			$scope.months = TimeStore.getMonths();
+		}	
+			
 			
         // Init
-        setState($scope, TimeStore)
-        
+        setState()
+
+		// Binding
+		$scope.$on(TimeStore.id, setState)
       
 		// Interaction handlers
 		

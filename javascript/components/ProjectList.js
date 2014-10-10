@@ -1,8 +1,5 @@
 define(["moment","Constants"], function (moment, constants) {
 
-	function setState($scope, ProjectStore) {
-        $scope.projects = ProjectStore.getProjects;
-	}
 	
 	// helper for compute timeline style
 	var timeStyle = function(ref, start, end) {
@@ -22,15 +19,27 @@ define(["moment","Constants"], function (moment, constants) {
 	
 	
     return function ($scope, ProjectStore, CalendarStore, TimeStore) {
+		var start = null;
+		var setState = function() {
+	       $scope.projects = ProjectStore.getProjects();
+		   start = TimeStore.getStart();
+		}
+		
 
         // Init
-        setState($scope, ProjectStore)
+        setState();
+		
+		// Binding
+		[ProjectStore.id, CalendarStore.id, TimeStore.id].forEach(function(id) {
+				$scope.$on(id, setState)
+		})
+		
 
 		// interaction handler
 		
 		// return style for project time line
 		$scope.timelineStyle = function(project) {
-			return timeStyle(TimeStore.getStart(), project.start, project.end)
+			return timeStyle(start, project.start, project.end)
 		}
 		
 		// edit projet

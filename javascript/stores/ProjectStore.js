@@ -5,12 +5,11 @@ define([
 ], function (Store,  projectHelper, constants) {
 
 	
-    return function (dispatcher, google, CalendarStore) {
+    return function (scope, dispatcher, google, CalendarStore) {
 		
 		// store projects here
 		var _projects = {};
         
-
 		// factory for google client
 		function googleCalendar() {
             var c = CalendarStore.getCalendar();
@@ -63,7 +62,7 @@ define([
 		// Store Object 
         function ProjectStore() {}
 		// inherit from Store for events method
-        ProjectStore.prototype = new Store(dispatcher)
+        ProjectStore.prototype = new Store(scope, dispatcher)
 		
 		// get the projects list
         ProjectStore.prototype.getProjects = function() {

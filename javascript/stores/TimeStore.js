@@ -26,7 +26,7 @@ define([
 	}
 
 	
-    return function (dispatcher) {
+    return function (scope, dispatcher) {
 		
 	    // init the start date to the begining of the current year
 	    var start = moment().startOf('year');
@@ -35,7 +35,7 @@ define([
 		// Store Object 
         function TimeStore() {}
 		// inherit from Store for events method
-        TimeStore.prototype = new Store(dispatcher)
+        TimeStore.prototype = new Store(scope, dispatcher)
 		
         // Simple accessor use by components for read the time reference
         TimeStore.prototype.getStart = function() {
