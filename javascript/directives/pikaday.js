@@ -14,6 +14,7 @@ define([
 			 	new Pikaday({ 
 					field: element[0], 
 					format: 'DD/MM/YYYY',
+					position : "bottom left",
 					setDefaultDate: true,
 					//defaultDate: scope.pikaday
 					onOpen : function() {

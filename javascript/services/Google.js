@@ -52,7 +52,7 @@ define([], function () {
 
         // request for getting events list
         var events = function(calendar) {
-            return request({method: 'GET', path: "/calendars/"+calendar+"/events"});
+            return request({method: 'GET', path: "/calendars/"+calendar+"/events"}).then();
         };
 
         // request for creating a new event

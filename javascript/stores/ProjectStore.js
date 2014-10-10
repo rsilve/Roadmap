@@ -44,9 +44,13 @@ define([
             console.debug("Save project " +  p.name)
 			if (p.id) {
 				// It's an update
-	            return googleCalendar().updateEvent(p.id, projectHelper.serialize(p)).then(getProjects())				
+	            return googleCalendar()
+				.updateEvent(p.id, projectHelper.serialize(p))
+				.then(function() { return getProjects() })				
 			} else {
-				return googleCalendar().createEvent(projectHelper.serialize(p)).then(getProjects())		
+				return googleCalendar()
+				.createEvent(projectHelper.serialize(p))
+				.then(function() { return getProjects() })		
 			}
         };
 		
@@ -54,7 +58,9 @@ define([
         // helper for delete a  project 
         var deleteProject = function(p) {
             console.debug("Delete project " +  p.name)
-			return googleCalendar().deleteEvent(p.id).then(getProjects())				
+			return googleCalendar()
+			.deleteEvent(p.id)
+			.then(function() { return getProjects() })				
         };
 		
 		
