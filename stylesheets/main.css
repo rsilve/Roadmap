@@ -254,6 +254,18 @@ body {
 	margin-right: 6px;
 }
 
+.history {
+    position: absolute;
+	bottom: 0;
+	right: 3px;
+    background: white;
+    border-top : 1px solid #BBB;
+    border-right : 1px solid #BBB;
+    border-left : 1px solid #BBB;
+	padding: 8px;
+    z-index: 2;
+}
+
 .delete-icon {
     position: absolute;
     padding: 0 5px;

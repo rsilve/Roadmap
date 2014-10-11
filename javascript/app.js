@@ -7,15 +7,17 @@ define([
     'stores/ProjectStore', 
     'stores/TimeStore', 
     'stores/ProjectEditorStore', 
+    'stores/HistoryStore', 
 	'components/CalendarChooser',
 	'components/ProjectToolbar',
 	'components/Timebar',
     'components/ProjectList', 
-    'components/ProjectEditor' 
+    'components/ProjectEditor', 
+    'components/HistoryList' 
 ], function (angular, PikadayDirective,
 	Dispatcher, Google,
-	CalendarStore, ProjectStore , TimeStore, ProjectEditorStore,
-	CalendarChooser, ProjectToolbar, Timebar, ProjectList, ProjectEditor) {
+	CalendarStore, ProjectStore , TimeStore, ProjectEditorStore, HistoryStore,
+	CalendarChooser, ProjectToolbar, Timebar, ProjectList, ProjectEditor, HistoryList) {
 
     // Declare app level module which depends on filters, and services
 
@@ -28,21 +30,21 @@ define([
 	.factory("ProjectStore", ['$rootScope','dispatcher', 'google', 'CalendarStore', ProjectStore])
 	.factory("TimeStore", ['$rootScope','dispatcher', TimeStore])
 	.factory("ProjectEditorStore", ['$rootScope','dispatcher', 'ProjectStore', ProjectEditorStore])
+	.factory("HistoryStore", ['$rootScope','dispatcher',  HistoryStore])
 	
-
 	angular.module('Roadmap.components', [])
     .controller('ProjectList', ['$scope',  'ProjectStore','CalendarStore', 'TimeStore', ProjectList])
     .controller('ProjectToolbar', ['$scope',  ProjectToolbar])
     .controller('CalendarChooser', ['$scope', 'CalendarStore', CalendarChooser])
     .controller('Timebar', ['$scope', 'TimeStore', Timebar])
     .controller('ProjectEditor', ['$scope', 'ProjectEditorStore', ProjectEditor])
+    .controller('HistoryList', ['$scope', 'HistoryStore', HistoryList])
     
 	angular.module('Roadmap.directives', [])
 	.directive('pikaday', PikadayDirective)
-	
-	
-	
-    return angular.module('Roadmap', ['Roadmap.services', 'Roadmap.stores', "Roadmap.components", 'Roadmap.directives'])
+
+    return angular.module('Roadmap', 
+		['Roadmap.services', 'Roadmap.stores', "Roadmap.components", 'Roadmap.directives'])
     
 	
 
