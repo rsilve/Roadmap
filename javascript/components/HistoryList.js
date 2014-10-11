@@ -15,6 +15,9 @@ function (constants) {
         
 		// Interaction handlers
 		
+		$scope.undo = function() {
+			$scope.$emit("dispatcher", constants.UNDO, {data : $scope.history.slice(0,1).shift() } )
+		}
 	}
 	
 });

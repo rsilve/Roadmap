@@ -63,6 +63,22 @@ define([
 			.then(function() { return getProjects() })				
         };
 		
+		var undoHandler = {}
+		undoHandler[constants.PROJECT_SAVE] = function(payload) {
+			return saveProject(payload.from)
+		}
+		undoHandler[constants.PROJECT_DESTROY] = function(payload) {
+			var p = payload.from
+			delete p.id;
+			return saveProject(payload.from)
+		}
+		var undo = function(payload) {
+			console.log("Undo", payload.data.actionType)
+			if (undoHandler[payload.data.actionType])
+			  return undoHandler[payload.data.actionType](payload.data)
+			else 
+			  return dispatcher.noop()
+		}
 		
 			
 		// Store Object 
@@ -83,6 +99,8 @@ define([
 			return deleteProject(payload.project)
         }).bind(constants.SET_CALENDAR, function(payload) {
 			return getProjects()
+        }).bind(constants.UNDO, function(payload) {
+			return undo(payload)
         })
 		
         

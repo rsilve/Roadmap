@@ -14,7 +14,9 @@ define([], function() {
         AUTH_FAILED: "AUTH_FAILED",
 
         SET_CALENDAR: "SET_CALENDAR",
-        RESET_CALENDAR: "RESET_CALENDAR"
+        RESET_CALENDAR: "RESET_CALENDAR",
+		
+		UNDO : "UNDO"
     }
 
 });
