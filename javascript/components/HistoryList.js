@@ -5,6 +5,7 @@ function (constants) {
 		
 		var setState = function() {
 	        $scope.history = HistoryStore.getHistory();
+			$scope.progress = false;
 		}
 		
 		// Initial state
@@ -17,6 +18,7 @@ function (constants) {
 		
 		$scope.undo = function() {
 			$scope.$emit("dispatcher", constants.UNDO, {data : $scope.history.slice(0,1).shift() } )
+			$scope.progress = true;
 		}
 	}
 	

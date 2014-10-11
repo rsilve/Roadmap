@@ -7,6 +7,7 @@ define([
 	return function (scope, dispatcher, ProjectStore, $interval) {
 		
 		var history = [];
+		var scheduler = null;
 		
 		// Store Object 
         function HistoryStore() {}
@@ -31,7 +32,14 @@ define([
 			return true // need for dispatcher
 		}
 		
-		
+		var cancelScheduler = function(){
+			$interval.cancel(scheduler)
+			return true;
+		} 
+		var startScheduler = function(){
+			scheduler = $interval(store.emitChange(), 60000)
+			return true;
+		} 
 		
 		// Create instance
         var store = new HistoryStore();
@@ -44,11 +52,14 @@ define([
 			return dispatcher.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
 			.then(push(payload))
         }).bind(constants.UNDO, function(payload) {
-			return dispatcher.waitFor([ProjectStore.dispatchIndex[constants.UNDO]])
-			.then(undo)
+			return dispatcher.defer(cancelScheduler)
+			.then(function() {
+				return dispatcher.waitFor([ProjectStore.dispatchIndex[constants.UNDO]])
+			}).then(undo)
+			.then(startScheduler)
         })
 		
-		$interval(store.emitChange(), 10000)
+		
        
 		console.info("Loading HistoryStore Service " + store.id)
         return store;

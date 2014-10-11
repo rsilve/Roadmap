@@ -5,6 +5,7 @@ define(["Constants"], function (constants) {
 		var project = null;
 		var setState = function() {
 	       $scope.project = ProjectEditorStore.getProject();
+		   $scope.progress = false;
 		   project = angular.copy($scope.project);
 		}
 		
@@ -23,6 +24,7 @@ define(["Constants"], function (constants) {
 		
 		// save project
 		$scope.save = function() {
+			$scope.progress = true;
 			if ($scope.project.id) {
 				$scope.$emit("dispatcher", constants.PROJECT_SAVE, {project : angular.copy($scope.project), from: project})
 			} else {
@@ -33,6 +35,7 @@ define(["Constants"], function (constants) {
 		
 		// delete project
 		$scope.delete = function() {
+			$scope.progress = true;
 			$scope.$emit("dispatcher", constants.PROJECT_DESTROY, {project : angular.copy($scope.project), from: project})
 		}
     };
