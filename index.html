@@ -47,8 +47,8 @@
         <div class="timebar" ng-controller="Timebar">
             <div id="time-bar">
             	<div class="clearfix">
-            		<div class="TimeBar-Prev" ng-click="previousQuarter()">&lt;&lt;</div>
-            		<div class="TimeBar-Next" ng-click="nextQuarter()">&gt;&gt;</div>
+            		<div class="TimeBar-Prev" ng-click="previousQuarter()"><i class="fa fa-backward"></i></div>
+            		<div class="TimeBar-Next" ng-click="nextQuarter()"><i class="fa fa-forward"></i></div>
             	</div>
 				<div class="TimeBar-Ticks clearfix">
 					<div ng-repeat="month in months" class="TimeBar-Month month" ng-class="month.meta">{{month.label}}</div>
@@ -58,9 +58,9 @@
         <div class="grid-content">
             <div id="project-list" ng-controller="ProjectList">
                 <ul class="ProjectList">
-					<li ng-repeat="project in projects" class="Project" ng-dblclick="editProject(project)">
+					<li ng-repeat="project in projects" class="Project" >
 						<div class="Project-timebar" ng-style="timelineStyle(project)" ></div>
-						<i class="fa fa-pencil clickable"></i>
+						<i class="fa fa-pencil clickable" ng-click="editProject(project)"></i>
 						{{project.name}}
 						<span style="color: #999; font-size: 0.8em">{{project.start.format("DD/MM/YYYY")}} 
 							<i class="fa fa-long-arrow-right"></i> 
@@ -70,9 +70,11 @@
             </div>
 		</div>
         <div class="history" ng-controller="HistoryList" ng-show="history.length > 0">
+			Dernières operations ...
             <ul >
-				<li ng-repeat="payload in history">
-					{{payload.actionType}} {{payload.project.name}}
+				<li ng-repeat="data in history" ng-class="$first ? 'selected' : ''" >
+					<span class="pull-right timestamp">{{data.timestamp.fromNow()}}</span>
+					<i class="fa {{data.payload.actionType}}"></i> {{data.payload.project.name}}
 				</li>
 			</ul>
 			<button ng-click="undo()">Undo</button>

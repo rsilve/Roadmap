@@ -264,7 +264,7 @@ body {
     border-left : 1px solid #BBB;
 	padding: 8px;
 	max-height: 200px;
-	max-width: 400px;
+	width: 500px;
 	overflow: scroll;
     z-index: 2;
 }
@@ -274,6 +274,29 @@ body {
 	margin: 0;
 	padding: 0;
 }
+
+.history li {
+	padding-bottom: 4px;
+	color: #BBB;
+}
+
+.history li .timestamp {
+	font-size: 0.8em;
+	color: #BBB;
+}
+
+.history li.selected {
+	color: black;
+}
+
+.history li .PROJECT_SAVE:before {
+		content: "\f0c7";
+}
+
+.history li .PROJECT_DESTROY:before{
+		content: "\f1f8";
+}
+
 
 .delete-icon {
     position: absolute;

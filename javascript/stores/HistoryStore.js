@@ -1,9 +1,10 @@
 define([
     'stores/Store',
-	'Constants'
-], function (Store, constants) {
+	'Constants',
+	'moment'
+], function (Store, constants, moment) {
 	
-	return function (scope, dispatcher, ProjectStore) {
+	return function (scope, dispatcher, ProjectStore, $interval) {
 		
 		var history = [];
 		
@@ -19,7 +20,8 @@ define([
 		
 		var push = function(payload) {
 			return function() { 
-				history.unshift(payload) 
+				
+				history.unshift({payload : payload, timestamp: moment()}) 
 				return true // need for dispatcher
 			}
 		}
@@ -46,6 +48,7 @@ define([
 			.then(undo)
         })
 		
+		$interval(store.emitChange(), 10000)
        
 		console.info("Loading HistoryStore Service " + store.id)
         return store;

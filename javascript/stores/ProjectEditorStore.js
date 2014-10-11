@@ -29,7 +29,7 @@ define([
 		
         // helper for resetting project
         var resetProject = function() {
-			console.debug("Cancel project edit " +  project.name)
+			console.debug("Cancel project edit ", project)
 			project = undefined;
             return true; // needed fo dispatcher
         };
@@ -56,13 +56,20 @@ define([
 			return dispatcher
 			.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_SAVE]])
 			.then(resetProject)	
+        }).bind(constants.PROJECT_INSERT, function() {
+			return dispatcher
+			.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_INSERT]])
+			.then(resetProject)	
         }).bind(constants.PROJECT_DESTROY, function() {
 			return dispatcher
 			.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
 			.then(resetProject)
         }).bind(constants.PROJECT_CREATE, function() {
 			return dispatcher.defer(createProject)
-        })
+        }).bind(constants.UNDO, function() {
+			return dispatcher.defer(resetProject)
+		})
+        
 		
 		
 		console.info("Loading ProjectEditorStore Service " + store.id)

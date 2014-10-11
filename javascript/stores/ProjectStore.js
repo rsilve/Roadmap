@@ -41,23 +41,23 @@ define([
 		
         // helper for saving a  project in dispatcher
         var saveProject = function(p) {
-            console.debug("Save project " +  p.name)
-			if (p.id) {
-				// It's an update
-	            return googleCalendar()
+            console.info("Save project " +  p.name)
+            return googleCalendar()
 				.updateEvent(p.id, projectHelper.serialize(p))
-				.then(function() { return getProjects() })				
-			} else {
-				return googleCalendar()
+				.then(function() { return getProjects() })
+        };
+        // helper for saving a  project in dispatcher
+        var insertProject = function(p) {
+            console.info("insert project " +  p.name)
+            return googleCalendar()
 				.createEvent(projectHelper.serialize(p))
-				.then(function() { return getProjects() })		
-			}
+				.then(function() { return getProjects() })
         };
 		
         
         // helper for delete a  project 
         var deleteProject = function(p) {
-            console.debug("Delete project " +  p.name)
+            console.info("Delete project ", p)
 			return googleCalendar()
 			.deleteEvent(p.id)
 			.then(function() { return getProjects() })				
@@ -65,17 +65,27 @@ define([
 		
 		var undoHandler = {}
 		undoHandler[constants.PROJECT_SAVE] = function(payload) {
-			return saveProject(payload.from)
+			var p = payload.from
+			if (p.id) {
+				return saveProject(p)
+			} else {
+				return dispatcher.noop() // deleteProject(payload.project)
+			}			
 		}
 		undoHandler[constants.PROJECT_DESTROY] = function(payload) {
-			var p = payload.from
-			delete p.id;
-			return saveProject(payload.from)
+			var p = payload.project
+			if (p.id) {
+				delete p.id;
+				return insertProject(p)
+			} else {
+				return dispatcher.noop()
+			}
+			
 		}
 		var undo = function(payload) {
-			console.log("Undo", payload.data.actionType)
-			if (undoHandler[payload.data.actionType])
-			  return undoHandler[payload.data.actionType](payload.data)
+			console.debug("Undo", payload.data.payload)
+			if (undoHandler[payload.data.payload.actionType])
+			  return undoHandler[payload.data.payload.actionType](payload.data.payload)
 			else 
 			  return dispatcher.noop()
 		}
@@ -95,6 +105,8 @@ define([
         var store = new ProjectStore();
 		store.bind(constants.PROJECT_SAVE, function(payload) {
 			return saveProject(payload.project)
+        }).bind(constants.PROJECT_INSERT, function(payload) {
+			return insertProject(payload.project)
         }).bind(constants.PROJECT_DESTROY, function(payload) {
 			return deleteProject(payload.project)
         }).bind(constants.SET_CALENDAR, function(payload) {

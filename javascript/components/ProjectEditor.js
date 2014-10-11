@@ -23,7 +23,12 @@ define(["Constants"], function (constants) {
 		
 		// save project
 		$scope.save = function() {
-			$scope.$emit("dispatcher", constants.PROJECT_SAVE, {project : angular.copy($scope.project), from: project})
+			if ($scope.project.id) {
+				$scope.$emit("dispatcher", constants.PROJECT_SAVE, {project : angular.copy($scope.project), from: project})
+			} else {
+				$scope.$emit("dispatcher", constants.PROJECT_INSERT, {project : angular.copy($scope.project)})
+			}
+			
 		}
 		
 		// delete project
