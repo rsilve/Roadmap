@@ -72,7 +72,7 @@
         <div class="history" ng-controller="HistoryList" ng-show="history.length > 0">
             <ul >
 				<li ng-repeat="payload in history">
-					{{payload}}
+					{{payload.actionType}} {{payload.project.name}}
 				</li>
 			</ul>
 		</div>

@@ -2,9 +2,10 @@ define(["Constants"], function (constants) {
 
 	
     return function ($scope, ProjectEditorStore) {
-
+		var project = null;
 		var setState = function() {
 	       $scope.project = ProjectEditorStore.getProject();
+		   project = angular.copy($scope.project);
 		}
 		
        	// Init
@@ -22,12 +23,12 @@ define(["Constants"], function (constants) {
 		
 		// save project
 		$scope.save = function() {
-			$scope.$emit("dispatcher", constants.PROJECT_SAVE, {project : angular.copy($scope.project)})
+			$scope.$emit("dispatcher", constants.PROJECT_SAVE, {project : angular.copy($scope.project), from: project})
 		}
 		
 		// delete project
 		$scope.delete = function() {
-			$scope.$emit("dispatcher", constants.PROJECT_DESTROY, {project : angular.copy($scope.project)})
+			$scope.$emit("dispatcher", constants.PROJECT_DESTROY, {project : angular.copy($scope.project), from: project})
 		}
     };
 });

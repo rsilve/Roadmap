@@ -263,7 +263,16 @@ body {
     border-right : 1px solid #BBB;
     border-left : 1px solid #BBB;
 	padding: 8px;
+	max-height: 200px;
+	max-width: 400px;
+	overflow: scroll;
     z-index: 2;
+}
+
+.history ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
 }
 
 .delete-icon {
