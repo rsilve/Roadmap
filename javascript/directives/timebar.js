@@ -5,7 +5,7 @@ define([
 ], function (moment,$ , constants) {
 	
 	// helper for compute timeline style
-	var timeStyle = function(ref, start, end) {
+	var timeStyle = function(ref, start, end, zoom) {
 	        var style = { position: "absolute", top: 0 , left: 0, width: 8};
 
 	        var dayStart = start.clone().startOf("day");
@@ -13,10 +13,10 @@ define([
 	        var dayRef = ref.clone().startOf("day");
 
 	        var offset = dayStart.diff(dayRef);
-	        style.left = moment.duration(offset).asMonths() * 80 + "px";
+	        style.left = moment.duration(offset).as(zoom) * 80 + "px";
 
 	        var duration = Math.abs(dayStart.diff(dayEnd));
-	        style.width = moment.duration(duration).asMonths() * 80 + "px";
+	        style.width = moment.duration(duration).as(zoom) * 80 + "px";
 			return style
 	    };
 	
@@ -33,7 +33,7 @@ define([
 			  scope.$on(TimeStore.id, updateStyle)
 			  
 			  function updateStyle() {
-				  style = timeStyle(TimeStore.getStart(), scope.project.start, scope.project.end)
+				  style = timeStyle(TimeStore.getStart(), scope.project.start, scope.project.end, TimeStore.getZoom())
 				  element.css(style)
 			  }
 			  
@@ -89,7 +89,7 @@ define([
 				  $(document).unbind('mouseup', stopmove);
 				  
 				  var origin = angular.copy(scope.project)
-				  var offset = moment.duration((event.clientX - p)/80, "months");
+				  var offset = moment.duration((event.clientX - p)/80, TimeStore.getZoom());
 				  scope.$apply(function() {
 					  scope.project.start.add(offset.asDays(), "days");
   				  	  scope.project.end.add(offset.asDays(), "days");
@@ -107,7 +107,7 @@ define([
 				  $(document).unbind('mouseup', stopResizeLeft);
 				  
 				  var origin = angular.copy(scope.project)
-				  var offset = moment.duration((event.clientX - p)/80, "months");
+				  var offset = moment.duration((event.clientX - p)/80, TimeStore.getZoom());
 				  scope.$apply(function() {
 					  scope.project.start.add(offset.asDays(), "days");
 				  })
@@ -124,7 +124,7 @@ define([
 				  $(document).unbind('mouseup', stopResizeRight);
 				  
 				  var origin = angular.copy(scope.project)
-				  var offset = moment.duration((event.clientX - p)/80, "months");
+				  var offset = moment.duration((event.clientX - p)/80, TimeStore.getZoom());
 				  scope.$apply(function() {
 					  scope.project.end.add(offset.asDays(), "days");
 				  })

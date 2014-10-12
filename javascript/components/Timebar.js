@@ -4,7 +4,7 @@ define(['Constants'], function (constants)  {
 		
 		var setState = function() {
 			$scope.start = TimeStore.getStart();
-			$scope.months = TimeStore.getMonths();
+			$scope.months = TimeStore.getTicks();
 		}	
 			
 			

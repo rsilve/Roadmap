@@ -10,7 +10,10 @@ define([], function() {
         PROJECT_DESTROY: "PROJECT_DESTROY",
         TIME_NEXT_PERIOD: "TIME_NEXT_PERIOD",
         TIME_PREV_PERIOD: "TIME_PREV_PERIOD",
-
+        TIME_DAYS: "TIME_DAYS",
+        TIME_WEEKS: "TIME_WEEKS",
+        TIME_MONTHS: "TIME_MONTHS",
+        
         AUTH_FAILED: "AUTH_FAILED",
 
         SET_CALENDAR: "SET_CALENDAR",

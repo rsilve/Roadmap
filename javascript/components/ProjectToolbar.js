@@ -29,6 +29,18 @@ define(['Constants'], function (constants) {
 		$scope.reload = function() {
 			$scope.$emit("dispatcher", constants.PROJECT_REFRESH_LIST)
 		}
+
+		$scope.zoomDays = function() {
+			$scope.$emit("dispatcher", constants.TIME_DAYS)
+		}
+
+		$scope.zoomWeeks = function() {
+			$scope.$emit("dispatcher", constants.TIME_WEEKS)
+		}
+
+		$scope.zoomMonths = function() {
+			$scope.$emit("dispatcher", constants.TIME_MONTHS)
+		}
 		
     };
 });

@@ -5,10 +5,10 @@ define([
 ], function (Store, constants, moment) {
 
 	// helper for compute month list
-	var updateMonths = function(/* moment */ start) {
+	var updateTicks = function(/* moment */ start, /* string */ zoom) {
 		var z = []
 		for (var i = 0; i < 24; i ++) {
-			var d = start.clone().add(i, "month");
+			var d = start.clone().add(i, zoom);
 			var month = { label : d.format("MMM") }
 			if (d.month() == 0) {
                 month.label = d.format("MMM YYYY");
@@ -24,12 +24,16 @@ define([
 		return z;
 	}
 
+	var ZOOM_DAYS = "days";
+	var ZOOM_WEEKS = "weeks";
+	var ZOOM_MONTHS = "months";
 	
     return function (scope, dispatcher) {
 		
 	    // init the start date to the begining of the current year
 	    var start = moment().startOf('year');
-		var months = updateMonths(start);	
+		var zoom = ZOOM_MONTHS;
+		var ticks = updateTicks(start, zoom);	
 		
 		// Store Object 
         function TimeStore() {}
@@ -41,26 +45,39 @@ define([
             return start
         };
         // Simple accessor use by components for read the months list
-        TimeStore.prototype.getMonths = function() {
-            return months
+        TimeStore.prototype.getTicks = function() {
+            return ticks
+        };
+       
+        TimeStore.prototype.getZoom = function() {
+            return zoom;
         };
        
 		
         // helper go to next quarter
         var next = function() {
 			start.quarter(start.quarter() + 1);
-			months = updateMonths(start);
+			ticks = updateTicks(start, zoom);
 			console.info("Time base move to ", start)
             return true; // need for dispatcher
         };
         // helper go to previous quarter
         var prev = function() {
             start.subtract(3, "month");
-			months = updateMonths(start);
+			ticks = updateTicks(start, zoom);
 			console.info("Time base move to ", start)
             return true; // need for dispatcher
         };
-
+        
+        var setZoom = function(z) {
+			return function(){
+				zoom = z
+				ticks = updateTicks(start, zoom);
+				console.info("Time base zoom to ", z)
+	            return true; // need for dispatcher
+			}
+        };
+		
         /*
          * here whe create an instance of the store
          * and we register some actions in the dispatcher
@@ -74,6 +91,12 @@ define([
         }).bind(constants.TIME_PREV_PERIOD, function() {
 			// on previous period action move to the previous quarter
 			return dispatcher.defer(prev)
+        }).bind(constants.TIME_DAYS, function() {
+			return dispatcher.defer(setZoom(ZOOM_DAYS))
+        }).bind(constants.TIME_WEEKS, function() {
+			return dispatcher.defer(setZoom(ZOOM_WEEKS))
+        }).bind(constants.TIME_MONTHS, function() {
+			return dispatcher.defer(setZoom(ZOOM_MONTHS))
         })
 		
        
