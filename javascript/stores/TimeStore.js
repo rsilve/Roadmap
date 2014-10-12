@@ -5,11 +5,10 @@ define([
 ], function (Store, constants, moment) {
 
 	// helper for compute month list
-	var updateMonths = function(start) {
+	var updateMonths = function(/* moment */ start) {
 		var z = []
 		for (var i = 0; i < 24; i ++) {
-			// $scope.start is a momentjs
-            var d = start.clone().add(i, "month");
+			var d = start.clone().add(i, "month");
 			var month = { label : d.format("MMM") }
 			if (d.month() == 0) {
                 month.label = d.format("MMM YYYY");

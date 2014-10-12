@@ -181,8 +181,23 @@ body {
     background-color: rgba(91, 192, 222, 0.7);
     width: 8px;
     margin-left: 40px;
-	cursor: move;
 }
+
+.Project-timebar > .timebar-body {
+	cursor: move;
+	height: 100%;
+}
+
+.Project-timebar > .timebar-hand {
+	width: 3px;
+	cursor: ew-resize;
+	z-index: 2;
+	height: 100%;
+}
+
+
+
+
 
 
 .Project-Description-Text {

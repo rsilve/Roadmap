@@ -60,7 +60,7 @@
             <div id="project-list" ng-controller="ProjectList">
                 <ul class="ProjectList">
 					<li ng-repeat="project in projects track by project.id" class="Project" >
-						<div class="Project-timebar" timebar="project" start="start"></div>
+						<div class="Project-timebar" timebar="project"></div>
 						<i class="fa fa-pencil clickable" ng-click="editProject(project)"></i>
 						{{project.name}}
 						<span style="color: #999; font-size: 0.8em">{{project.start.format("DD/MM/YYYY")}} 

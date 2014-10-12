@@ -20,45 +20,118 @@ define([
 			return style
 	    };
 	
-	
-    return function () {
+    return function (TimeStore) {
 		return {
 		  scope : {
-			project: '=timebar',
-			start: '='	
+			project: '=timebar'
 		  },
 		  link : function(scope, element, attrs) {
 			  var style = {}
 			  
-			  scope.$watch("project.start", function() {
-				  style = timeStyle(scope.start, scope.project.start, scope.project.end)
-				  element.css(style)
-			  })
-			  scope.$watch("project.end", function() {
-				  style = timeStyle(scope.start, scope.project.start, scope.project.end)
-				  element.css(style)
-			  })
+			  scope.$watch("project.start", updateStyle)
+			  scope.$watch("project.end", updateStyle)
+			  scope.$on(TimeStore.id, updateStyle)
 			  
- 
+			  function updateStyle() {
+				  style = timeStyle(TimeStore.getStart(), scope.project.start, scope.project.end)
+				  element.css(style)
+			  }
+			  
+			  var body = angular.element("<div/>").addClass("timebar-body")
+			  var leftHand = angular.element("<div/>").addClass("timebar-hand").css("float", "left")
+			  var rightHand = angular.element("<div/>").addClass("timebar-hand").css("float", "right")
+			  
+			  element.append(leftHand).append(rightHand).append(body);
+			  
 			  var p = null
 			  var left = null
-			  element.bind("mousedown", function(event) {
+			  var width = null;
+			  body.bind("mousedown", function(event) {
 				  p = event.clientX
 				  left = $(element).position().left  
 			  }).bind("mousemove", function(event) {
-				  if (p) {  
-					element.css("left", left + (event.clientX - p) + "px") 
-				  }
+				  
 			  }).bind("mouseup", function(event) {
+				  
+			  })
+			  
+			  body.on('mousedown', function(event) {
+	              event.preventDefault();
+				  p = event.clientX
+				  left = $(element).position().left 
+	              $(document).on('mousemove', move);
+	              $(document).on('mouseup', stopmove);
+	          });
+			  leftHand.on('mousedown', function(event) {
+	              event.preventDefault();
+				  p = event.clientX
+				  width = $(element).width();
+				  left = $(element).position().left 
+	              $(document).on('mousemove', resizeLeft);
+	              $(document).on('mouseup', stopResizeLeft);
+	          });
+			  rightHand.on('mousedown', function(event) {
+	              event.preventDefault();
+				  p = event.clientX
+				  width = $(element).width();
+				  left = $(element).position().left 
+	              $(document).on('mousemove', resizeRight);
+	              $(document).on('mouseup', stopResizeRight);
+	          });
+			  
+			  function move(event) { 
+					element
+					.css("left", left + (event.clientX - p) + "px") 
+			  }
+			  
+			  function stopmove(event) {
+				  $(document).unbind('mousemove', move);
+				  $(document).unbind('mouseup', stopmove);
+				  
 				  var origin = angular.copy(scope.project)
 				  var offset = moment.duration((event.clientX - p)/80, "months");
-				  p = null;
 				  scope.$apply(function() {
 					  scope.project.start.add(offset.asDays(), "days");
   				  	  scope.project.end.add(offset.asDays(), "days");
 				  })
 				  scope.$emit("dispatcher", constants.PROJECT_SAVE, {project : angular.copy(scope.project), from: origin})
-			  })
+			  }
+			  
+			  function resizeLeft(event) {
+				  element.css("left", left + (event.clientX - p) + "px") 
+					.css("width", width - (event.clientX - p) + "px" )
+			  }
+			  
+			  function stopResizeLeft(event) {
+				  $(document).unbind('mousemove', resizeLeft);
+				  $(document).unbind('mouseup', stopResizeLeft);
+				  
+				  var origin = angular.copy(scope.project)
+				  var offset = moment.duration((event.clientX - p)/80, "months");
+				  scope.$apply(function() {
+					  scope.project.start.add(offset.asDays(), "days");
+				  })
+				  scope.$emit("dispatcher", constants.PROJECT_SAVE, {project : angular.copy(scope.project), from: origin})
+			  }
+			  
+			  function resizeRight(event) {
+				  element 
+				  .css("width", width + (event.clientX - p) + "px" )
+			  }
+			  
+			  function stopResizeRight(event) {
+				  $(document).unbind('mousemove', resizeRight);
+				  $(document).unbind('mouseup', stopResizeRight);
+				  
+				  var origin = angular.copy(scope.project)
+				  var offset = moment.duration((event.clientX - p)/80, "months");
+				  scope.$apply(function() {
+					  scope.project.end.add(offset.asDays(), "days");
+				  })
+				  scope.$emit("dispatcher", constants.PROJECT_SAVE, {project : angular.copy(scope.project), from: origin})
+			  }
+			  
+			  
 			}
 		};
     };

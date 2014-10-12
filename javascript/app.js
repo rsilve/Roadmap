@@ -43,7 +43,7 @@ define([
     
 	angular.module('Roadmap.directives', [])
 	.directive('pikaday', PikadayDirective)
-	.directive('timebar', TimebarDirective)
+	.directive('timebar', ['TimeStore', TimebarDirective])
 	
     return angular.module('Roadmap', 
 		['Roadmap.services', 'Roadmap.stores', "Roadmap.components", 'Roadmap.directives'])
