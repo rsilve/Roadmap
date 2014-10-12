@@ -4,31 +4,52 @@ define([
 	'moment'
 ], function (Store, constants, moment) {
 
+	var ZOOM_DAYS = "day";
+	var ZOOM_WEEKS = "week";
+	var ZOOM_MONTHS = "month";
+	
+    
 	// helper for compute month list
 	var updateTicks = function(/* moment */ start, /* string */ zoom) {
 		var z = []
 		for (var i = 0; i < 24; i ++) {
-			var d = start.clone().add(i, zoom);
-			var month = { label : d.format("MMM") }
-			if (d.month() == 0) {
-                month.label = d.format("MMM YYYY");
-                month.meta += " startyear"
-            }
-            if (d.month() % 3 == 0) {
-                month.label = d.format("MMM YYYY");
-                month.meta += " quarter"
-            }
+			var d = start.clone().add(i, zoom).startOf(zoom);
+			var month = { label : d.format("DD/MM") }
+			if (zoom === ZOOM_MONTHS) {
+				month.label = d.format("MMM");
+				if (d.month() == 0) {
+	                month.label = d.format("MMM YYYY");
+	                month.meta += " startyear"
+	            }
+	            if (d.month() % 3 == 0) {
+	                month.label = d.format("MMM YYYY");
+	                month.meta += " quarter"
+	            }
+			}
+			if (zoom === ZOOM_WEEKS) {
+				if (d.date() < 7) {
+	                month.label = d.format("DD/MM/YY");
+					if (d.month() == 0) 
+	                	month.meta += " startyear"
+	            }
+	           
+			}
+			if (zoom === ZOOM_DAYS) {
+				if (d.date() === 1) {
+	                month.label = d.format("DD/MM/YY");
+					if (d.month() == 0) 
+	                	month.meta += " startyear"
+	            }
+	           
+			}
+			
 		
            z.push(month );
         }
 		return z;
 	}
 
-	var ZOOM_DAYS = "days";
-	var ZOOM_WEEKS = "weeks";
-	var ZOOM_MONTHS = "months";
-	
-    return function (scope, dispatcher) {
+	return function (scope, dispatcher) {
 		
 	    // init the start date to the begining of the current year
 	    var start = moment().startOf('year');
