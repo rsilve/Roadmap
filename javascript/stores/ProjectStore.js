@@ -9,6 +9,7 @@ define([
 		
 		// store projects here
 		var _projects = {};
+		var loading = false
         
 		// factory for google client
 		function googleCalendar() {
@@ -50,7 +51,7 @@ define([
         // helper for saving a  project in dispatcher
         var insertProject = function(p) {
             console.info("insert project " +  p.name)
-            return googleCalendar()
+			return googleCalendar()
 				.createEvent(projectHelper.serialize(p))
 				.then(function() { return getProjects() })
         };
@@ -102,6 +103,43 @@ define([
         ProjectStore.prototype.getProjects = function() {
         	return _projects;
         }
+		
+		// get loading status
+        ProjectStore.prototype.isLoading = function() {
+        	return loading;
+        }
+		// get loading status
+        ProjectStore.prototype.loadingEvent = function() {
+        	return this.id+"-loading";
+        }
+		
+		ProjectStore.prototype.emitLoading = function() {
+			loading = true;
+			console.debug("Emit ", this.loadingEvent())
+			this.$scope.$broadcast(this.loadingEvent())
+			return true
+		}
+	    ProjectStore.prototype.emitChange = function() {
+			var self = this;
+			return function() {
+				loading = false;
+				console.debug("Emit ", self.id)
+		        self.$scope.$broadcast(self.id)
+				console.debug("Emit ", self.loadingEvent())
+				self.$scope.$broadcast(self.loadingEvent())
+			}
+		
+	    };
+		
+		ProjectStore.prototype.bind = function(/* string */ event, /* function */ callback, /* boolean */ emitDisabled) {
+			var self = this
+			var f = function(payload) {
+				return self.dispatcher.defer(function() { return self.emitLoading() })
+				.then(function() { return callback(payload) })
+			}
+			
+			return Store.prototype.bind.call(this, event, f, emitDisabled)
+		}
 		
 		// Store instance
         var store = new ProjectStore();

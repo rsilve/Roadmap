@@ -1,9 +1,10 @@
 define(['Constants'], function (constants) {
 
 
-    return function ($scope, CalendarStore) {
+    return function ($scope, CalendarStore, ProjectStore) {
 		var setState = function() {
 	       $scope.calendar = CalendarStore.getCalendar();
+		   $scope.loading = ProjectStore.isLoading();
 		}
 		
        	// Init
@@ -11,6 +12,7 @@ define(['Constants'], function (constants) {
 		
 		// Binding 
 		$scope.$on(CalendarStore.id, setState)
+		$scope.$on(ProjectStore.loadingEvent(), setState)
 		
 		// Interaction handlers
 		
