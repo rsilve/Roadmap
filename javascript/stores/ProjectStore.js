@@ -33,6 +33,7 @@ define([
                 _projects = {};
                 console.warn(err);
             };
+            console.info("Get project list")
             return googleCalendar().events().then(initProjects).catch(errorHandler)
 
         }
@@ -42,7 +43,7 @@ define([
         // helper for saving a  project in dispatcher
         var saveProject = function(p) {
             console.info("Save project " +  p.name)
-            return googleCalendar()
+			return googleCalendar()
 				.updateEvent(p.id, projectHelper.serialize(p))
 				.then(function() { return getProjects() })
         };
@@ -67,6 +68,7 @@ define([
 		undoHandler[constants.PROJECT_SAVE] = function(payload) {
 			var p = payload.from
 			if (p.id) {
+				p.sequence ++;
 				return saveProject(p)
 			} else {
 				return dispatcher.noop() // deleteProject(payload.project)
@@ -113,6 +115,8 @@ define([
 			return getProjects()
         }).bind(constants.UNDO, function(payload) {
 			return undo(payload)
+        }).bind(constants.PROJECT_REFRESH_LIST, function(payload) {
+			return getProjects()
         })
 		
         

@@ -34,7 +34,7 @@ define([
         // helper for choosing a calendar in dispatcher
         var setCalendar = function(id) {
             return function() {
-				console.debug("Choose calendar " + id)
+				console.info("Choose calendar " + id)
                 calendar = id;
                 return true; // needed fo dispatcher
             }
@@ -42,7 +42,7 @@ define([
 
         // helper for reseting  calendar in dispatcher
         var resetCalendar = function() {
-			console.debug("Unselect calendar")
+			console.info("Unselect calendar")
             calendar = undefined;
             return true; // needed fo dispatcher
         };

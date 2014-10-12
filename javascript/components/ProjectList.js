@@ -19,13 +19,12 @@ define(["moment","Constants"], function (moment, constants) {
 	
 	
     return function ($scope, ProjectStore, CalendarStore, TimeStore) {
-		var start = null;
 		var setState = function() {
 	       $scope.projects = ProjectStore.getProjects();
-		   start = TimeStore.getStart();
+		   $scope.start = TimeStore.getStart();
 		}
 		
-
+		
         // Init
         setState();
 		
@@ -39,7 +38,7 @@ define(["moment","Constants"], function (moment, constants) {
 		
 		// return style for project time line
 		$scope.timelineStyle = function(project) {
-			return timeStyle(start, project.start, project.end)
+			return timeStyle($scope.start, project.start, project.end)
 		}
 		
 		// edit projet

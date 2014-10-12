@@ -39,7 +39,8 @@
         <div class="toolbar">
             <div class="toolbar-container" ng-controller="ProjectToolbar">
 				<div id="project-toolbar">
-					<i class="fa fa-list-ul calendar-reset" ng-click="calendarReset()"></i>
+					<i class="fa fa-refresh fa-lg pull-right clickable" ng-show="calendar" ng-click="reload()"></i>
+					<i class="fa fa-list-ul fa-lg clickable calendar-reset" ng-click="calendarReset()"></i>
 					<span class="clickable" ng-click="createProject()">Ajouter un projet</span>
 				</div>
 			</div>
@@ -58,8 +59,8 @@
         <div class="grid-content">
             <div id="project-list" ng-controller="ProjectList">
                 <ul class="ProjectList">
-					<li ng-repeat="project in projects" class="Project" >
-						<div class="Project-timebar" ng-style="timelineStyle(project)" ></div>
+					<li ng-repeat="project in projects track by project.id" class="Project" >
+						<div class="Project-timebar" timebar="project" start="start"></div>
 						<i class="fa fa-pencil clickable" ng-click="editProject(project)"></i>
 						{{project.name}}
 						<span style="color: #999; font-size: 0.8em">{{project.start.format("DD/MM/YYYY")}} 

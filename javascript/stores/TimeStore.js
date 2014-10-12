@@ -49,14 +49,16 @@ define([
 		
         // helper go to next quarter
         var next = function() {
-            start.quarter(start.quarter() + 1);
+			start.quarter(start.quarter() + 1);
 			months = updateMonths(start);
+			console.info("Time base move to ", start)
             return true; // need for dispatcher
         };
         // helper go to previous quarter
         var prev = function() {
             start.subtract(3, "month");
 			months = updateMonths(start);
+			console.info("Time base move to ", start)
             return true; // need for dispatcher
         };
 
