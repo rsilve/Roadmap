@@ -8,43 +8,41 @@ define([
 	var ZOOM_WEEKS = "week";
 	var ZOOM_MONTHS = "month";
 	
-    
-	// helper for compute month list
+    var ticksFormat = {}
+    ticksFormat[ZOOM_MONTHS] = function(d, tick) {
+		tick.label = d.format("MMM");
+		if (d.month() == 0) {
+            tick.label = d.format("MMM YYYY");
+            tick.meta += " startyear"
+        }
+        if (d.month() % 3 == 0) {
+            tick.label = d.format("MMM YYYY");
+            tick.meta += " quarter"
+        }
+	}
+	ticksFormat[ZOOM_WEEKS] = function(d, month) {
+		if (d.date() < 7) {
+            tick.label = d.format("DD/MM/YY");
+			if (d.month() == 0) 
+            	tick.meta += " startyear"
+        }
+	}
+	ticksFormat[ZOOM_DAYS] = function(d, tick) {
+		if (d.date() === 1) {
+            tick.label = d.format("DD/MM/YY");
+			if (d.month() == 0) 
+            	tick.meta += " startyear"
+        }
+	}
+	
+	// helper for compute tick list
 	var updateTicks = function(/* moment */ start, /* string */ zoom) {
 		var z = []
 		for (var i = 0; i < 24; i ++) {
 			var d = start.clone().add(i, zoom).startOf(zoom);
-			var month = { label : d.format("DD/MM") }
-			if (zoom === ZOOM_MONTHS) {
-				month.label = d.format("MMM");
-				if (d.month() == 0) {
-	                month.label = d.format("MMM YYYY");
-	                month.meta += " startyear"
-	            }
-	            if (d.month() % 3 == 0) {
-	                month.label = d.format("MMM YYYY");
-	                month.meta += " quarter"
-	            }
-			}
-			if (zoom === ZOOM_WEEKS) {
-				if (d.date() < 7) {
-	                month.label = d.format("DD/MM/YY");
-					if (d.month() == 0) 
-	                	month.meta += " startyear"
-	            }
-	           
-			}
-			if (zoom === ZOOM_DAYS) {
-				if (d.date() === 1) {
-	                month.label = d.format("DD/MM/YY");
-					if (d.month() == 0) 
-	                	month.meta += " startyear"
-	            }
-	           
-			}
-			
-		
-           z.push(month );
+			var tick = { label : d.format("DD/MM") }
+			ticksFormat[zoom](d, tick);
+            z.push(tick );
         }
 		return z;
 	}
@@ -65,7 +63,7 @@ define([
         TimeStore.prototype.getStart = function() {
             return start
         };
-        // Simple accessor use by components for read the months list
+        // Simple accessor use by components for read the ticks list
         TimeStore.prototype.getTicks = function() {
             return ticks
         };
