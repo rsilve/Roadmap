@@ -119,13 +119,13 @@ define([
 			this.$scope.$broadcast(this.loadingEvent())
 			return true
 		}
+		
+		// override emit change for emitting loadingEvent AND changEvent
 	    ProjectStore.prototype.emitChange = function() {
 			var self = this;
 			return function() {
 				loading = false;
-				console.debug("Emit ", self.id)
 		        self.$scope.$broadcast(self.id)
-				console.debug("Emit ", self.loadingEvent())
 				self.$scope.$broadcast(self.loadingEvent())
 			}
 		
@@ -134,7 +134,7 @@ define([
 		ProjectStore.prototype.bind = function(/* string */ event, /* function */ callback, /* boolean */ emitDisabled) {
 			var self = this
 			var f = function(payload) {
-				return self.dispatcher.defer(function() { return self.emitLoading() })
+				return self.dispatcher.when(self.emitLoading())
 				.then(function() { return callback(payload) })
 			}
 			

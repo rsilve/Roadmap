@@ -41,10 +41,13 @@
 				<div id="project-toolbar">
 					<i class="fa fa-refresh fa-lg pull-right clickable" ng-class="loading ? 'fa-spin' : ''" ng-show="calendar" ng-click="reload()"></i>
 					<i class="fa fa-list-ul fa-lg clickable calendar-reset" ng-click="calendarReset()"></i>
+					<span class="toolbar-separator"></span>
 					<span class="clickable" ng-click="createProject()">Ajouter un projet</span>
-					<span class="clickable" ng-click="zoomDays()">Zoom Jours</span>
-					<span class="clickable" ng-click="zoomWeeks()">Zoom Semaines</span>
-					<span class="clickable" ng-click="zoomMonths()">Zoom Mois</span>
+					<span class="toolbar-separator"></span>
+					<i class="fa fa-search-plus muted"></i>
+					<span class="clickable" ng-click="zoomDays()">Jours</span>&nbsp;
+					<span class="clickable" ng-click="zoomWeeks()">Semaines</span>&nbsp;
+					<span class="clickable" ng-click="zoomMonths()">Mois</span>&nbsp;
 				</div>
 			</div>
         </div>

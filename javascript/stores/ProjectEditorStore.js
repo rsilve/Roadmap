@@ -20,11 +20,9 @@ define([
         };
         // helper for setting project in dispatcher
         var setProject = function(p) {
-            return function() {
-				console.debug("Edit project " +  p.name)
-                project = p;
-                return true; // needed fo dispatcher
-            }
+			console.debug("Edit project " +  p.name)
+            project = p;
+            return true; // needed fo dispatcher
         };
 		
         // helper for resetting project
@@ -49,9 +47,9 @@ define([
 		// Store instance
         var store = new ProjectEditorStore();
 		store.bind(constants.PROJECT_EDIT, function(payload) {
-			return dispatcher.defer(setProject(payload.project))
+			return setProject(payload.project)
         }).bind(constants.PROJECT_EDIT_CANCEL, function() {
-			return dispatcher.defer(resetProject)
+			return resetProject()
         }).bind(constants.PROJECT_SAVE, function() {
 			return dispatcher
 			.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_SAVE]])
@@ -65,9 +63,9 @@ define([
 			.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
 			.then(resetProject)
         }).bind(constants.PROJECT_CREATE, function() {
-			return dispatcher.defer(createProject)
+			return createProject()
         }).bind(constants.UNDO, function() {
-			return dispatcher.defer(resetProject)
+			return resetProject()
 		})
         
 		

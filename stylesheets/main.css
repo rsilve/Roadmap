@@ -351,6 +351,11 @@ body {
     color: #ccc;
 }
 
+
+.muted {
+	color : #BBB;
+}
+
 .clickable {
     cursor: pointer;
 }
@@ -361,5 +366,9 @@ body {
 
 .pull-left {
     float: left;
+}
+
+.toolbar-separator {
+	padding-left: 4em;
 }
 

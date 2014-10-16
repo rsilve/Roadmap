@@ -20,7 +20,7 @@ define([
             tick.meta += " quarter"
         }
 	}
-	ticksFormat[ZOOM_WEEKS] = function(d, month) {
+	ticksFormat[ZOOM_WEEKS] = function(d, tick) {
 		if (d.date() < 7) {
             tick.label = d.format("DD/MM/YY");
 			if (d.month() == 0) 
@@ -89,12 +89,10 @@ define([
         };
         
         var setZoom = function(z) {
-			return function(){
-				zoom = z
-				ticks = updateTicks(start, zoom);
-				console.info("Time base zoom to ", z)
-	            return true; // need for dispatcher
-			}
+			zoom = z
+			ticks = updateTicks(start, zoom);
+			console.info("Time base zoom to ", z)
+            return true; // need for dispatcher
         };
 		
         /*
@@ -106,16 +104,16 @@ define([
         var store = new TimeStore();
 		store.bind(constants.TIME_NEXT_PERIOD, function() {
 			// on next period action move to the next quarter
-			return dispatcher.defer(next)
+			return next()
         }).bind(constants.TIME_PREV_PERIOD, function() {
 			// on previous period action move to the previous quarter
-			return dispatcher.defer(prev)
+			return prev()
         }).bind(constants.TIME_DAYS, function() {
-			return dispatcher.defer(setZoom(ZOOM_DAYS))
+			return setZoom(ZOOM_DAYS)
         }).bind(constants.TIME_WEEKS, function() {
-			return dispatcher.defer(setZoom(ZOOM_WEEKS))
+			return setZoom(ZOOM_WEEKS)
         }).bind(constants.TIME_MONTHS, function() {
-			return dispatcher.defer(setZoom(ZOOM_MONTHS))
+			return setZoom(ZOOM_MONTHS)
         })
 		
        

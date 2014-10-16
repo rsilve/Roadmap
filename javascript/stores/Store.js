@@ -33,15 +33,15 @@ define([], function () {
 		if (emitDisabled) {
 			var f = function(payload) {
 				if (event === payload.actionType)
-				 	return callback(payload)
+				 	return self.dispatcher.when(callback(payload))
 				else 
 					return self.dispatcher.noop()
 			}
-			this.dispatchIndex[event] = this.dispatcher.register(callback);
+			this.dispatchIndex[event] = this.dispatcher.register(f);
 		} else {
 			var f = function(payload) {
 				if (event === payload.actionType)
-				 	return callback(payload).then(self.emitChange())
+				 	return self.dispatcher.when(callback(payload)).then(self.emitChange())
 				else 
 					return self.dispatcher.noop()
 			}

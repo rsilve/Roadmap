@@ -10,6 +10,10 @@ define([], function () {
 	        this._promises = [];
 	        this._recoverPromises = [];
 	    }
+		
+		Dispatcher.prototype.when = function(v) {
+			return $q.when(v)
+		}
 
 	    // method for registering callback from the stores
 	    Dispatcher.prototype.register =  function(callback) {

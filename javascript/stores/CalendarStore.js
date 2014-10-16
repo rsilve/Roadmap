@@ -33,11 +33,9 @@ define([
 
         // helper for choosing a calendar in dispatcher
         var setCalendar = function(id) {
-            return function() {
-				console.info("Choose calendar " + id)
-                calendar = id;
-                return true; // needed fo dispatcher
-            }
+			console.info("Choose calendar " + id)
+            calendar = id;
+            return true; // needed fo dispatcher
         };
 
         // helper for reseting  calendar in dispatcher
@@ -57,9 +55,9 @@ define([
 
         var store = new CalendarStore();
 		store.bind(constants.SET_CALENDAR, function(payload) {
-			return dispatcher.defer(setCalendar(payload.calendar))
+			return setCalendar(payload.calendar)
         }).bind(constants.RESET_CALENDAR, function(payload) {
-			return dispatcher.defer(resetCalendar)
+			return resetCalendar()
         })
 		
         // finally do some call for init
