@@ -116,8 +116,7 @@ define([
 		ProjectStore.prototype.emitLoading = function() {
 			loading = true;
 			console.debug("Emit ", this.loadingEvent())
-			this.$scope.$broadcast(this.loadingEvent())
-			return true
+			this.$scope.$broadcast(this.loadingEvent());
 		}
 		
 		// override emit change for emitting loadingEvent AND changEvent

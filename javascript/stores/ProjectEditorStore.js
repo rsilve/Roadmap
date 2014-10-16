@@ -22,14 +22,12 @@ define([
         var setProject = function(p) {
 			console.debug("Edit project " +  p.name)
             project = p;
-            return true; // needed fo dispatcher
         };
 		
         // helper for resetting project
         var resetProject = function() {
 			console.debug("Cancel project edit ", project)
 			project = undefined;
-            return true; // needed fo dispatcher
         };
 
         // helper for create project
@@ -39,7 +37,6 @@ define([
 				start : moment(),
 				end : moment().add(1, "month")
 			};
-            return true; // needed fo dispatcher
         };
 		
 		

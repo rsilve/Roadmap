@@ -135,18 +135,7 @@ define([], function () {
 	        return $q.resolve();
 	    };
 
-	    // Allow a store to create a deferred process
-	    // callback must return true (for resolve) or false (to reject)
-	    Dispatcher.prototype.defer = function(/*function*/ callback) {
-			var deferred = $q.defer();
-            if (callback()) {
-                deferred.resolve(true);
-            } else {
-                deferred.reject(new Error('Dispatcher callback unsuccessful'));
-            }
-	        return deferred.promise
-	    };
-
+	    
 	    // Helper for creating a deferred that always resolve
 	    Dispatcher.prototype.noop = function(value) { 
 			var d = $q.defer();

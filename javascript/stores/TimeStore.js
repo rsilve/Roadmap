@@ -78,21 +78,18 @@ define([
 			start.quarter(start.quarter() + 1);
 			ticks = updateTicks(start, zoom);
 			console.info("Time base move to ", start)
-            return true; // need for dispatcher
         };
         // helper go to previous quarter
         var prev = function() {
             start.subtract(3, "month");
 			ticks = updateTicks(start, zoom);
 			console.info("Time base move to ", start)
-            return true; // need for dispatcher
         };
         
         var setZoom = function(z) {
 			zoom = z
 			ticks = updateTicks(start, zoom);
 			console.info("Time base zoom to ", z)
-            return true; // need for dispatcher
         };
 		
         /*

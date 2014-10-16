@@ -35,14 +35,12 @@ define([
         var setCalendar = function(id) {
 			console.info("Choose calendar " + id)
             calendar = id;
-            return true; // needed fo dispatcher
         };
 
         // helper for reseting  calendar in dispatcher
         var resetCalendar = function() {
 			console.info("Unselect calendar")
             calendar = undefined;
-            return true; // needed fo dispatcher
         };
 
 

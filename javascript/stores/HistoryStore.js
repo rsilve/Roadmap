@@ -21,24 +21,19 @@ define([
 		
 		var push = function(payload) {
 			return function() { 
-				
 				history.unshift({payload : payload, timestamp: moment()}) 
-				return true // need for dispatcher
 			}
 		}
 		
 		var undo = function() {
 			history.shift();
-			return true // need for dispatcher
 		}
 		
 		var cancelScheduler = function(){
 			$interval.cancel(scheduler)
-			return true;
 		} 
 		var startScheduler = function(){
-			scheduler = $interval(store.emitChange(), 60000)
-			return true;
+			scheduler = $interval(store.emitChange(), 60000);
 		} 
 		
 		// Create instance
