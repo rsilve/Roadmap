@@ -33,7 +33,7 @@ define([], function () {
 		if (emitDisabled) {
 			var f = function(payload) {
 				if (event === payload.actionType)
-				 	return self.dispatcher.when(callback(payload))
+				 	return callback(payload)
 				else 
 					return self.dispatcher.noop()
 			}

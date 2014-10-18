@@ -84,10 +84,11 @@ define(['app'], function() {
 			var handlerThen = jasmine.createSpy('then');
 			
 		   dispatcher.register(function(p) {
-               return dispatcher.fail(p)
+               return dispatcher.fail("FAIL")
            });
-           dispatcher.register(function() {
-               return dispatcher.waitForError(function() {return 1})
+           dispatcher.waitForError(function(p, err) {
+               console.debug(err);
+               return 1
 	   	   });
            dispatcher.dispatch(true).then(handlerThen).catch(handlerCatch)
 		   $rootScope.$digest();

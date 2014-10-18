@@ -20,7 +20,7 @@ define([], function () {
             return function (reason) {
                 var _recoverPromises = [];
                 _recovers.forEach(function (/* function */ callback) {
-                    _recoverPromises.push($q.when(callback(payload)));
+                    _recoverPromises.push($q.when(callback(payload, reason)));
                 });
                 if (_recoverPromises.length > 0) {
                     return $q.all(_recoverPromises)
@@ -48,6 +48,8 @@ define([], function () {
         /**
          * Here is the dispatcher API
          *
+         * First the main API
+         *
          */
 
         /**
@@ -74,6 +76,14 @@ define([], function () {
 	        return _callbacks.length - 1;
 	    };
 
+        /**
+         * This method allow to register a callback to recover {@see dispatch} failed execution
+         * @param callback
+         * @returns {*}
+         */
+        Dispatcher.prototype.waitForError = function( /* function */ callback) {
+            _recovers.push(callback);
+        };
 
         /**
          * this method execute a dispatch. It execute all registered callback.
@@ -92,7 +102,8 @@ define([], function () {
 	        _callbacks.forEach(function(callback) {
 	            _addPromise(callback, payload);
 	        });
-			return $q.all(_promises).catch(recover(payload))
+			return $q.all(_promises)
+            .catch(recover(payload))
 			.then(function(data){
 				console.debug("Dispatch completed");
 				return data;
@@ -103,58 +114,43 @@ define([], function () {
 	    };
 
 
-	    /**
-	     * Allows a store to wait for the registered callbacks of other stores
-	     * to get invoked before its own does.
-	     * This function is not used by this TodoMVC example application, but
-	     * it is very useful in a larger, more complex application.
-	     *
-	     * Example usage where StoreB waits for StoreA:
-	     *
-	     *   var StoreA = merge(EventEmitter.prototype, {
-	   *     // other methods omitted
-	   *
-	   *     dispatchIndex: Dispatcher.register(function(payload) {
-	   *       // switch statement with lots of cases
-	   *     })
-	   *   }
-	     *
-	     *   var StoreB = merge(EventEmitter.prototype, {
-	   *     // other methods omitted
-	   *
-	   *     dispatchIndex: Dispatcher.register(function(payload) {
-	   *       switch(payload.action.actionType) {
-	   *
-	   *         case MyConstants.FOO_ACTION:
-	   *           Dispatcher.waitFor([StoreA.dispatchIndex], function() {
-	   *             // Do stuff only after StoreA's callback returns.
-	   *           });
-	   *       }
-	   *     })
-	   *   }
-	     *
-	     * It should be noted that if StoreB waits for StoreA, and StoreA waits for
-	     * StoreB, a circular dependency will occur, but no error will be thrown.
-	     * A more robust Dispatcher would issue a warning in this scenario.
-	     */
-	    Dispatcher.prototype.waitFor = function(/*Array*/ promiseIndexes) {
+        /**
+         * Here the helpers API.
+         * This method helps to create callback.
+         * The main things is to provide a scheduling feature by using
+         * the promise API.
+         *
+         * When {@see dispatch} is run all callback are converted to promise if necessary
+         * so we can use it for providing basic dependencies management between
+         * callbacks even for async callback process
+         */
+
+
+        /**
+         * Allow to make a callback wait for the execution of another callback
+         *
+         *  // registering callback with an execution dependency
+         *  var index1 = dispatcher.register(function() { return 1 });
+         *  var index2 = dispatcher.register(function() {
+         *      return dispatcher.waitFor([index1]).then(function() { return 2 });
+         *  });
+         *
+         * // on execution callback 1 is execute before callback 2
+         * // if callback 1 is a promise that fail, callback2 is not executed
+         * dispatcher.dispatch(true)
+         *
+         * @param promiseIndexes
+         * @returns {Promise}
+         */
+	    Dispatcher.prototype.waitFor = function(/* Array */ promiseIndexes) {
 	        var selectedPromises = [];
-	        var self = this;
 	        promiseIndexes.forEach(function(index) {
 	            selectedPromises.push(_promises[index]);
 	        });
-
 	        return $q.all(selectedPromises);
 	    };
 
 
-	    // Allow a store to do something after an error occured
-	    Dispatcher.prototype.waitForError = function( /* function */ callback) {
-	        _recovers.push(callback)
-			var d = $q.defer();
-			d.resolve();
-	        return d.promise;
-	    };
 
 	    
 	    // Helper for creating a deferred that always resolve
@@ -181,14 +177,6 @@ define([], function () {
         };
 
 
-        /**
-	     * A bridge function between the views and the dispatcher, marking the action
-	     * as a view action.  Another variant here could be handleServerAction.
-	     * @param  {object} payload The data coming from the view.
-	     */
-	    Dispatcher.prototype.handleViewAction = function(/* object */ payload) {
-	        return this.dispatch(payload).catch(function(err) { console.warn(err) })
-	    };
 
 
         console.info("Loading Dispatcher Service")
@@ -199,8 +187,8 @@ define([], function () {
 		$rootScope.$on("dispatcher", function(event, /* string */ actionType, /* object */ payload ) {
 			payload = payload || {};
 			payload.actionType = actionType;
-            dispatcher.handleViewAction(payload);
-		})
+            dispatcher.dispatch(payload).catch(function(err) { console.warn(err) });
+		});
 		
 		
         return dispatcher;
