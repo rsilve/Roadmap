@@ -1,6 +1,6 @@
 define([
     'stores/Store',
-	'Constants',
+	'services/Constants',
 	'moment'
 ], function (Store, constants, moment) {
 	

@@ -1,7 +1,7 @@
 define([
     'stores/Store',
 	'stores/ProjectHelper',
-	'Constants'
+	'services/Constants'
 ], function (Store,  projectHelper, constants) {
 
 	

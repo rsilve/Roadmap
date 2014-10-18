@@ -1,6 +1,6 @@
 define([
     'stores/Store',
-    'Constants'
+    'services/Constants'
 ], function (Store, constants) {
 
     return function (scope, dispatcher, google) {

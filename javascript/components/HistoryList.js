@@ -1,4 +1,4 @@
-define(['Constants'], 
+define(['services/Constants'], 
 function (constants) {
 
 	return function($scope, HistoryStore) {

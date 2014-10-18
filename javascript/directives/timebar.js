@@ -1,7 +1,7 @@
 define([
     'moment',
 	'jquery',
-	'Constants'
+	'services/Constants'
 ], function (moment,$ , constants) {
 	
 	// helper for compute timeline style

@@ -1,4 +1,4 @@
-define(['Constants'], function (constants) {
+define(['services/Constants'], function (constants) {
 
 
     return function ($scope, CalendarStore, ProjectStore) {

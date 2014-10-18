@@ -1,4 +1,4 @@
-define(["moment","Constants"], function (moment, constants) {
+define(["moment","services/Constants"], function (moment, constants) {
 
 	
 	

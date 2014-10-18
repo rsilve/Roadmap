@@ -16,7 +16,7 @@ define([], function () {
 		}
 
 	    // method for registering callback from the stores
-	    Dispatcher.prototype.register =  function(callback) {
+	    Dispatcher.prototype.register =  function(/* function */ callback) {
 	        this._callbacks.push(callback);
 	        return this._callbacks.length - 1; // index
 	    };
@@ -24,7 +24,7 @@ define([], function () {
 	    // helper factory for error recovery callback
 	    var recover = function(self, payload) {
 	        return function (reason) {
-	            self._recovers.forEach(function (callback) {
+	            self._recovers.forEach(function (/* function */ callback) {
 	                self._addPromiseRecover(callback, reason, payload);
 	            });
 	            if (self._recoverPromises.length > 0) {
@@ -36,7 +36,7 @@ define([], function () {
 	        }
 	    };
 	    // method for dispatch an action to the stores
-	    Dispatcher.prototype.dispatch = function(payload) {
+	    Dispatcher.prototype.dispatch = function(/* object */ payload) {
 			console.debug("Dispatch started")
 	        this._clearPromises();
 	        var self = this;
@@ -44,7 +44,13 @@ define([], function () {
 	            self._addPromise(callback, payload);
 	        });
 			return $q.all(this._promises).catch(recover(self, payload))
-			.then(function(){console.debug("Dispatch completed")})
+			.then(function(data){
+				console.debug("Dispatch completed");
+				return data;
+			}).catch(function(err) {
+				console.debug("Dispatch failed");
+				return self.fail(err)
+			})
 	    };
 
 
@@ -59,13 +65,8 @@ define([], function () {
 	    // helper : transform a callback in promise that will be use to recover after
 	    // failed process
 	    Dispatcher.prototype._addPromiseRecover = function(callback, payload) {
-			var deferred = $q.defer();
-            if (callback(payload)) {
-                rdeferred.esolve(payload);
-            } else {
-                deferred.reject(new Error('Dispatcher callback unsuccessful'));
-            }
-	        this._recoverPromises.push(deferred.promise);
+			var promise = callback(payload)
+            this._recoverPromises.push(promise);
 	    };
 
 	    // helper : before dispatch an action clear all promises
@@ -130,9 +131,11 @@ define([], function () {
 
 
 	    // Allow a store to do something after an error occured
-	    Dispatcher.prototype.waitForError = function( /*function*/ callback) {
+	    Dispatcher.prototype.waitForError = function( /* function */ callback) {
 	        this._recovers.push(callback)
-	        return $q.resolve();
+			var d = $q.defer();
+			d.resolve();
+	        return d.promise;
 	    };
 
 	    
@@ -152,13 +155,13 @@ define([], function () {
 	    /**
 	     * A bridge function between the views and the dispatcher, marking the action
 	     * as a view action.  Another variant here could be handleServerAction.
-	     * @param  {object} action The data coming from the view.
+	     * @param  {object} payload The data coming from the view.
 	     */
 	    Dispatcher.prototype.handleViewAction = function(/* object */ payload) {
 	        return this.dispatch(payload).catch(function(err) { console.warn(err) })
 	    };
 
-	   
+
         console.info("Loading Dispatcher Service")
 		
 		
