@@ -13,12 +13,6 @@ define([], function () {
         var _callbacks = [];
         var _recovers = [];
 
-        /**
-         * Here is the dispatcher API
-         *
-         * First the main API
-         *
-         */
 
         /**
          * Base constructor for the dispatcher
@@ -78,25 +72,6 @@ define([], function () {
 				return ec.fail(err)
 			})
 	    };
-
-
-        /**
-         * Here the helpers API.
-         * This method helps to create callback.
-         * The main things is to provide a scheduling feature by using
-         * the promise API.
-         *
-         * When {@see dispatch} is run all callback are converted to promise if necessary
-         * so we can use it for providing basic dependencies management between
-         * callbacks even for async callback process
-         */
-
-
-
-
-
-
-	    
 
 
         console.info("Loading Dispatcher Service")

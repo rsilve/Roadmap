@@ -88,6 +88,15 @@ define(['app'], function() {
             expect(handlerThen).toHaveBeenCalledWith([1, 2]);
         });
 
+        it('should have a method recover that generate a failed promise from en empty list of callback', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
+            ec.run([], 1).then(ec.recover([], 1)).then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
+            expect(handlerCatch).toHaveBeenCalled();
+            expect(handlerThen).not.toHaveBeenCalled();
+        });
+
     });
 
 
