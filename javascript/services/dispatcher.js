@@ -1,49 +1,98 @@
 define([], function () {
 
+    /**
+     * Factory definition for the dispatcher service
+     */
     return function ($rootScope, $q) {
-		
-		
-		// Base object dispatcher
-	    function Dispatcher() {
-	        this._callbacks = [];
-	        this._recovers = [];
-	        this._promises = [];
-	        this._recoverPromises = [];
-	    }
-		
-		Dispatcher.prototype.when = function(v) {
-			return $q.when(v)
-		}
 
-	    // method for registering callback from the stores
+        /**
+         * Dispatcher will be a singleton so we manage internal data outside his api.
+         *
+         */
+
+        var _callbacks = [];
+        var _recovers = [];
+        var _promises = [];
+
+
+        // helper factory for error recovery callback
+        var recover = function(payload) {
+            return function (reason) {
+                var _recoverPromises = [];
+                _recovers.forEach(function (/* function */ callback) {
+                    _recoverPromises.push($q.when(callback(payload)));
+                });
+                if (_recoverPromises.length > 0) {
+                    return $q.all(_recoverPromises)
+                } else {
+                    return $q.reject(reason)
+                }
+
+            }
+        };
+
+
+        // helper : when an action is fired transform a callback in promise
+        var _addPromise = function(callback, payload) {
+            var promise = $q.when(callback(payload));
+            _promises.push(promise);
+        };
+
+        // helper : before dispatch an action clear all promises
+        var _clearPromises = function() {
+            _promises = [];
+            _recovers = [];
+        };
+
+
+        /**
+         * Here is the dispatcher API
+         *
+         */
+
+        /**
+         * Base constructor for the dispatcher
+         * @constructor
+         */
+	    function Dispatcher() {}
+
+
+        /**
+         * this method let the dispatcher register a callback function
+         * that will be execute on disptach operation.
+         * This method return the index position in the
+         * register internal array. So you can store this
+         * index when registering a callback, for use with the {@see waitFor} method
+         *
+         * registered callback could return a simple value or a promise
+         *
+         * @param callback
+         * @returns {number}
+         */
 	    Dispatcher.prototype.register =  function(/* function */ callback) {
-	        this._callbacks.push(callback);
-	        return this._callbacks.length - 1; // index
+	        _callbacks.push(callback);
+	        return _callbacks.length - 1;
 	    };
 
-	    // helper factory for error recovery callback
-	    var recover = function(self, payload) {
-	        return function (reason) {
-	            self._recovers.forEach(function (/* function */ callback) {
-	                self._addPromiseRecover(callback, reason, payload);
-	            });
-	            if (self._recoverPromises.length > 0) {
-	                return $q.all(self._recoverPromises)
-	            } else {
-	                return $q.reject(reason)
-	            }
 
-	        }
-	    };
-	    // method for dispatch an action to the stores
+        /**
+         * this method execute a dispatch. It execute all registered callback.
+         * It return a promise that resolve an array of all result of all callback
+         *
+         * If a callback return a promise and if this promise fail, the dispatch
+         * will try to use the {@see waitForError} callbacks to recover the error
+         *
+         * @param payload
+         * @returns {promise}
+         */
 	    Dispatcher.prototype.dispatch = function(/* object */ payload) {
-			console.debug("Dispatch started")
-	        this._clearPromises();
+			console.debug("Dispatch started");
+	        _clearPromises();
 	        var self = this;
-	        this._callbacks.forEach(function(callback) {
-	            self._addPromise(callback, payload);
+	        _callbacks.forEach(function(callback) {
+	            _addPromise(callback, payload);
 	        });
-			return $q.all(this._promises).catch(recover(self, payload))
+			return $q.all(_promises).catch(recover(payload))
 			.then(function(data){
 				console.debug("Dispatch completed");
 				return data;
@@ -53,37 +102,6 @@ define([], function () {
 			})
 	    };
 
-
-
-
-	    // helper : when an action is fired transform a callback in promise
-	    Dispatcher.prototype._addPromise = function(callback, payload) {
-	        var promise = callback(payload);
-	        this._promises.push(promise);
-	    };
-
-	    // helper : transform a callback in promise that will be use to recover after
-	    // failed process
-	    Dispatcher.prototype._addPromiseRecover = function(callback, payload) {
-			var promise = callback(payload)
-            this._recoverPromises.push(promise);
-	    };
-
-	    // helper : before dispatch an action clear all promises
-	    Dispatcher.prototype._clearPromises = function() {
-	        this._promises = [];
-	        this._recovers = [];
-	        this._recoverPromises = [];
-
-	    };
-
-	    // helper : clear all callback registered (for testing purpose)
-	    Dispatcher.prototype.clearAll = function() {
-	        this._callbacks = [];
-	        this._recovers = [];
-	        this._promises = [];
-	        this._recoverPromises = [];
-	    };
 
 	    /**
 	     * Allows a store to wait for the registered callbacks of other stores
@@ -121,9 +139,9 @@ define([], function () {
 	     */
 	    Dispatcher.prototype.waitFor = function(/*Array*/ promiseIndexes) {
 	        var selectedPromises = [];
-	        var self = this
+	        var self = this;
 	        promiseIndexes.forEach(function(index) {
-	            selectedPromises.push(self._promises[index]);
+	            selectedPromises.push(_promises[index]);
 	        });
 
 	        return $q.all(selectedPromises);
@@ -132,7 +150,7 @@ define([], function () {
 
 	    // Allow a store to do something after an error occured
 	    Dispatcher.prototype.waitForError = function( /* function */ callback) {
-	        this._recovers.push(callback)
+	        _recovers.push(callback)
 			var d = $q.defer();
 			d.resolve();
 	        return d.promise;
@@ -152,7 +170,18 @@ define([], function () {
 			return d.promise
 		};
 
-	    /**
+        /**
+         * this method return a promise
+         * whatever the given parameter is a value or a promise
+         * @param v
+         * @returns {Promise}
+         */
+        Dispatcher.prototype.when = function(v) {
+            return $q.when(v)
+        };
+
+
+        /**
 	     * A bridge function between the views and the dispatcher, marking the action
 	     * as a view action.  Another variant here could be handleServerAction.
 	     * @param  {object} payload The data coming from the view.
