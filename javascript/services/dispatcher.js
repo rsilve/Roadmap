@@ -12,14 +12,48 @@ define([], function () {
 
         var _callbacks = [];
         var _recovers = [];
-        var _promises = [];
 
+        /**
+         * Execution context is create each time dispatcher run dispatch method
+         * It store the complete execution stack
+         *
+         * The instance is pass to the callbacks so we can manipulate the execution
+         * workflow
+         *
+         * @constructor
+         */
+        function ExecutionContext() {
+            this.promises = [];
+        }
 
-        // helper factory for error recovery callback
-        var recover = function(payload) {
-            return function (reason) {
+        /**
+         * Create the list of promise to execute from the callback register in  the dispatcher
+         * {@see Dispatcher.register}
+         *
+         * @param payload
+         * @param callbacks
+         * @returns {Array}
+         */
+        ExecutionContext.prototype.run = function(/* Array */ callbacks, /* object */ payload) {
+            var self = this;
+            callbacks.forEach(function(callback) {
+                var promise = $q.when(callback(payload, self));
+                self.promises.push(promise);
+            });
+            return self.promises
+        };
+
+        /**
+         * Create the list of promise to execute from the callback register with the
+         * {@see Dispatcher.waitForError} method of the dispatcher
+         *
+         * @param payload
+         * @returns {function}
+         */
+        ExecutionContext.prototype.recover = function(/* Array */recovers, /* object */ payload) {
+            return function(reason) {
                 var _recoverPromises = [];
-                _recovers.forEach(function (/* function */ callback) {
+                recovers.forEach(function (/* function */ callback) {
                     _recoverPromises.push($q.when(callback(payload, reason)));
                 });
                 if (_recoverPromises.length > 0) {
@@ -27,23 +61,33 @@ define([], function () {
                 } else {
                     return $q.reject(reason)
                 }
-
             }
         };
 
-
-        // helper : when an action is fired transform a callback in promise
-        var _addPromise = function(callback, payload) {
-            var promise = $q.when(callback(payload));
-            _promises.push(promise);
+        /**
+         * Allow to make a callback wait for the execution of another callback
+         *
+         *  // registering callback with an execution dependency
+         *  var index1 = dispatcher.register(function() { return 1 });
+         *  var index2 = dispatcher.register(function(payload , ec) {
+         *      return ec.waitFor([index1]).then(function() { return 2 });
+         *  });
+         *
+         * // on execution callback 1 is execute before callback 2
+         * // if callback 1 is a promise that fail, callback2 is not executed
+         * dispatcher.dispatch(true)
+         *
+         * @param promiseIndexes
+         * @returns {Promise}
+         */
+        ExecutionContext.prototype.waitFor = function(/* Array */ promiseIndexes) {
+            var self = this;
+            var selectedPromises = [];
+            promiseIndexes.forEach(function(index) {
+                selectedPromises.push(self.promises[index]);
+            });
+            return $q.all(selectedPromises);
         };
-
-        // helper : before dispatch an action clear all promises
-        var _clearPromises = function() {
-            _promises = [];
-            _recovers = [];
-        };
-
 
         /**
          * Here is the dispatcher API
@@ -97,13 +141,11 @@ define([], function () {
          */
 	    Dispatcher.prototype.dispatch = function(/* object */ payload) {
 			console.debug("Dispatch started");
-	        _clearPromises();
-	        var self = this;
-	        _callbacks.forEach(function(callback) {
-	            _addPromise(callback, payload);
-	        });
-			return $q.all(_promises)
-            .catch(recover(payload))
+            var self = this;
+            var ec = new ExecutionContext();
+
+			return $q.all(ec.run(_callbacks, payload))
+            .catch(ec.recover(_recovers, payload))
 			.then(function(data){
 				console.debug("Dispatch completed");
 				return data;
@@ -126,29 +168,7 @@ define([], function () {
          */
 
 
-        /**
-         * Allow to make a callback wait for the execution of another callback
-         *
-         *  // registering callback with an execution dependency
-         *  var index1 = dispatcher.register(function() { return 1 });
-         *  var index2 = dispatcher.register(function() {
-         *      return dispatcher.waitFor([index1]).then(function() { return 2 });
-         *  });
-         *
-         * // on execution callback 1 is execute before callback 2
-         * // if callback 1 is a promise that fail, callback2 is not executed
-         * dispatcher.dispatch(true)
-         *
-         * @param promiseIndexes
-         * @returns {Promise}
-         */
-	    Dispatcher.prototype.waitFor = function(/* Array */ promiseIndexes) {
-	        var selectedPromises = [];
-	        promiseIndexes.forEach(function(index) {
-	            selectedPromises.push(_promises[index]);
-	        });
-	        return $q.all(selectedPromises);
-	    };
+
 
 
 
@@ -156,13 +176,13 @@ define([], function () {
 	    // Helper for creating a deferred that always resolve
 	    Dispatcher.prototype.noop = function(value) { 
 			var d = $q.defer();
-			d.resolve(value)
+			d.resolve(value);
 			return d.promise
 		};
 	    // Helper for creating a deferred that always reject
 	    Dispatcher.prototype.fail = function(value) { 
 			var d = $q.defer();
-			d.reject(value)
+			d.reject(value);
 			return d.promise
 		};
 

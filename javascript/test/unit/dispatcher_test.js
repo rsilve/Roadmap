@@ -82,18 +82,16 @@ define(['app'], function() {
         it('should have a waitForError for recovering on dispatch error ', function () {
 			var handlerCatch = jasmine.createSpy('catch');
 			var handlerThen = jasmine.createSpy('then');
-			
-		   dispatcher.register(function(p) {
+
+            dispatcher.register(function(p) { return p });
+            dispatcher.register(function() {
                return dispatcher.fail("FAIL")
            });
-           dispatcher.waitForError(function(p, err) {
-               console.debug(err);
-               return 1
-	   	   });
+           dispatcher.waitForError(function(p, err) { return err });
            dispatcher.dispatch(true).then(handlerThen).catch(handlerCatch)
 		   $rootScope.$digest();
 		   expect(handlerCatch).not.toHaveBeenCalled();
-		   expect(handlerThen).toHaveBeenCalledWith([1]);
+		   expect(handlerThen).toHaveBeenCalledWith(["FAIL"]);
         });
 
 
@@ -101,8 +99,8 @@ define(['app'], function() {
 
             var index = dispatcher.register(function() { return 1 });
             dispatcher.register(function() { return 2 });
-            dispatcher.register(function() {
-                return dispatcher.waitFor([index])
+            dispatcher.register(function(payload, ec) {
+                return ec.waitFor([index])
                     .then(function(v) {
                         expect(v.length).toEqual(1);
                         expect(v[0]).toBe(1);

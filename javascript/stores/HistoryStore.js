@@ -40,19 +40,19 @@ define([
         var store = new HistoryStore();
 		
 		// bind to dispatcher
-		store.bind(constants.PROJECT_SAVE, function(payload) {
-			return dispatcher.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_SAVE]]).
+		store.bind(constants.PROJECT_SAVE, function(payload, ec) {
+			return ec.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_SAVE]]).
 			then(push(payload))
-        }).bind(constants.PROJECT_DESTROY, function(payload) {
-			return dispatcher.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
+        }).bind(constants.PROJECT_DESTROY, function(payload, ec ) {
+			return ec.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
 			.then(push(payload))
-        }).bind(constants.UNDO, function(payload) {
+        }).bind(constants.UNDO, function(payload, ec) {
 			return dispatcher.when(cancelScheduler())
 			.then(function() {
-				return dispatcher.waitFor([ProjectStore.dispatchIndex[constants.UNDO]])
+				return ec.waitFor([ProjectStore.dispatchIndex[constants.UNDO]])
 			}).then(undo)
 			.then(startScheduler)
-        })
+        });
 		
 		
        

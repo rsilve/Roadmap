@@ -47,17 +47,14 @@ define([
 			return setProject(payload.project)
         }).bind(constants.PROJECT_EDIT_CANCEL, function() {
 			return resetProject()
-        }).bind(constants.PROJECT_SAVE, function() {
-			return dispatcher
-			.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_SAVE]])
+        }).bind(constants.PROJECT_SAVE, function(payload, ec) {
+			return ec.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_SAVE]])
 			.then(resetProject)	
-        }).bind(constants.PROJECT_INSERT, function() {
-			return dispatcher
-			.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_INSERT]])
+        }).bind(constants.PROJECT_INSERT, function(payload, ec) {
+			return ec.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_INSERT]])
 			.then(resetProject)	
-        }).bind(constants.PROJECT_DESTROY, function() {
-			return dispatcher
-			.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
+        }).bind(constants.PROJECT_DESTROY, function(payload, ec) {
+			return ec.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
 			.then(resetProject)
         }).bind(constants.PROJECT_CREATE, function() {
 			return createProject()

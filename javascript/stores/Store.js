@@ -28,27 +28,49 @@ define([], function () {
 		}
 		
     };
-	Store.prototype.bind = function(/* string */ event, /* function */ callback, /* boolean */ emitDisabled) {
-		var self = this;
-		if (emitDisabled) {
-			var f = function(payload) {
-				if (event === payload.actionType)
-				 	return callback(payload)
-				else 
-					return self.dispatcher.noop()
-			}
-			this.dispatchIndex[event] = this.dispatcher.register(f);
-		} else {
-			var f = function(payload) {
-				if (event === payload.actionType)
-				 	return self.dispatcher.when(callback(payload)).then(self.emitChange())
-				else 
-					return self.dispatcher.noop()
-			}
-			this.dispatchIndex[event] = this.dispatcher.register(f);
-		}
-		return this;
-	}
+    Store.prototype.bind = function(/* string */ event, /* function */ callback, /* boolean */ emitDisabled) {
+        var self = this;
+        if (emitDisabled) {
+            var f = function(payload, ec) {
+                if (event === payload.actionType)
+                    return callback(payload, ec)
+                else
+                    return self.dispatcher.noop()
+            };
+            this.dispatchIndex[event] = this.dispatcher.register(f);
+        } else {
+            var f = function(payload, ec) {
+                if (event === payload.actionType)
+                    return self.dispatcher.when(callback(payload, ec)).then(self.emitChange())
+                else
+                    return self.dispatcher.noop()
+            };
+            this.dispatchIndex[event] = this.dispatcher.register(f);
+        }
+        return this;
+    };
+
+    Store.prototype.recover = function(/* string */ event, /* function */ callback, /* boolean */ emitDisabled) {
+        var self = this;
+        if (emitDisabled) {
+            var f = function(payload, ec) {
+                if (event === payload.actionType)
+                    return callback(payload, ec)
+                else
+                    return self.dispatcher.noop()
+            };
+            this.dispatchIndex[event] = this.dispatcher.waitForError(f);
+        } else {
+            var f = function(payload, ec) {
+                if (event === payload.actionType)
+                    return self.dispatcher.when(callback(payload, ec)).then(self.emitChange())
+                else
+                    return self.dispatcher.noop()
+            };
+            this.dispatchIndex[event] = this.dispatcher.waitForError(f);
+        }
+        return this;
+    };
 
     return Store
 });
