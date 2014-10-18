@@ -2,8 +2,9 @@ define([
     'angular', 
 	'directives/pikaday',
 	'directives/timebar',
-	'services/dispatcher',
-	'services/Google',
+    'services/ExecutionContext',
+    'services/dispatcher',
+    'services/Google',
 	'stores/CalendarStore',
     'stores/ProjectStore', 
     'stores/TimeStore', 
@@ -16,7 +17,7 @@ define([
     'components/ProjectEditor', 
     'components/HistoryList'
 ], function (angular, PikadayDirective, TimebarDirective,
-	Dispatcher, Google,
+             ExecutionContext, Dispatcher, Google,
 	CalendarStore, ProjectStore , TimeStore, ProjectEditorStore, HistoryStore,
 	CalendarChooser, ProjectToolbar, Timebar, ProjectList, ProjectEditor, HistoryList) {
 
@@ -24,9 +25,10 @@ define([
 
 	angular.module('Roadmap.services', [])
     .factory("google", ['$q', '$http', Google])
-    .factory("dispatcher", ['$rootScope', '$q', Dispatcher])
-    
-	angular.module('Roadmap.stores', [])
+        .factory("ExecutionContext", ['$q', ExecutionContext])
+        .factory("dispatcher", ['$rootScope', '$q', "ExecutionContext",  Dispatcher])
+
+    angular.module('Roadmap.stores', [])
 	.factory("CalendarStore", ['$rootScope','dispatcher', 'google',  CalendarStore])
 	.factory("ProjectStore", ['$rootScope','dispatcher', 'google', 'CalendarStore', ProjectStore])
 	.factory("TimeStore", ['$rootScope','dispatcher', TimeStore])

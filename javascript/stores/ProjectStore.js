@@ -66,32 +66,32 @@ define([
         };
 		
 		var undoHandler = {}
-		undoHandler[constants.PROJECT_SAVE] = function(payload) {
+		undoHandler[constants.PROJECT_SAVE] = function(payload, ec) {
 			var p = payload.from
 			if (p.id) {
 				p.sequence ++;
 				return saveProject(p)
 			} else {
-				return dispatcher.noop() // deleteProject(payload.project)
+				return ec.noop() // deleteProject(payload.project)
 			}			
-		}
-		undoHandler[constants.PROJECT_DESTROY] = function(payload) {
-			var p = payload.project
+		};
+		undoHandler[constants.PROJECT_DESTROY] = function(payload, ec) {
+			var p = payload.project;
 			if (p.id) {
 				delete p.id;
 				return insertProject(p)
 			} else {
-				return dispatcher.noop()
+				return ec.when()
 			}
 			
-		}
-		var undo = function(payload) {
+		};
+		var undo = function(payload, ec) {
 			console.debug("Undo", payload.data.payload)
 			if (undoHandler[payload.data.payload.actionType])
 			  return undoHandler[payload.data.payload.actionType](payload.data.payload)
 			else 
-			  return dispatcher.noop()
-		}
+			  return ec.noop()
+		};
 		
 			
 		// Store Object 
@@ -102,22 +102,22 @@ define([
 		// get the projects list
         ProjectStore.prototype.getProjects = function() {
         	return _projects;
-        }
+        };
 		
 		// get loading status
         ProjectStore.prototype.isLoading = function() {
         	return loading;
-        }
+        };
 		// get loading status
         ProjectStore.prototype.loadingEvent = function() {
         	return this.id+"-loading";
-        }
+        };
 		
 		ProjectStore.prototype.emitLoading = function() {
 			loading = true;
 			console.debug("Emit ", this.loadingEvent())
 			this.$scope.$broadcast(this.loadingEvent());
-		}
+		};
 		
 		// override emit change for emitting loadingEvent AND changEvent
 	    ProjectStore.prototype.emitChange = function() {
@@ -131,14 +131,14 @@ define([
 	    };
 		
 		ProjectStore.prototype.bind = function(/* string */ event, /* function */ callback, /* boolean */ emitDisabled) {
-			var self = this
-			var f = function(payload) {
-				return self.dispatcher.when(self.emitLoading())
-				.then(function() { return callback(payload) })
-			}
+			var self = this;
+			var f = function(payload, ec) {
+				return ec.when(self.emitLoading())
+				.then(function() { return callback(payload, ec) })
+			};
 			
 			return Store.prototype.bind.call(this, event, f, emitDisabled)
-		}
+		};
 		
 		// Store instance
         var store = new ProjectStore();
@@ -154,7 +154,7 @@ define([
 			return undo(payload)
         }).bind(constants.PROJECT_REFRESH_LIST, function(payload) {
 			return getProjects()
-        })
+        });
 		
         
 		console.info("Loading ProjectStore Service " + store.id)

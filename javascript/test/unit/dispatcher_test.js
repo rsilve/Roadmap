@@ -11,42 +11,6 @@ define(['app'], function() {
 			$rootScope = injector.get('$rootScope')
 		});
 		
-		
-        it('should have a fail method that return a failed  promise', function () {
-			var handlerCatch = jasmine.createSpy('catch');
-			var handlerThen = jasmine.createSpy('then');
-			dispatcher.fail(1).then(handlerThen).catch(handlerCatch)
-			$rootScope.$digest();
-			expect(handlerCatch).toHaveBeenCalledWith(1);
-			expect(handlerThen).not.toHaveBeenCalled();
-        });
-		
-        it('should have a noop method that return a resolved promise', function () {
-			var handlerCatch = jasmine.createSpy('catch');
-			var handlerThen = jasmine.createSpy('then');
-			dispatcher.noop(3).then(handlerThen).catch(handlerCatch)
-			$rootScope.$digest();
-			expect(handlerCatch).not.toHaveBeenCalled();
-			expect(handlerThen).toHaveBeenCalledWith(3);
-        });
-
-        it('should have a when method that return a resolved promise when the parameter a value', function () {
-			var handlerCatch = jasmine.createSpy('catch');
-			var handlerThen = jasmine.createSpy('then');
-			dispatcher.when(1).then(handlerThen).catch(handlerCatch)
-			$rootScope.$digest();
-			expect(handlerCatch).not.toHaveBeenCalled();
-			expect(handlerThen).toHaveBeenCalledWith(1);
-        });
-		
-        it('should have a when method that return the promise give as argument', function () {
-			var handlerCatch = jasmine.createSpy('catch');
-			var handlerThen = jasmine.createSpy('then');
-			dispatcher.when(dispatcher.noop(2)).then(handlerThen).catch(handlerCatch)
-			$rootScope.$digest();
-			expect(handlerCatch).not.toHaveBeenCalled();
-			expect(handlerThen).toHaveBeenCalledWith(2);
-        });
 
         it('should have a register method return an index position', function () {
 			var index = dispatcher.register(function() {return 1});
@@ -58,7 +22,7 @@ define(['app'], function() {
         it('should have a dispatch method that succeed if all registered succeed', function () {
 		   dispatcher.register(function(p) { return p });
            dispatcher.register(function(p) { return p });
-           dispatcher.dispatch(true).then(function(v){
+           dispatcher.run(true).then(function(v){
                expect(v.length).toEqual(2);
                expect(v[0]).toBe(true);
                expect(v[1]).toBe(true);
@@ -72,8 +36,8 @@ define(['app'], function() {
 			var handlerThen = jasmine.createSpy('then');
 			
 		   dispatcher.register(function(p) { return p });
-           dispatcher.register(function() { return dispatcher.fail()});
-           dispatcher.dispatch(true).then(handlerThen).catch(handlerCatch)
+           dispatcher.register(function(p, ec) { return ec.fail()});
+           dispatcher.run(true).then(handlerThen).catch(handlerCatch)
 		   $rootScope.$digest();
 		   expect(handlerCatch).toHaveBeenCalled();
 		   expect(handlerThen).not.toHaveBeenCalled();
@@ -84,11 +48,11 @@ define(['app'], function() {
 			var handlerThen = jasmine.createSpy('then');
 
             dispatcher.register(function(p) { return p });
-            dispatcher.register(function() {
-               return dispatcher.fail("FAIL")
+            dispatcher.register(function(p, ec) {
+               return ec.fail("FAIL")
            });
            dispatcher.waitForError(function(p, err) { return err });
-           dispatcher.dispatch(true).then(handlerThen).catch(handlerCatch)
+           dispatcher.run(true).then(handlerThen).catch(handlerCatch)
 		   $rootScope.$digest();
 		   expect(handlerCatch).not.toHaveBeenCalled();
 		   expect(handlerThen).toHaveBeenCalledWith(["FAIL"]);
@@ -107,7 +71,7 @@ define(['app'], function() {
                         return v[0]+1
                     })
             });
-            dispatcher.dispatch(true).then(function(v) {
+            dispatcher.run(true).then(function(v) {
                 expect(v.length).toEqual(3);
                 expect(v[0]+v[1]+v[2]).toBe(5);
             });
