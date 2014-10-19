@@ -17,17 +17,22 @@ Object.keys(window.__karma__.files).forEach(function(file) {
 //console.log(allTestFiles)
 
 require.config({
-  // Karma serves files under /base, which is the basePath from your config file
+  // Karma serves files under /base/javascript, which is the basePath from your config file
   baseUrl: '/base/javascript/',
   paths: {
 	  "angular": 		'../bower_components/angular/angular',
+      "angular-mocks":  '../bower_components/angular-mocks/angular-mocks',
       "pikaday": 		'../bower_components/pikaday/pikaday',
       "jquery": 		"../bower_components/jquery/dist/jquery",
       "moment": 		"../bower_components/momentjs/min/moment-with-locales.min",
       "toastr": 		"../bower_components/toastr/toastr"
     },
     shim: {
-        'angular' : {'exports' : 'angular'}
+        'angular' : {'exports' : 'angular'},
+        "angular-mocks" : {"deps" : ["angular"]},
+        // by default we load angular mock before app
+        // so we can use it in all tests
+        "app" : {"deps" : ["angular-mocks"]}
     },
 	config: {
 	        moment: {
