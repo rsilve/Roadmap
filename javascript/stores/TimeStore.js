@@ -47,33 +47,53 @@ define([
 		return z;
 	}
 
+    /**
+     * Factory definition for the TimeStore service
+     */
 	return function (scope, dispatcher) {
 		
 	    // init the start date to the begining of the current year
 	    var start = moment().startOf('year');
 		var zoom = ZOOM_MONTHS;
-		var ticks = updateTicks(start, zoom);	
-		
-		// Store Object 
+		var ticks = updateTicks(start, zoom);
+
+        /**
+         * Constructor of the TimeStore
+         * This service intend to manage the time view of the application
+         *
+         * @constructor
+         */
         function TimeStore() {}
-		// inherit from Store for events method
         TimeStore.prototype = new Store(scope, dispatcher)
-		
-        // Simple accessor use by components for read the time reference
+
+        /**
+         * get start date that will be use as reference fo the time view
+         * @returns {*}
+         */
         TimeStore.prototype.getStart = function() {
             return start
         };
-        // Simple accessor use by components for read the ticks list
+
+        /**
+         * get the time ticks that will be display by the time view
+         *
+         * @returns {Array}
+         */
         TimeStore.prototype.getTicks = function() {
             return ticks
         };
-       
+
+        /**
+         * get the scale of the time view
+         * @returns {string}
+         */
         TimeStore.prototype.getZoom = function() {
             return zoom;
         };
-       
-		
-        // helper go to next quarter
+
+        /**
+         * helper to update the start date reference base on the current scale
+         */
         var next = function() {
             if (zoom === ZOOM_MONTHS)
                 start.add(3, 'months');
@@ -84,7 +104,10 @@ define([
             ticks = updateTicks(start, zoom);
 			console.info("Time base move to ", start.toString())
         };
-        // helper go to previous quarter
+
+        /**
+         * helper to update the start date reference base on the current scale
+         */
         var prev = function() {
             if (zoom === ZOOM_MONTHS)
                 start.subtract(3, 'months');
@@ -95,7 +118,10 @@ define([
             ticks = updateTicks(start, zoom);
 			console.info("Time base move to ", start.toString())
         };
-        
+
+        /**
+         * helper to update the ticks  base on the given scale
+         */
         var setZoom = function(z) {
 			zoom = z;
 			ticks = updateTicks(start, zoom);
@@ -122,8 +148,7 @@ define([
         }).bind(constants.TIME_MONTHS, function() {
 			return setZoom(ZOOM_MONTHS)
         });
-		
-       
+
 		console.info("Loading TimeStore Service " + store.id);
         return store;
     };
