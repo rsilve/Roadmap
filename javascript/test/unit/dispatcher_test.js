@@ -19,19 +19,28 @@ define(['app'], function() {
 			expect(index).toEqual(1)
         });
 
-        it('should have a dispatch method that succeed if all registered succeed', function () {
-		   dispatcher.register(function(p) { return p });
-           dispatcher.register(function(p) { return p });
-           dispatcher.run(true).then(function(v){
-               expect(v.length).toEqual(2);
-               expect(v[0]).toBe(true);
-               expect(v[1]).toBe(true);
-           });
-		   $rootScope.$digest();
+        it('should have a run method that succeed if all registered callback succeed', function () {
+            dispatcher.register(function(p) { return p });
+            dispatcher.register(function(p) { return p });
+            dispatcher.run(true).then(function(v){
+                expect(v.length).toEqual(2);
+                expect(v[0]).toBe(true);
+                expect(v[1]).toBe(true);
+            });
+            $rootScope.$digest();
+        });
+
+        it('should have a run method that could ignore callbacks', function () {
+            dispatcher.register(function(p) { return 1 });
+            dispatcher.register(function(p, ec) { ec.ignore(); return 2 });
+            dispatcher.run(true).then(function(v){
+                expect(v).toEqual([1]);
+            });
+            $rootScope.$digest();
         });
 
 
-        it('should have a dispatch method that fail if one registered fail', function () {
+        it('should have a run method that fail if one registered fail', function () {
 			var handlerCatch = jasmine.createSpy('catch');
 			var handlerThen = jasmine.createSpy('then');
 			

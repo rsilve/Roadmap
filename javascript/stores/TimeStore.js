@@ -8,7 +8,7 @@ define([
 	var ZOOM_WEEKS = "week";
 	var ZOOM_MONTHS = "month";
 	
-    var ticksFormat = {}
+    var ticksFormat = {};
     ticksFormat[ZOOM_MONTHS] = function(d, tick) {
 		tick.label = d.format("MMM");
 		if (d.month() == 0) {
@@ -19,28 +19,28 @@ define([
             tick.label = d.format("MMM YYYY");
             tick.meta += " quarter"
         }
-	}
+	};
 	ticksFormat[ZOOM_WEEKS] = function(d, tick) {
 		if (d.date() < 7) {
             tick.label = d.format("DD/MM/YY");
 			if (d.month() == 0) 
             	tick.meta += " startyear"
         }
-	}
+	};
 	ticksFormat[ZOOM_DAYS] = function(d, tick) {
 		if (d.date() === 1) {
             tick.label = d.format("DD/MM/YY");
 			if (d.month() == 0) 
             	tick.meta += " startyear"
         }
-	}
+	};
 	
 	// helper for compute tick list
 	var updateTicks = function(/* moment */ start, /* string */ zoom) {
-		var z = []
+		var z = [];
 		for (var i = 0; i < 24; i ++) {
 			var d = start.clone().add(i, zoom).startOf(zoom);
-			var tick = { label : d.format("DD/MM") }
+			var tick = { label : d.format("DD/MM"), date: d }
 			ticksFormat[zoom](d, tick);
             z.push(tick );
         }
@@ -75,19 +75,29 @@ define([
 		
         // helper go to next quarter
         var next = function() {
-			start.quarter(start.quarter() + 1);
-			ticks = updateTicks(start, zoom);
-			console.info("Time base move to ", start)
+            if (zoom === ZOOM_MONTHS)
+                start.add(3, 'months');
+            if (zoom === ZOOM_WEEKS)
+                start.add(1, 'months');
+            if (zoom === ZOOM_DAYS)
+                start.add(1, 'weeks');
+            ticks = updateTicks(start, zoom);
+			console.info("Time base move to ", start.toString())
         };
         // helper go to previous quarter
         var prev = function() {
-            start.subtract(3, "month");
-			ticks = updateTicks(start, zoom);
-			console.info("Time base move to ", start)
+            if (zoom === ZOOM_MONTHS)
+                start.subtract(3, 'months');
+            if (zoom === ZOOM_WEEKS)
+                start.subtract(1, 'months');
+            if (zoom === ZOOM_DAYS)
+                start.subtract(1, 'weeks');
+            ticks = updateTicks(start, zoom);
+			console.info("Time base move to ", start.toString())
         };
         
         var setZoom = function(z) {
-			zoom = z
+			zoom = z;
 			ticks = updateTicks(start, zoom);
 			console.info("Time base zoom to ", z)
         };
@@ -111,10 +121,10 @@ define([
 			return setZoom(ZOOM_WEEKS)
         }).bind(constants.TIME_MONTHS, function() {
 			return setZoom(ZOOM_MONTHS)
-        })
+        });
 		
        
-		console.info("Loading TimeStore Service " + store.id)
+		console.info("Loading TimeStore Service " + store.id);
         return store;
     };
 });
