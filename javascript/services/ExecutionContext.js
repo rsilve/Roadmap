@@ -106,9 +106,7 @@ define([], function () {
          * @returns {*}
          */
         ExecutionContext.prototype.fail = function(value) {
-            var d = $q.defer();
-            d.reject(value);
-            return d.promise
+            return $q.reject(value)
         };
 
         console.info("Loading ExecutionContext Service")

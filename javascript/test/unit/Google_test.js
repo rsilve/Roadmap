@@ -4,15 +4,16 @@ define(['services/Google', 'app'], function(Google) {
 
         var google;
         var $httpBackend;
+        var $q;
+        var $rootScope;
 
         // Load the module which contains the directive
         beforeEach(function () {
             var injector = angular.injector(['Roadmap.services', 'ng', 'ngMock']);
-            var $q = injector.get('$q');
+            $q = injector.get('$q');
+            $rootScope = injector.get('$rootScope')
             $httpBackend = injector.get('$httpBackend');
-            var defer = $q.defer();
-            defer.resolve({access_token : "access_token"});
-            var auth = defer.promise;
+            var auth = $q.when({access_token : "access_token", token_type : "bearer"});
 
             google = injector.invoke(Google, null, {auth: auth})
         });
@@ -51,6 +52,49 @@ define(['services/Google', 'app'], function(Google) {
 
         });
 
+        it('should have a failing events method when a calendar is  not defined', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
+            google().events().then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
+            expect(handlerCatch).toHaveBeenCalled();
+            expect(handlerThen).not.toHaveBeenCalled();
+
+        });
+
+        it('should have a failing createEvent method  when a calendar is not defined', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
+            google().createEvent({}).then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
+            expect(handlerCatch).toHaveBeenCalled();
+            expect(handlerThen).not.toHaveBeenCalled();
+        });
+
+        it('should have a failing deleteEvent method when a calendar is not defined', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
+            google().deleteEvent("eventId").then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
+            expect(handlerCatch).toHaveBeenCalled();
+            expect(handlerThen).not.toHaveBeenCalled();
+        });
+
+        it('should have a failing updateEvent method when a calendar is not  defined', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
+            google().updateEvent("eventId", {}).then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
+            expect(handlerCatch).toHaveBeenCalled();
+            expect(handlerThen).not.toHaveBeenCalled();
+        });
+
+        it('should have a calendarList method when a calendar is not defined', function () {
+            $httpBackend.expect('GET', 'https://www.googleapis.com/calendar/v3/users/me/calendarList')
+                .respond(200, 1);
+            google().calendarList();
+            $httpBackend.flush();
+        });
 
     });
 

@@ -1,20 +1,20 @@
 define([], function () {
 
     return function ($q, auth, $http) {
-		console.info("Loading Google Service")
+		console.info("Loading Google Service");
         // constants for google api
         var google_api = "https://www.googleapis.com/calendar/v3";
 
 
         // helper to create  request
         function request(c) {
-			console.debug("Send request " + c.path)
+			console.debug("Send request " + c.path);
             c = c || {};
             c.method = c.method || "GET";
             c.url = google_api +  c.path;
             
 			return auth.then(function (auth) {
-				console.debug("Got Google auth "+auth.access_token)
+				console.debug("Got Google auth "+auth.access_token);
                 c.headers = {
                     // this header is required by google api
                     "Authorization": auth.token_type + " " + auth.access_token,
@@ -31,7 +31,7 @@ define([], function () {
 
         // request for getting events list
         var events = function(calendar) {
-            return request({method: 'GET', path: "/calendars/"+calendar+"/events"}).then();
+            return request({method: 'GET', path: "/calendars/"+calendar+"/events"});
         };
 
         // request for creating a new event
