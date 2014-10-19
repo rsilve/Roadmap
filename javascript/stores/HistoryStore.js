@@ -47,7 +47,7 @@ define([
 			return ec.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
 			.then(push(payload))
         }).bind(constants.UNDO, function(payload, ec) {
-			return dispatcher.when(cancelScheduler())
+			return ec.when(cancelScheduler())
 			.then(function() {
 				return ec.waitFor([ProjectStore.dispatchIndex[constants.UNDO]])
 			}).then(undo)

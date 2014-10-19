@@ -6,7 +6,7 @@ function (constants) {
 		var setState = function() {
 	        $scope.history = HistoryStore.getHistory();
 			$scope.progress = false;
-		}
+		};
 		
 		// Initial state
 		setState();

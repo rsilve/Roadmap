@@ -2,11 +2,23 @@ define([], function () {
 
     return function ($q, auth, $http) {
 		console.info("Loading Google Service");
-        // constants for google api
+
+        /**
+         * Constant used to construct all google api request
+         * @type {string}
+         */
         var google_api = "https://www.googleapis.com/calendar/v3";
 
 
-        // helper to create  request
+        /**
+         * Helper method use to create a google api request.
+         * It wrap the call of authentication check, the creation
+         * of the authenticated header, the generation of the url based on a common prefix
+         * {@see google_api}.
+         *
+         * @param c
+         * @returns {promise}
+         */
         function request(c) {
 			console.debug("Send request " + c.path);
             c = c || {};
@@ -30,13 +42,23 @@ define([], function () {
 			});
         }
 
-        // request for getting events list
+        /**
+         * Method that return the events from a calendar
+         * @param calendar
+         * @returns {promise}
+         */
         var events = function(calendar) {
             return request({method: 'GET', path: "/calendars/"+calendar+"/events"});
         };
 
-        // request for creating a new event
-        // data is a JSON string
+        /**
+         * Method that create a new event in a calendar.
+         * data must be valid ({@see ProjectHelper} for helping data serialization)
+         *
+         * @param calendar
+         * @param data
+         * @returns {promise}
+         */
         var createEvent = function(calendar, data) {
             return request({
                 method: 'POST',
@@ -45,7 +67,13 @@ define([], function () {
             });
         };
 
-        // request for delete an event
+        /**
+         * Method for delete an event of a calendar
+         *
+         * @param calendar
+         * @param id
+         * @returns {promise}
+         */
         var deleteEvent = function(calendar, id) {
             return request({
                 method: 'DELETE',
@@ -54,8 +82,15 @@ define([], function () {
         };
 
 
-        // request for update an event
-        // data is a JSON string
+        /**
+         * Method for update an event in a calendar
+         * data must be valid ({@see ProjectHelper} for helping data serialization)
+         *
+         * @param calendar
+         * @param id
+         * @param data
+         * @returns {promise}
+         */
         var updateEvent = function(calendar, id, data) {
             return request({
                 method: 'PUT',
@@ -64,7 +99,11 @@ define([], function () {
             });
         };
 
-        // request for getting calendarList
+        /**
+         * Method for get the calendar list
+         *
+         * @returns {promise}
+         */
         var calendarList = function() {
             return request({
                 method: 'GET',
@@ -73,7 +112,9 @@ define([], function () {
         };
 
 
-        // Expose API
+        /**
+         * Expose the API
+         */
         return function(calendar) {
             if (calendar)
                 return {
