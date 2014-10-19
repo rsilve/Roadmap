@@ -25,7 +25,8 @@ define([], function () {
 				console.debug("request result", r)
 				return r.data 
 			}).catch(function(err) {
-				console.warn("Google", err)
+				console.warn("Google", err);
+                return $q.reject(err)
 			});
         }
 

@@ -11,7 +11,7 @@ define(['services/Google', 'app'], function(Google) {
         beforeEach(function () {
             var injector = angular.injector(['Roadmap.services', 'ng', 'ngMock']);
             $q = injector.get('$q');
-            $rootScope = injector.get('$rootScope')
+            $rootScope = injector.get('$rootScope');
             $httpBackend = injector.get('$httpBackend');
             var auth = $q.when({access_token : "access_token", token_type : "bearer"});
 
@@ -20,31 +20,63 @@ define(['services/Google', 'app'], function(Google) {
 
 
         it('should have a events method when a calendar is defined', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
             $httpBackend.expect('GET', 'https://www.googleapis.com/calendar/v3/calendars/calendarId/events')
                 .respond(200, 1);
-            google("calendarId").events();
+            google("calendarId").events().then(handlerThen).catch(handlerCatch);
             $httpBackend.flush();
+            $rootScope.$digest();
+            expect(handlerCatch).not.toHaveBeenCalled();
+            expect(handlerThen).toHaveBeenCalled();
         });
 
         it('should have a createEvent method  when a calendar is defined', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
+            $httpBackend.expect('POST', 'https://www.googleapis.com/calendar/v3/calendars/calendarId/events')
+                .respond(500, 1);
+            google("calendarId").createEvent({}).then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
+            $httpBackend.flush();
+            expect(handlerCatch).toHaveBeenCalled();
+            expect(handlerThen).not.toHaveBeenCalled();
+        });
+
+        it('should have a createEvent method  when a calendar is defined that failed if the status is not 200', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
             $httpBackend.expect('POST', 'https://www.googleapis.com/calendar/v3/calendars/calendarId/events')
                 .respond(200, 1);
-            google("calendarId").createEvent({});
+            google("calendarId").createEvent({}).then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
             $httpBackend.flush();
+            expect(handlerCatch).not.toHaveBeenCalled();
+            expect(handlerThen).toHaveBeenCalled();
         });
 
         it('should have a deleteEvent method when a calendar is defined', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
             $httpBackend.expect('DELETE', 'https://www.googleapis.com/calendar/v3/calendars/calendarId/events/eventId')
                 .respond(200, 1);
-            google("calendarId").deleteEvent("eventId");
+            google("calendarId").deleteEvent("eventId").then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
             $httpBackend.flush();
+            expect(handlerCatch).not.toHaveBeenCalled();
+            expect(handlerThen).toHaveBeenCalled();
         });
 
         it('should have a updateEvent method when a calendar is defined', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
             $httpBackend.expect('PUT', 'https://www.googleapis.com/calendar/v3/calendars/calendarId/events/eventId')
                 .respond(200, 1);
-            google("calendarId").updateEvent("eventId", {});
+            google("calendarId").updateEvent("eventId", {}).then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
             $httpBackend.flush();
+            expect(handlerCatch).not.toHaveBeenCalled();
+            expect(handlerThen).toHaveBeenCalled();
         });
 
         it('should not have a calendarList method when a calendar is defined', function () {
