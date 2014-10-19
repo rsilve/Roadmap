@@ -30,9 +30,11 @@ require.config({
     shim: {
         'angular' : {'exports' : 'angular'},
         "angular-mocks" : {"deps" : ["angular"]},
-        // by default we load angular mock before app
-        // so we can use it in all tests
-        "app" : {"deps" : ["angular-mocks"]}
+        // by default we load mocks before app
+        // so we can use it in all tests as needed
+        // Caution module need to be loaded in test
+        // ie : var injector = angular.injector(['ng', 'ngMock', 'Roadmap.services', 'Roadmap.mocks']);
+        "app" : {"deps" : ["angular-mocks", "test/Mocks"]}
     },
 	config: {
 	        moment: {

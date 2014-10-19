@@ -1,21 +1,20 @@
-define(['services/Google', 'app'], function(Google) {
+define(['app'], function() {
 
-    describe('ExecutionContext service', function () {
+    describe('Google service', function () {
 
         var google;
         var $httpBackend;
-        var $q;
         var $rootScope;
+        var auth;
 
         // Load the module which contains the directive
         beforeEach(function () {
-            var injector = angular.injector(['Roadmap.services', 'ng', 'ngMock']);
-            $q = injector.get('$q');
+            var injector = angular.injector(['ng', 'ngMock', 'Roadmap.services', 'Roadmap.mocks']);
             $rootScope = injector.get('$rootScope');
             $httpBackend = injector.get('$httpBackend');
-            var auth = $q.when({access_token : "access_token", token_type : "bearer"});
 
-            google = injector.invoke(Google, null, {auth: auth})
+            auth = injector.get("GoogleAuth");
+            google = injector.get("google")
         });
 
 
@@ -25,6 +24,7 @@ define(['services/Google', 'app'], function(Google) {
             $httpBackend.expect('GET', 'https://www.googleapis.com/calendar/v3/calendars/calendarId/events')
                 .respond(200, 1);
             google("calendarId").events().then(handlerThen).catch(handlerCatch);
+            auth.resolve();
             $httpBackend.flush();
             $rootScope.$digest();
             expect(handlerCatch).not.toHaveBeenCalled();
@@ -37,6 +37,7 @@ define(['services/Google', 'app'], function(Google) {
             $httpBackend.expect('POST', 'https://www.googleapis.com/calendar/v3/calendars/calendarId/events')
                 .respond(500, 1);
             google("calendarId").createEvent({}).then(handlerThen).catch(handlerCatch);
+            auth.resolve();
             $rootScope.$digest();
             $httpBackend.flush();
             expect(handlerCatch).toHaveBeenCalled();
@@ -49,10 +50,21 @@ define(['services/Google', 'app'], function(Google) {
             $httpBackend.expect('POST', 'https://www.googleapis.com/calendar/v3/calendars/calendarId/events')
                 .respond(200, 1);
             google("calendarId").createEvent({}).then(handlerThen).catch(handlerCatch);
+            auth.resolve();
             $rootScope.$digest();
             $httpBackend.flush();
             expect(handlerCatch).not.toHaveBeenCalled();
             expect(handlerThen).toHaveBeenCalled();
+        });
+
+        it('should have a createEvent method  when a calendar is defined that failed if the auth is invalid', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
+            google("calendarId").createEvent({}).then(handlerThen).catch(handlerCatch);
+            auth.reject();
+            $rootScope.$digest();
+            expect(handlerCatch).toHaveBeenCalled();
+            expect(handlerThen).not.toHaveBeenCalled();
         });
 
         it('should have a deleteEvent method when a calendar is defined', function () {
@@ -61,6 +73,7 @@ define(['services/Google', 'app'], function(Google) {
             $httpBackend.expect('DELETE', 'https://www.googleapis.com/calendar/v3/calendars/calendarId/events/eventId')
                 .respond(200, 1);
             google("calendarId").deleteEvent("eventId").then(handlerThen).catch(handlerCatch);
+            auth.resolve();
             $rootScope.$digest();
             $httpBackend.flush();
             expect(handlerCatch).not.toHaveBeenCalled();
@@ -73,6 +86,7 @@ define(['services/Google', 'app'], function(Google) {
             $httpBackend.expect('PUT', 'https://www.googleapis.com/calendar/v3/calendars/calendarId/events/eventId')
                 .respond(200, 1);
             google("calendarId").updateEvent("eventId", {}).then(handlerThen).catch(handlerCatch);
+            auth.resolve();
             $rootScope.$digest();
             $httpBackend.flush();
             expect(handlerCatch).not.toHaveBeenCalled();
@@ -88,6 +102,7 @@ define(['services/Google', 'app'], function(Google) {
             var handlerCatch = jasmine.createSpy('catch');
             var handlerThen = jasmine.createSpy('then');
             google().events().then(handlerThen).catch(handlerCatch);
+            auth.resolve();
             $rootScope.$digest();
             expect(handlerCatch).toHaveBeenCalled();
             expect(handlerThen).not.toHaveBeenCalled();
@@ -98,6 +113,7 @@ define(['services/Google', 'app'], function(Google) {
             var handlerCatch = jasmine.createSpy('catch');
             var handlerThen = jasmine.createSpy('then');
             google().createEvent({}).then(handlerThen).catch(handlerCatch);
+            auth.resolve();
             $rootScope.$digest();
             expect(handlerCatch).toHaveBeenCalled();
             expect(handlerThen).not.toHaveBeenCalled();
@@ -107,6 +123,7 @@ define(['services/Google', 'app'], function(Google) {
             var handlerCatch = jasmine.createSpy('catch');
             var handlerThen = jasmine.createSpy('then');
             google().deleteEvent("eventId").then(handlerThen).catch(handlerCatch);
+            auth.resolve();
             $rootScope.$digest();
             expect(handlerCatch).toHaveBeenCalled();
             expect(handlerThen).not.toHaveBeenCalled();
@@ -116,6 +133,7 @@ define(['services/Google', 'app'], function(Google) {
             var handlerCatch = jasmine.createSpy('catch');
             var handlerThen = jasmine.createSpy('then');
             google().updateEvent("eventId", {}).then(handlerThen).catch(handlerCatch);
+            auth.resolve();
             $rootScope.$digest();
             expect(handlerCatch).toHaveBeenCalled();
             expect(handlerThen).not.toHaveBeenCalled();
@@ -125,6 +143,7 @@ define(['services/Google', 'app'], function(Google) {
             $httpBackend.expect('GET', 'https://www.googleapis.com/calendar/v3/users/me/calendarList')
                 .respond(200, 1);
             google().calendarList();
+            auth.resolve();
             $httpBackend.flush();
         });
 
