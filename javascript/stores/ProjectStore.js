@@ -5,7 +5,7 @@ define([
 ], function (Store,  projectHelper, constants) {
 
 	
-    return function (scope, dispatcher, google, CalendarStore) {
+    return function (scope, dispatcher, google, CalendarStore, ConfirmStore) {
 		
 		// store projects here
 		var _projects = {};
@@ -146,8 +146,9 @@ define([
 			return saveProject(payload.project)
         }).bind(constants.PROJECT_INSERT, function(payload) {
 			return insertProject(payload.project)
-        }).bind(constants.PROJECT_DESTROY, function(payload) {
-			return deleteProject(payload.project)
+        }).bind(constants.PROJECT_DESTROY, function(payload, ec) {
+            return ec.waitFor([ConfirmStore.dispatchIndex[constants.PROJECT_DESTROY]])
+                .then(function() { return deleteProject(payload.project) })
         }).bind(constants.SET_CALENDAR, function(payload) {
 			return getProjects()
         }).bind(constants.UNDO, function(payload) {

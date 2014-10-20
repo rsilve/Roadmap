@@ -9,18 +9,20 @@ define([
     'stores/CalendarStore',
     'stores/ProjectStore', 
     'stores/TimeStore', 
-    'stores/ProjectEditorStore', 
-    'stores/HistoryStore', 
-	'components/CalendarChooser',
+    'stores/ProjectEditorStore',
+    'stores/HistoryStore',
+    'stores/ConfirmStore',
+    'components/CalendarChooser',
 	'components/ProjectToolbar',
 	'components/Timebar',
     'components/ProjectList', 
     'components/ProjectEditor', 
-    'components/HistoryList'
+    'components/HistoryList',
+    'components/Confirm'
 ], function (angular, PikadayDirective, TimebarDirective,
              ExecutionContext, Dispatcher, GoogleAuth, Google,
-	CalendarStore, ProjectStore , TimeStore, ProjectEditorStore, HistoryStore,
-	CalendarChooser, ProjectToolbar, Timebar, ProjectList, ProjectEditor, HistoryList) {
+	CalendarStore, ProjectStore , TimeStore, ProjectEditorStore, HistoryStore, ConfirmStore,
+	CalendarChooser, ProjectToolbar, Timebar, ProjectList, ProjectEditor, HistoryList, Confirm) {
 
     // Declare app level module which depends on filters, and services
 
@@ -31,21 +33,23 @@ define([
     .factory("dispatcher", ['$rootScope', '$q', "ExecutionContext",  Dispatcher]);
 
     angular.module('Roadmap.stores', [])
-	.factory("CalendarStore", ['$rootScope','dispatcher', 'google',  CalendarStore])
-	.factory("ProjectStore", ['$rootScope','dispatcher', 'google', 'CalendarStore', ProjectStore])
+    .factory("ConfirmStore", ['$rootScope','dispatcher', '$interval', ConfirmStore])
+    .factory("CalendarStore", ['$rootScope','dispatcher', 'google',  CalendarStore])
+    .factory("ProjectEditorStore", ['$rootScope','dispatcher', 'ProjectStore', ProjectEditorStore])
+    .factory("ProjectStore", ['$rootScope','dispatcher', 'google', 'CalendarStore', 'ConfirmStore', ProjectStore])
 	.factory("TimeStore", ['$rootScope','dispatcher', TimeStore])
-	.factory("ProjectEditorStore", ['$rootScope','dispatcher', 'ProjectStore', ProjectEditorStore])
-	.factory("HistoryStore", ['$rootScope','dispatcher', 'ProjectStore', '$interval', HistoryStore]);
-	
-	angular.module('Roadmap.components', [])
+	.factory("HistoryStore", ['$rootScope','dispatcher', 'ProjectStore', '$interval', HistoryStore])
+
+    angular.module('Roadmap.components', [])
+    .controller('ProjectEditor', ['$scope', 'ProjectEditorStore', ProjectEditor])
     .controller('ProjectList', ['$scope',  'ProjectStore','CalendarStore', ProjectList])
     .controller('ProjectToolbar', ['$scope', 'CalendarStore', 'ProjectStore', ProjectToolbar])
     .controller('CalendarChooser', ['$scope', 'CalendarStore', CalendarChooser])
     .controller('Timebar', ['$scope', 'TimeStore', Timebar])
-    .controller('ProjectEditor', ['$scope', 'ProjectEditorStore', ProjectEditor])
     .controller('HistoryList', ['$scope', 'HistoryStore', HistoryList])
-    
-	angular.module('Roadmap.directives', [])
+    .controller('Confirm', ['$scope', 'ConfirmStore', Confirm]);
+
+    angular.module('Roadmap.directives', [])
 	.directive('pikaday', PikadayDirective)
 	.directive('timebar', ['TimeStore', TimebarDirective]);
 	

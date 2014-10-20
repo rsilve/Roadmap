@@ -30,16 +30,6 @@ define(['app'], function() {
             $rootScope.$digest();
         });
 
-        it('should have a run method that could ignore callbacks', function () {
-            dispatcher.register(function(p) { return 1 });
-            dispatcher.register(function(p, ec) { ec.ignore(); return 2 });
-            dispatcher.run(true).then(function(v){
-                expect(v).toEqual([1]);
-            });
-            $rootScope.$digest();
-        });
-
-
         it('should have a run method that fail if one registered fail', function () {
 			var handlerCatch = jasmine.createSpy('catch');
 			var handlerThen = jasmine.createSpy('then');
@@ -99,6 +89,42 @@ define(['app'], function() {
             $rootScope.$emit("dispatcher", "action", {value: 1});
             $rootScope.$digest();
             expect(result).toEqual(1);
+        });
+
+        it('could use promise as result of callback', function () {
+            var d ;
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
+            var index, index2;
+
+            index = dispatcher.register(function(p, ec) {
+                d = ec.defer();
+                return d.promise
+            });
+
+            index2 = dispatcher.register(function(p, ec) {
+                return ec.waitFor([index])
+                    .then(function(v) {
+                        return v + "B"
+                    })
+
+            });
+            dispatcher.register(function(p, ec) {
+                return ec.waitFor([index2])
+                    .then(function(v) {
+                        return v+"C"
+                    })
+            });
+
+            dispatcher.run(true).then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
+            expect(handlerCatch).not.toHaveBeenCalled();
+            expect(handlerThen).not.toHaveBeenCalled();
+            d.resolve("A");
+            $rootScope.$digest();
+            expect(handlerCatch).not.toHaveBeenCalled();
+            expect(handlerThen).toHaveBeenCalledWith(["A","AB","ABC"]);
+
         });
 
     });

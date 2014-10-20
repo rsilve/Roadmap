@@ -63,19 +63,6 @@ define(['app'], function() {
             expect(handlerThen).toHaveBeenCalledWith([1, 2]);
         });
 
-        it('should have a method run that generate a promise from a list of callback with ignore', function () {
-            var handlerCatch = jasmine.createSpy('catch');
-            var handlerThen = jasmine.createSpy('then');
-            ec.run([
-                function(p, ec) { return 1 },
-                function(p, ec) { ec.ignore(); return 2 },
-                function(p, ec) { return 3 }
-            ], 1).then(handlerThen).catch(handlerCatch);
-            $rootScope.$digest();
-            expect(handlerCatch).not.toHaveBeenCalled();
-            expect(handlerThen).toHaveBeenCalledWith([1, 3]);
-        });
-
         it('should have a method recover that generate a promise from a list of callback', function () {
             var handlerCatch = jasmine.createSpy('catch');
             var handlerThen = jasmine.createSpy('then');
@@ -95,6 +82,31 @@ define(['app'], function() {
             $rootScope.$digest();
             expect(handlerCatch).toHaveBeenCalled();
             expect(handlerThen).not.toHaveBeenCalled();
+        });
+
+
+        it('should have a method waitFor for help for control execution workflow', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
+            ec.run([
+                function(p, ec) { return p },
+                function(p, ec) { return ec.waitFor([0]).then(function(v) { return v[0] + "B" }) }
+            ], "A").then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
+            expect(handlerCatch).not.toHaveBeenCalled();
+            expect(handlerThen).toHaveBeenCalledWith(["A", "AB"]);
+        });
+
+        it('should reject invalid waitFor usage', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
+            ec.run([
+                function(p, ec) { return ec.waitFor([1]).then(function(v) { return v[0] + "B" }) },
+                function(p, ec) { return p }
+            ], "A").then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
+            expect(handlerCatch).not.toHaveBeenCalled();
+            expect(handlerThen).toHaveBeenCalledWith(["AB", "A"]);
         });
 
     });

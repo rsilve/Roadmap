@@ -19,7 +19,9 @@ define([], function() {
         SET_CALENDAR: "SET_CALENDAR",
         RESET_CALENDAR: "RESET_CALENDAR",
 		
-		UNDO : "UNDO"
+		UNDO : "UNDO",
+        CONFIRM_OK: "CONFIRM_OK",
+        CONFIRM_CANCEL: "CONFIRM_CANCEL"
     }
 
 });

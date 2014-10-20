@@ -32,12 +32,12 @@ define([], function () {
         var self = this;
         var f = function(payload, ec) {
             if (event === payload.actionType) {
-                var p = ec.when(callback(payload, ec))
+                var p = ec.when(callback(payload, ec));
                 return emitDisabled ? p : p.then(self.emitChange());
-            } else
-                ec.ignore();
+            }
         };
         this.dispatchIndex[event] = this.dispatcher.register(f);
+        console.debug("callback is registered at index "+this.dispatchIndex[event]+ " for event "+event)
         return this;
     };
 
@@ -47,8 +47,7 @@ define([], function () {
             if (event === payload.actionType) {
                 var p = ec.when(callback(payload, ec))
                 return emitDisabled ? p : p.then(self.emitChange());
-            } else
-                ec.ignore();
+            }
         };
         this.dispatchIndex[event] = this.dispatcher.waitForError(f);
         return this;
