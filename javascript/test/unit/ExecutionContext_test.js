@@ -97,7 +97,7 @@ define(['app'], function() {
             expect(handlerThen).toHaveBeenCalledWith(["A", "AB"]);
         });
 
-        it('should reject invalid waitFor usage', function () {
+        it('should not have order constraint on waitFor usage', function () {
             var handlerCatch = jasmine.createSpy('catch');
             var handlerThen = jasmine.createSpy('then');
             ec.run([
@@ -107,6 +107,20 @@ define(['app'], function() {
             $rootScope.$digest();
             expect(handlerCatch).not.toHaveBeenCalled();
             expect(handlerThen).toHaveBeenCalledWith(["AB", "A"]);
+        });
+
+
+        it('should reject invalid waitFor usage', function () {
+            var handlerCatch = jasmine.createSpy('catch');
+            var handlerThen = jasmine.createSpy('then');
+            ec.run([
+                // we use a waitFor index that does not exist
+                function(p, ec) { return ec.waitFor([3]).then(function(v) { return v[0] + "B" }) },
+                function(p, ec) { return p }
+            ], "A").then(handlerThen).catch(handlerCatch);
+            $rootScope.$digest();
+            expect(handlerCatch).toHaveBeenCalled();
+            expect(handlerThen).not.toHaveBeenCalled();
         });
 
     });

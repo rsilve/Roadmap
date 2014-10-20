@@ -95,8 +95,8 @@ define([], function () {
                 if (self.promises[index]) {
                     selectedPromises.push(self.promises[index]);
                 } else {
-                    console.warn("No callback to waitFor at position "+index+". Execution continue.")
-                    selectedPromises.push($q.when(undefined));
+                    console.warn("No callback to waitFor at position "+index+". Execution will fail.")
+                    selectedPromises.push($q.reject(undefined));
                 }
             });
             return $q.all(selectedPromises);
