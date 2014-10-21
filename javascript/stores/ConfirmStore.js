@@ -44,21 +44,7 @@ define([
             };
         })();
 
-
-
-        // Create instance
-        var store = new ConfirmStore();
-		
-		// bind to dispatcher
-		store.bind(constants.CONFIRM_OK, function(payload, ec) {
-            payload.defer.resolve();
-            delete confirms[payload.id];
-            store.emitChange()();
-        }).bind(constants.CONFIRM_CANCEL, function(payload, ec) {
-            payload.defer.reject();
-            delete confirms[payload.id];
-            store.emitChange()();
-        }).bind(constants.PROJECT_DESTROY, function(payload, ec ) {
+        var askConfirm = function (){
             console.info("Ask confirm before project destroy");
             var defer = ec.defer();
             var id = guid();
@@ -69,12 +55,37 @@ define([
                 payload : payload
             };
             store.emitChange()();
-			return defer.promise
-        }).bind(constants.SET_CALENDAR, function(payload) {
+            return defer.promise
+        };
+
+        var validConfirm = function() {
+            payload.defer.resolve();
+            delete confirms[payload.id];
+        };
+        var rejectConfirm = function() {
+            payload.defer.reject();
+            delete confirms[payload.id];
+        };
+
+        var rejectAll = function() {
             angular.forEach(confirms, function(v, k) {
                 v.defer.reject();
                 delete confirms[v.id];
             });
+        };
+
+        // Create instance
+        var store = new ConfirmStore();
+		
+		// bind to dispatcher
+		store.bind(constants.CONFIRM_OK, function(payload, ec) {
+            return ec.when(cancelScheduler()).then(validConfirm).then(startScheduler);
+        }).bind(constants.CONFIRM_CANCEL, function(payload, ec) {
+            return ec.when(cancelScheduler()).then(rejectConfirm).then(startScheduler);
+        }).bind(constants.PROJECT_DESTROY, function(payload, ec ) {
+            return ec.when(cancelScheduler()).then(askConfirm).then(startScheduler);
+        }).bind(constants.SET_CALENDAR, function(payload) {
+            return ec.when(cancelScheduler()).then(rejectAll).then(startScheduler);
         });
 		
 		
