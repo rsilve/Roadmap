@@ -1,8 +1,9 @@
 define([
+    'angular',
     'stores/Store',
 	'services/Constants',
 	'moment'
-], function (Store, constants, moment) {
+], function (angular, Store, constants, moment) {
 	
 	return function (scope, dispatcher, $interval) {
 		
@@ -12,21 +13,18 @@ define([
 		// Store Object 
         function ConfirmStore() {}
 		// inherit from Store for events method
-        ConfirmStore.prototype = new Store(scope, dispatcher)
+        ConfirmStore.prototype = new Store(scope, dispatcher);
 		
 		// get the history
         ConfirmStore.prototype.getConfirms = function() {
-			return confirms;
+            var array = [];
+            angular.forEach(confirms, function(v, k) {
+                array.push(v)
+            });
+			return array;
 		};
 		
-		var push = function(payload) {
-            confirms.push({payload : payload, timestamp: moment()})
-		};
-		
-		var confirm = function() {
-            confirms.shift();
-		};
-		
+
 		var cancelScheduler = function(){
 			$interval.cancel(scheduler)
 		};
@@ -34,31 +32,49 @@ define([
 			scheduler = $interval(store.emitChange(), 60000);
 		};
 
+        var guid = (function() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+            return function() {
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                    s4() + '-' + s4() + s4() + s4();
+            };
+        })();
 
-		// Create instance
+
+
+        // Create instance
         var store = new ConfirmStore();
 		
 		// bind to dispatcher
 		store.bind(constants.CONFIRM_OK, function(payload, ec) {
-            var defer = confirms[payload.id];
-            defer.resolve();
+            payload.defer.resolve();
             delete confirms[payload.id];
             store.emitChange()();
         }).bind(constants.CONFIRM_CANCEL, function(payload, ec) {
-            var defer = confirms[payload.id];
-            defer.reject();
+            payload.defer.reject();
             delete confirms[payload.id];
             store.emitChange()();
         }).bind(constants.PROJECT_DESTROY, function(payload, ec ) {
-            console.info("Ask confirm before project destroy")
+            console.info("Ask confirm before project destroy");
             var defer = ec.defer();
-            confirms[payload.id] = {
+            var id = guid();
+            confirms[id] = {
+                id : id,
                 defer : defer,
                 timestamp : moment(),
                 payload : payload
             };
             store.emitChange()();
 			return defer.promise
+        }).bind(constants.SET_CALENDAR, function(payload) {
+            angular.forEach(confirms, function(v, k) {
+                v.defer.reject();
+                delete confirms[v.id];
+            });
         });
 		
 		
@@ -66,4 +82,4 @@ define([
 		console.info("Loading ConfirmStore Service " + store.id)
         return store;
 	}
-})
+});

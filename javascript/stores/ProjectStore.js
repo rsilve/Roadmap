@@ -72,7 +72,7 @@ define([
 				p.sequence ++;
 				return saveProject(p)
 			} else {
-				return ec.noop() // deleteProject(payload.project)
+				return ec.when() // deleteProject(payload.project)
 			}			
 		};
 		undoHandler[constants.PROJECT_DESTROY] = function(payload, ec) {
@@ -90,7 +90,7 @@ define([
 			if (undoHandler[payload.data.payload.actionType])
 			  return undoHandler[payload.data.payload.actionType](payload.data.payload)
 			else 
-			  return ec.noop()
+			  return ec.when()
 		};
 		
 			
@@ -130,7 +130,7 @@ define([
 		
 	    };
 		
-		ProjectStore.prototype.bind = function(/* string */ event, /* function */ callback, /* boolean */ emitDisabled) {
+		ProjectStore.prototype.bindWithLoading = function(/* string */ event, /* function */ callback, /* boolean */ emitDisabled) {
 			var self = this;
 			var f = function(payload, ec) {
 				return ec.when(self.emitLoading())
@@ -142,18 +142,19 @@ define([
 		
 		// Store instance
         var store = new ProjectStore();
-		store.bind(constants.PROJECT_SAVE, function(payload) {
+		store.bindWithLoading(constants.PROJECT_SAVE, function(payload) {
 			return saveProject(payload.project)
-        }).bind(constants.PROJECT_INSERT, function(payload) {
+        }).bindWithLoading(constants.PROJECT_INSERT, function(payload) {
 			return insertProject(payload.project)
         }).bind(constants.PROJECT_DESTROY, function(payload, ec) {
             return ec.waitFor([ConfirmStore.dispatchIndex[constants.PROJECT_DESTROY]])
+                .then(function() { store.emitLoading() })
                 .then(function() { return deleteProject(payload.project) })
-        }).bind(constants.SET_CALENDAR, function(payload) {
+        }).bindWithLoading(constants.SET_CALENDAR, function(payload) {
 			return getProjects()
-        }).bind(constants.UNDO, function(payload) {
+        }).bindWithLoading(constants.UNDO, function(payload) {
 			return undo(payload)
-        }).bind(constants.PROJECT_REFRESH_LIST, function(payload) {
+        }).bindWithLoading(constants.PROJECT_REFRESH_LIST, function(payload) {
 			return getProjects()
         });
 		

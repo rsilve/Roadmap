@@ -54,17 +54,16 @@ define([
 			return ec.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_INSERT]])
 			.then(resetProject)	
         }).bind(constants.PROJECT_DESTROY, function(payload, ec) {
-			return ec.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_DESTROY]])
-			.then(resetProject)
+			return resetProject()
         }).bind(constants.PROJECT_CREATE, function() {
 			return createProject()
         }).bind(constants.UNDO, function() {
 			return resetProject()
-		})
+		});
         
 		
 		
-		console.info("Loading ProjectEditorStore Service " + store.id)
+		console.info("Loading ProjectEditorStore Service " + store.id);
         return store;
     };
 });

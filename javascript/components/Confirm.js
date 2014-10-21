@@ -12,8 +12,15 @@ function (constants) {
 		
 		// Binding
 		$scope.$on(ConfirmStore.id, setState);
-        
 
-	}
+        $scope.confirm = function(c) {
+            $scope.$emit("dispatcher", constants.CONFIRM_OK, c)
+        };
+
+        $scope.cancel = function(c) {
+            $scope.$emit("dispatcher", constants.CONFIRM_CANCEL, c)
+        };
+
+    }
 	
 });

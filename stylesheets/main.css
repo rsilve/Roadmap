@@ -270,18 +270,19 @@ body {
 
 .history {
     position: absolute;
-	bottom: 0;
-	right: 3px;
+    bottom: 0;
+    right: 3px;
     background: white;
     border-top : 1px solid #BBB;
     border-right : 1px solid #BBB;
     border-left : 1px solid #BBB;
-	padding: 8px;
-	max-height: 200px;
-	width: 500px;
-	overflow: scroll;
+    padding: 8px;
+    max-height: 200px;
+    width: 500px;
+    overflow: scroll;
     z-index: 2;
 }
+
 
 .history ul {
 	list-style-type: none;
@@ -309,6 +310,41 @@ body {
 
 .history li .PROJECT_DESTROY:before{
 		content: "\f1f8";
+}
+
+
+.confirm {
+    position: absolute;
+    bottom: 0;
+    left: 3px;
+    background: white;
+    border-top : 1px solid #BBB;
+    border-right : 1px solid #BBB;
+    border-left : 1px solid #BBB;
+    padding: 8px;
+    max-height: 200px;
+    width: 500px;
+    overflow: scroll;
+    z-index: 2;
+}
+
+.confirm ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.confirm li {
+    padding-bottom: 4px;
+}
+
+.confirm li .timestamp {
+    font-size: 0.8em;
+    color: #BBB;
+}
+
+.confirm li .PROJECT_DESTROY:before{
+    content: "\f1f8";
 }
 
 

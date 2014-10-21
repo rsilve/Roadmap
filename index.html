@@ -63,12 +63,14 @@
             </div>
         </div>
         <div class="grid-content">
+            {{deletePending}}
             <div id="project-list" ng-controller="ProjectList">
                 <ul class="ProjectList">
 					<li ng-repeat="project in projects track by project.id" class="Project" >
 						<div class="Project-timebar" timebar="project"></div>
-						<i class="fa fa-pencil clickable" ng-click="editProject(project)"></i>
-						{{project.name}}
+                        <i class="fa fa-exclamation-circle fa-fw muted" ng-show="deletePending[project.id]"></i>
+                        <i class="fa fa-pencil fa-fw clickable" ng-click="editProject(project)" ng-hide="deletePending[project.id]"></i>
+                        {{project.name}}
 						<span style="color: #999; font-size: 0.8em">{{project.start.format("DD/MM/YYYY")}} 
 							<i class="fa fa-long-arrow-right"></i> 
 							{{project.end.format("DD/MM/YYYY")}}</span>
@@ -81,7 +83,7 @@
             <ul >
 				<li ng-repeat="data in history" ng-class="$first ? 'selected' : ''" >
 					<span class="pull-right timestamp">{{data.timestamp.fromNow()}}</span>
-					<i class="fa {{data.payload.actionType}}"></i> {{data.payload.project.name}}
+					<i class="fa {{data.payload.actionType}} fa-fw"></i> {{data.payload.project.name}}
 				</li>
 			</ul>
 			<button ng-disabled="progress" ng-click="undo()">Undo</button>
@@ -90,10 +92,12 @@
         <div class="confirm" ng-controller="Confirm" ng-show="confirms.length > 0">
             Opérations à confirmer ...
             <ul >
-                <li ng-repeat="data in confirms" >
-                    <span class="pull-right timestamp">{{data.timestamp.fromNow()}}</span>
-                    {{data.payload}}
-                    <button>ok</button>
+                <li ng-repeat="c in confirms" >
+                    <span class="pull-right timestamp">{{c.timestamp.fromNow()}}</span>
+                    <i class="fa {{data.payload.actionType}}"></i>
+                    {{c.payload.project.name}}
+                    <button ng-click="confirm(c)">ok</button>
+                    <button ng-click="cancel(c)">cancel</button>
                 </li>
             </ul>
         </div>

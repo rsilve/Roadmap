@@ -1,21 +1,28 @@
-define(["moment","services/Constants"], function (moment, constants) {
+define(["angular", "services/Constants"], function (angular, constants) {
 
 	
 	
 	
-    return function ($scope, ProjectStore, CalendarStore) {
+    return function ($scope, ProjectStore, CalendarStore, ConfirmStore) {
 		var setState = function() {
-	       $scope.projects = ProjectStore.getProjects();
-		}
+            var confirms = ConfirmStore.getConfirms();
+            $scope.deletePending = [];
+            angular.forEach(confirms, function(item) {
+                if (item.payload.actionType == constants.PROJECT_DESTROY) {
+                    $scope.deletePending[item.payload.project.id] = true
+                }
+            });
+	        $scope.projects = ProjectStore.getProjects();
+		};
 		
 		
         // Init
         setState();
 		
 		// Binding
-		[ProjectStore.id, CalendarStore.id].forEach(function(id) {
+		[ProjectStore.id, CalendarStore.id, ConfirmStore.id].forEach(function(id) {
 				$scope.$on(id, setState)
-		})
+		});
 		
 
 		// interaction handler
