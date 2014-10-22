@@ -33,12 +33,12 @@ define([
     .factory("dispatcher", ['$rootScope', '$q', "ExecutionContext",  Dispatcher]);
 
     angular.module('Roadmap.stores', [])
-    .factory("ConfirmStore", ['$rootScope','dispatcher', '$interval', ConfirmStore])
+    .factory("ConfirmStore", ['$rootScope','dispatcher', ConfirmStore])
     .factory("CalendarStore", ['$rootScope','dispatcher', 'Google',  CalendarStore])
     .factory("ProjectEditorStore", ['$rootScope','dispatcher', 'ProjectStore', ProjectEditorStore])
     .factory("ProjectStore", ['$rootScope','dispatcher', 'Google', 'CalendarStore', 'ConfirmStore', ProjectStore])
 	.factory("TimeStore", ['$rootScope','dispatcher', TimeStore])
-	.factory("HistoryStore", ['$rootScope','dispatcher', 'ProjectStore', '$interval', HistoryStore])
+	.factory("HistoryStore", ['$rootScope','dispatcher', 'ProjectStore', '$interval', HistoryStore]);
 
     angular.module('Roadmap.components', [])
     .controller('ProjectEditor', ['$scope', 'ProjectEditorStore', ProjectEditor])
@@ -47,7 +47,7 @@ define([
     .controller('CalendarChooser', ['$scope', 'CalendarStore', CalendarChooser])
     .controller('Timebar', ['$scope', 'TimeStore', Timebar])
     .controller('HistoryList', ['$scope', 'HistoryStore', HistoryList])
-    .controller('Confirm', ['$scope', 'ConfirmStore', Confirm]);
+    .controller('Confirm', ['$scope', 'ConfirmStore', '$interval', Confirm]);
 
     angular.module('Roadmap.directives', [])
 	.directive('pikaday', PikadayDirective)

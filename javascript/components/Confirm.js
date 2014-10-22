@@ -13,6 +13,11 @@ function (constants) {
 		// Binding
 		$scope.$on(ConfirmStore.id, setState);
 
+        // refresh the view every minute
+        $interval(function() {
+            $scope.$apply()
+        }, 60000);
+
         $scope.confirm = function(c) {
             $scope.$emit("dispatcher", constants.CONFIRM_OK, c)
         };

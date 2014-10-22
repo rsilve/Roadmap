@@ -5,12 +5,11 @@ define([
 	'moment'
 ], function (angular, Store, constants, moment) {
 	
-	return function (scope, dispatcher, $interval) {
+	return function (scope, dispatcher) {
 		
 		var confirms = {};
-		var scheduler = null;
-		
-		// Store Object 
+
+		// Store Object
         function ConfirmStore() {}
 		// inherit from Store for events method
         ConfirmStore.prototype = new Store(scope, dispatcher);
@@ -25,13 +24,6 @@ define([
 		};
 		
 
-		var cancelScheduler = function(){
-			$interval.cancel(scheduler)
-		};
-		var startScheduler = function(){
-			scheduler = $interval(store.emitChange(), 60000);
-		};
-
         var guid = (function() {
             function s4() {
                 return Math.floor((1 + Math.random()) * 0x10000)
@@ -45,33 +37,27 @@ define([
         })();
 
         var askConfirm = function(payload, ec) {
-            return function (){
-                console.info("Ask confirm before project destroy");
-                var defer = ec.defer();
-                var id = guid();
-                confirms[id] = {
-                    id : id,
-                    defer : defer,
-                    timestamp : moment(),
-                    payload : payload
-                };
-                store.emitChange()();
-                return defer.promise
-            }
+            console.info("Ask confirm before project destroy");
+            var defer = ec.defer();
+            var id = guid();
+            confirms[id] = {
+                id : id,
+                defer : defer,
+                timestamp : moment(),
+                payload : payload
+            };
+            return defer.promise
         };
 
         var validConfirm = function(payload) {
-            return function() {
-                payload.defer.resolve();
-                delete confirms[payload.id];
-            }
+            payload.defer.resolve();
+            delete confirms[payload.id];
+            store.emitChange()();
         };
 
         var rejectConfirm = function(payload) { 
-            return function() {
-                payload.defer.reject();
-                delete confirms[payload.id];
-            }
+            payload.defer.reject();
+            delete confirms[payload.id];
         };
 
         var rejectAll = function() {
@@ -86,13 +72,13 @@ define([
 		
 		// bind to dispatcher
 		store.bind(constants.CONFIRM_OK, function(payload, ec) {
-            return ec.when(cancelScheduler()).then(validConfirm(payload)).then(startScheduler);
+            return validConfirm(payload);
         }).bind(constants.CONFIRM_CANCEL, function(payload, ec) {
-            return ec.when(cancelScheduler()).then(rejectConfirm(payload)).then(startScheduler);
+            return rejectConfirm(payload);
         }).bind(constants.PROJECT_DESTROY, function(payload, ec ) {
-            return ec.when(cancelScheduler()).then(askConfirm(payload, ec)).then(startScheduler);
+            return askConfirm(payload, ec);
         }).bind(constants.SET_CALENDAR, function(payload, ec) {
-            return ec.when(cancelScheduler()).then(rejectAll).then(startScheduler);
+            return rejectAll();
         });
 		
 		console.info("Loading ConfirmStore Service " + store.id)
