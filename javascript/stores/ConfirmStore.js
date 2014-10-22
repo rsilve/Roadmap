@@ -84,7 +84,7 @@ define([
             return ec.when(cancelScheduler()).then(rejectConfirm).then(startScheduler);
         }).bind(constants.PROJECT_DESTROY, function(payload, ec ) {
             return ec.when(cancelScheduler()).then(askConfirm).then(startScheduler);
-        }).bind(constants.SET_CALENDAR, function(payload) {
+        }).bind(constants.SET_CALENDAR, function(payload, ec) {
             return ec.when(cancelScheduler()).then(rejectAll).then(startScheduler);
         });
 		

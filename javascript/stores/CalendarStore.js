@@ -3,43 +3,64 @@ define([
     'services/Constants'
 ], function (Store, constants) {
 
-    return function (scope, dispatcher, google) {
-        /*
-         * Here we define the CalendarStore class
-         */
 
-        // init the calendar chooser
-        var calendar = undefined;
+    /**
+     * Factory definition for the TimeStore service
+     */
+    return function (scope, dispatcher, google) {
+
+        // init the calendars data
+        var calendar;
         var calendarList = [];
 
 
-        // This store inherit from Store
+        /**
+         * Contructor of the calendarStore
+         * This service manage the working calendar across application
+         * @constructor
+         */
         function CalendarStore() {}
         CalendarStore.prototype = new Store(scope, dispatcher);
 
-        // Simple accessor use by components for read the calendar Id
+        /**
+         * Get the working calendar
+         * @returns {String}
+         */
         CalendarStore.prototype.getCalendar = function() {
             return calendar
         };
-        // Simple accessor use by components for read the calendarList
+
+        /**
+         * Get the calendars list use for choose the working calendar
+         * @returns {Array}
+         */
         CalendarStore.prototype.getCalendarList = function() {
             return calendarList
         };
 
-        // helper for setting calendarList
+        /**
+         * Helper for setting calendar list from the result of a google call
+         * @param data
+         */
         var setCalendarList = function(data) {
+            console.info("Setting calendar list");
             calendarList = data.items;
         };
 
-        // helper for choosing a calendar in dispatcher
+        /**
+         * Helper for setting the current calendar
+         * @param id
+         */
         var setCalendar = function(id) {
-			console.info("Choose calendar " + id)
+			console.info("Choose calendar " + id);
             calendar = id;
         };
 
-        // helper for reseting  calendar in dispatcher
+        /**
+         * Helper for unset the working calendar
+         */
         var resetCalendar = function() {
-			console.info("Unselect calendar")
+			console.info("Unselect calendar");
             calendar = undefined;
         };
 
@@ -49,22 +70,21 @@ define([
          * and we register some actions in the dispatcher
          */
 
-
-
         var store = new CalendarStore();
 		store.bind(constants.SET_CALENDAR, function(payload) {
 			return setCalendar(payload.calendar)
         }).bind(constants.RESET_CALENDAR, function(payload) {
 			return resetCalendar()
-        })
-		
+        });
+
+
         // finally do some call for init
         google().calendarList()
 		.then(setCalendarList)
 		.then(store.emitChange())
-		.catch(function(err) { console.log(err) });
+		.catch(function(err) { console.warn(err) });
 		
-        console.info("Loading CalendarStore Service "+store.id)
+        console.info("Loading CalendarStore Service "+store.id);
 		
         return store;
     };

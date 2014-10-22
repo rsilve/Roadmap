@@ -26,6 +26,8 @@ define(['angular'], function (angular) {
      */
     function GoogleAuthProvider ($q) {
 
+        console.info("Loading Google auth mock")
+
         var d = $q.defer();
         var auth = d.promise;
         auth.resolve = function(value) {
@@ -46,5 +48,7 @@ define(['angular'], function (angular) {
      */
     angular.module('Roadmap.mocks', [])
     .provider('GoogleAuth', function() { this.$get = ['$q', GoogleAuthProvider] });
+
+
 
 });

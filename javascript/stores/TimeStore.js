@@ -45,7 +45,7 @@ define([
             z.push(tick );
         }
 		return z;
-	}
+	};
 
     /**
      * Factory definition for the TimeStore service
@@ -64,7 +64,7 @@ define([
          * @constructor
          */
         function TimeStore() {}
-        TimeStore.prototype = new Store(scope, dispatcher)
+        TimeStore.prototype = new Store(scope, dispatcher);
 
         /**
          * get start date that will be use as reference fo the time view

@@ -28,15 +28,15 @@ define([
 
 	angular.module('Roadmap.services', [])
     .factory("GoogleAuth", ['$q',  GoogleAuth])
-    .factory("google", ['$q', "GoogleAuth", '$http', Google])
+    .factory("Google", ['$q', "GoogleAuth", '$http', Google])
     .factory("ExecutionContext", ['$q', ExecutionContext])
     .factory("dispatcher", ['$rootScope', '$q', "ExecutionContext",  Dispatcher]);
 
     angular.module('Roadmap.stores', [])
     .factory("ConfirmStore", ['$rootScope','dispatcher', '$interval', ConfirmStore])
-    .factory("CalendarStore", ['$rootScope','dispatcher', 'google',  CalendarStore])
+    .factory("CalendarStore", ['$rootScope','dispatcher', 'Google',  CalendarStore])
     .factory("ProjectEditorStore", ['$rootScope','dispatcher', 'ProjectStore', ProjectEditorStore])
-    .factory("ProjectStore", ['$rootScope','dispatcher', 'google', 'CalendarStore', 'ConfirmStore', ProjectStore])
+    .factory("ProjectStore", ['$rootScope','dispatcher', 'Google', 'CalendarStore', 'ConfirmStore', ProjectStore])
 	.factory("TimeStore", ['$rootScope','dispatcher', TimeStore])
 	.factory("HistoryStore", ['$rootScope','dispatcher', 'ProjectStore', '$interval', HistoryStore])
 

@@ -14,7 +14,7 @@ define(['app'], function() {
             $httpBackend = injector.get('$httpBackend');
 
             auth = injector.get("GoogleAuth");
-            google = injector.get("google")
+            google = injector.get("Google");
         });
 
 
