@@ -16,6 +16,8 @@ define(['services/Constants', 'app', 'test/mocks/GoogleMockForCalendar'], functi
             calendarStore = injector.get('CalendarStore');
             google = injector.get('Google');
             $rootScope = injector.get('$rootScope');
+
+            // init the google mock
             $rootScope.$digest();
 		});
 
