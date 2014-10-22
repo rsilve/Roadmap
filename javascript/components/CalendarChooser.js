@@ -6,7 +6,7 @@ function (constants) {
 		var setState = function() {
 	        $scope.list = CalendarStore.getCalendarList();
 	        $scope.calendar = CalendarStore.getCalendar();
-		}
+		};
 		
 		// Initial state
 		setState();

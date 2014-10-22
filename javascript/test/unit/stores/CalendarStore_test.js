@@ -36,13 +36,13 @@ define(['services/Constants', 'app', 'test/mocks/GoogleMockForCalendar'], functi
         });
 
         it("could be notified to set working calendar", function() {
-            $rootScope.$emit("dispatcher", constants.SET_CALENDAR, { calendar : 'id' })
+            $rootScope.$emit("dispatcher", constants.SET_CALENDAR, { calendar : 'id' });
             $rootScope.$digest();
             expect(calendarStore.getCalendar()).toEqual("id")
         });
 
         it("could be notified to unset working calendar", function() {
-            $rootScope.$emit("dispatcher", constants.RESET_CALENDAR)
+            $rootScope.$emit("dispatcher", constants.RESET_CALENDAR);
             $rootScope.$digest();
             expect(calendarStore.getCalendar()).toBeUndefined()
         });

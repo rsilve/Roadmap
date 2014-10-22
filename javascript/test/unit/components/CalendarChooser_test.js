@@ -25,6 +25,13 @@ define(['components/CalendarChooser', 'services/Constants', 'app'], function(Cal
 
         });
 
+        it('should notify for setting calendar ', function () {
+            $scope.$emit("dispatcher", constants.SET_CALENDAR, { calendar : 'id' });
+            $rootScope.$digest();
+            expect($scope.list).toEqual(["A","B"]);
+            expect($scope.calendar).toEqual('id');
+        });
+
 
 
 
