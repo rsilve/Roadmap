@@ -44,27 +44,34 @@ define([
             };
         })();
 
-        var askConfirm = function (){
-            console.info("Ask confirm before project destroy");
-            var defer = ec.defer();
-            var id = guid();
-            confirms[id] = {
-                id : id,
-                defer : defer,
-                timestamp : moment(),
-                payload : payload
-            };
-            store.emitChange()();
-            return defer.promise
+        var askConfirm = function(payload, ec) {
+            return function (){
+                console.info("Ask confirm before project destroy");
+                var defer = ec.defer();
+                var id = guid();
+                confirms[id] = {
+                    id : id,
+                    defer : defer,
+                    timestamp : moment(),
+                    payload : payload
+                };
+                store.emitChange()();
+                return defer.promise
+            }
         };
 
-        var validConfirm = function() {
-            payload.defer.resolve();
-            delete confirms[payload.id];
+        var validConfirm = function(payload) {
+            return function() {
+                payload.defer.resolve();
+                delete confirms[payload.id];
+            }
         };
-        var rejectConfirm = function() {
-            payload.defer.reject();
-            delete confirms[payload.id];
+
+        var rejectConfirm = function(payload) { 
+            return function() {
+                payload.defer.reject();
+                delete confirms[payload.id];
+            }
         };
 
         var rejectAll = function() {
@@ -79,17 +86,15 @@ define([
 		
 		// bind to dispatcher
 		store.bind(constants.CONFIRM_OK, function(payload, ec) {
-            return ec.when(cancelScheduler()).then(validConfirm).then(startScheduler);
+            return ec.when(cancelScheduler()).then(validConfirm(payload)).then(startScheduler);
         }).bind(constants.CONFIRM_CANCEL, function(payload, ec) {
-            return ec.when(cancelScheduler()).then(rejectConfirm).then(startScheduler);
+            return ec.when(cancelScheduler()).then(rejectConfirm(payload)).then(startScheduler);
         }).bind(constants.PROJECT_DESTROY, function(payload, ec ) {
-            return ec.when(cancelScheduler()).then(askConfirm).then(startScheduler);
+            return ec.when(cancelScheduler()).then(askConfirm(payload, ec)).then(startScheduler);
         }).bind(constants.SET_CALENDAR, function(payload, ec) {
             return ec.when(cancelScheduler()).then(rejectAll).then(startScheduler);
         });
 		
-		
-       
 		console.info("Loading ConfirmStore Service " + store.id)
         return store;
 	}
