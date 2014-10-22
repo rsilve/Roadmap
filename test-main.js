@@ -34,7 +34,7 @@ require.config({
         // so we can use it in all tests as needed
         // Caution module need to be loaded in test
         // ie : var injector = angular.injector(['ng', 'ngMock', 'Roadmap.services', 'Roadmap.mocks']);
-        "app" : {"deps" : ["angular-mocks", "test/Mocks"]}
+        "app" : {"deps" : ["angular-mocks"]}
     },
 	config: {
 	        moment: {

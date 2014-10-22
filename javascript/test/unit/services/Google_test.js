@@ -1,4 +1,4 @@
-define(['app'], function() {
+define(['app', 'test/mocks/GoogleAuthMock'], function() {
 
     describe('Google service', function () {
 
@@ -9,7 +9,7 @@ define(['app'], function() {
 
         // Load the module which contains the directive
         beforeEach(function () {
-            var injector = angular.injector(['ng', 'ngMock', 'Roadmap.services', 'Roadmap.mocks']);
+            var injector = angular.injector(['ng', 'ngMock', 'Roadmap.services', 'GoogleAuth.mocks']);
             $rootScope = injector.get('$rootScope');
             $httpBackend = injector.get('$httpBackend');
 

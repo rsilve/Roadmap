@@ -46,8 +46,8 @@ define(['angular'], function (angular) {
     /**
      * Load the mocks as providers
      */
-    angular.module('Roadmap.mocks', [])
-    .provider('GoogleAuth', function() { this.$get = ['$q', GoogleAuthProvider] });
+    angular.module('GoogleAuth.mocks', [])
+        .provider('GoogleAuth', function() { this.$get = ['$q', GoogleAuthProvider] });
 
 
 

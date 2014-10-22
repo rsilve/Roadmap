@@ -1,4 +1,4 @@
-define(['services/Constants', 'app'], function(constants) {
+define(['services/Constants', 'app', 'test/mocks/GoogleMockForCalendar'], function(constants) {
 
     describe('CalendarStore service', function () {
         var google;
@@ -8,21 +8,9 @@ define(['services/Constants', 'app'], function(constants) {
         // Load the module which contains the directive
 		beforeEach(function() {
 
-            // create a fake google service
-            function GoogleProvider ($q) {
-                console.info("Loading Google mock");
-                var obj = {
-                    calendarList : function() { return $q.when({items : ["A", "B"]}) }
-                };
-                return jasmine.createSpy("google").andReturn(obj);
-            }
-            // load it via an angular module
-            angular.module('google.mocks', [])
-                .provider('Google', function() { this.$get = ['$q', GoogleProvider] });
-
             var injector = angular.injector([
                 'Roadmap.services', 'Roadmap.stores',
-                'Roadmap.mocks', 'google.mocks',
+                'Google.mocks',
                 'ng', 'ngMock']);
 
             calendarStore = injector.get('CalendarStore');
