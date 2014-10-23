@@ -18,7 +18,7 @@ requirejs.config({
 });
 
 require( ['angular', 'app', 'moment'], function(angular, app, moment) {
-	moment.locale('fr')
+	moment.locale('fr');
     angular.element(document).ready(function() {
         angular.bootstrap(document, ['Roadmap']);
     });

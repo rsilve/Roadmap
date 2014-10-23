@@ -4,9 +4,9 @@ define([
 	'moment'
 ], function (Store, constants, moment) {
 
-	var ZOOM_DAYS = "day";
-	var ZOOM_WEEKS = "week";
-	var ZOOM_MONTHS = "month";
+	var ZOOM_DAYS = "days";
+	var ZOOM_WEEKS = "weeks";
+	var ZOOM_MONTHS = "months";
 	
     var ticksFormat = {};
     ticksFormat[ZOOM_MONTHS] = function(d, tick) {
@@ -63,12 +63,14 @@ define([
          *
          * @constructor
          */
-        function TimeStore() {}
+        function TimeStore() {
+            this.ZOOM_DAYS = ZOOM_DAYS;
+            this.ZOOM_WEEKS = ZOOM_WEEKS;
+            this.ZOOM_MONTHS = ZOOM_MONTHS;
+
+        }
         TimeStore.prototype = new Store(scope, dispatcher);
 
-        TimeStore.ZOOM_DAYS = ZOOM_DAYS;
-        TimeStore.ZOOM_WEEKS = ZOOM_WEEKS;
-        TimeStore.ZOOM_MONTHS = ZOOM_MONTHS;
 
         /**
          * get start date that will be use as reference fo the time view
@@ -153,8 +155,10 @@ define([
             return setZoom(ZOOM_MONTHS)
         }).bind(constants.SESSION_LOADED, function(payload) {
             console.info("Load session time info");
-            start = payload.session.timeStart
-            zoom = payload.session.timeScale
+            if (payload.session.timeStart)
+                start = moment.unix(payload.session.timeStart);
+            if (payload.session.timeScale)
+                zoom = payload.session.timeScale;
         });
 
 		console.info("Loading TimeStore Service " + store.id);
