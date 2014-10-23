@@ -19,6 +19,7 @@ define(['stores/Store', 'services/Constants'], function (Store, constants) {
             console.info("Store calendar in session");
             session.calendar = payload.calendar;
         }).bind(constants.RESET_CALENDAR, function(payload) {
+            console.info("Reset session on calendar change");
             delete session.calendar;
         }).bind(constants.TIME_NEXT_PERIOD, function() {
             console.info("Store time scale in session");
