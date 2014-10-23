@@ -150,7 +150,11 @@ define([
         }).bind(constants.TIME_WEEKS, function() {
 			return setZoom(ZOOM_WEEKS)
         }).bind(constants.TIME_MONTHS, function() {
-			return setZoom(ZOOM_MONTHS)
+            return setZoom(ZOOM_MONTHS)
+        }).bind(constants.SESSION_LOADED, function(payload) {
+            console.info("Load session time info");
+            start = payload.session.timeStart
+            zoom = payload.session.timeScale
         });
 
 		console.info("Loading TimeStore Service " + store.id);

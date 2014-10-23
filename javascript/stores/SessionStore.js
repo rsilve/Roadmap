@@ -21,9 +21,11 @@ define(['stores/Store', 'services/Constants'], function (Store, constants) {
         }).bind(constants.RESET_CALENDAR, function(payload) {
             delete session.calendar;
         }).bind(constants.TIME_NEXT_PERIOD, function() {
-
+            console.info("Store time scale in session");
+            session.timeStart = TimeStore.getStart();
         }).bind(constants.TIME_PREV_PERIOD, function() {
-
+            console.info("Store time scale in session");
+            session.timeStart = TimeStore.getStart();
         }).bind(constants.TIME_DAYS, function() {
             console.info("Store time scale in session");
             session.timeScale = TimeStore.ZOOM_DAYS;
