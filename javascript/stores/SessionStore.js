@@ -35,12 +35,9 @@ define(['stores/Store', 'services/Constants'], function (Store, constants) {
         }).bind(constants.TIME_MONTHS, function() {
             console.info("Store time scale in session");
             session.timeScale = TimeStore.ZOOM_MONTHS;
-            console.log(session)
         });
 
         console.info("Loading Session Service");
-
-        console.log(session)
         return session;
 
     };

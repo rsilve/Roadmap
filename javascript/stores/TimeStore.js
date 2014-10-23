@@ -159,6 +159,7 @@ define([
                 start = moment.unix(payload.session.timeStart);
             if (payload.session.timeScale)
                 zoom = payload.session.timeScale;
+            ticks = updateTicks(start, zoom);
         });
 
 		console.info("Loading TimeStore Service " + store.id);
