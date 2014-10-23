@@ -52,7 +52,7 @@ define([
      */
 	return function (scope, dispatcher) {
 		
-	    // init the start date to the begining of the current year
+	    // init the start date to the beginning of the current year
 	    var start = moment().startOf('year');
 		var zoom = ZOOM_MONTHS;
 		var ticks = updateTicks(start, zoom);
@@ -65,6 +65,10 @@ define([
          */
         function TimeStore() {}
         TimeStore.prototype = new Store(scope, dispatcher);
+
+        TimeStore.ZOOM_DAYS = ZOOM_DAYS;
+        TimeStore.ZOOM_WEEKS = ZOOM_WEEKS;
+        TimeStore.ZOOM_MONTHS = ZOOM_MONTHS;
 
         /**
          * get start date that will be use as reference fo the time view

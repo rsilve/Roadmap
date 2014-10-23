@@ -156,6 +156,9 @@ define([
 			return undo(payload)
         }).bindWithLoading(constants.PROJECT_REFRESH_LIST, function(payload) {
 			return getProjects()
+        }).bindWithLoading(constants.SESSION_LOADED, function(payload) {
+            console.info("Load session calendar projects");
+            return getProjects();
         });
 		
         

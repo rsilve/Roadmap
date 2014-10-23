@@ -2,10 +2,12 @@ define([
     'angular', 
 	'directives/pikaday',
 	'directives/timebar',
+    'directives/sessionAware',
     'services/ExecutionContext',
     'services/dispatcher',
     'services/GoogleAuth',
     'services/Google',
+    'stores/SessionStore',
     'stores/CalendarStore',
     'stores/ProjectStore', 
     'stores/TimeStore', 
@@ -19,8 +21,8 @@ define([
     'components/ProjectEditor', 
     'components/HistoryList',
     'components/Confirm'
-], function (angular, PikadayDirective, TimebarDirective,
-             ExecutionContext, Dispatcher, GoogleAuth, Google,
+], function (angular, PikadayDirective, TimebarDirective, SessionAwareDirective,
+             ExecutionContext, Dispatcher, GoogleAuth, Google, SessionStore,
 	CalendarStore, ProjectStore , TimeStore, ProjectEditorStore, HistoryStore, ConfirmStore,
 	CalendarChooser, ProjectToolbar, Timebar, ProjectList, ProjectEditor, HistoryList, Confirm) {
 
@@ -38,10 +40,11 @@ define([
     .factory("ProjectEditorStore", ['$rootScope','dispatcher', 'ProjectStore', ProjectEditorStore])
     .factory("ProjectStore", ['$rootScope','dispatcher', 'Google', 'CalendarStore', 'ConfirmStore', ProjectStore])
 	.factory("TimeStore", ['$rootScope','dispatcher', TimeStore])
-	.factory("HistoryStore", ['$rootScope','dispatcher', 'ProjectStore', '$interval', HistoryStore]);
+	.factory("HistoryStore", ['$rootScope','dispatcher', 'ProjectStore', '$interval', HistoryStore])
+    .factory("SessionStore",['$rootScope','dispatcher', 'TimeStore', SessionStore]);
 
-    angular.module('Roadmap.components', [])
-    .controller('ProjectEditor', ['$scope', 'ProjectEditorStore', ProjectEditor])
+    angular.module('Roadmap.components', ['Roadmap.stores'])
+    .controller('ProjectEditor', ['$scope', 'ProjectEditorStore',  ProjectEditor])
     .controller('ProjectList', ['$scope',  'ProjectStore','CalendarStore', 'ConfirmStore', ProjectList])
     .controller('ProjectToolbar', ['$scope', 'CalendarStore', 'ProjectStore', ProjectToolbar])
     .controller('CalendarChooser', ['$scope', 'CalendarStore', CalendarChooser])
@@ -51,10 +54,12 @@ define([
 
     angular.module('Roadmap.directives', [])
 	.directive('pikaday', PikadayDirective)
-	.directive('timebar', ['TimeStore', TimebarDirective]);
-	
+    .directive('timebar', ['TimeStore', TimebarDirective])
+    .directive('sessionAware', ['SessionStore', SessionAwareDirective]);
+
     return angular.module('Roadmap', 
 		['Roadmap.services', 'Roadmap.stores', "Roadmap.components", 'Roadmap.directives'])
+
     
 	
 

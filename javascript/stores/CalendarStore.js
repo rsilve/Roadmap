@@ -74,7 +74,10 @@ define([
 		store.bind(constants.SET_CALENDAR, function(payload) {
 			return setCalendar(payload.calendar)
         }).bind(constants.RESET_CALENDAR, function(payload) {
-			return resetCalendar()
+            return resetCalendar()
+        }).bind(constants.SESSION_LOADED, function(payload) {
+            console.info("Load session calendar")
+            return setCalendar(payload.session.calendar)
         });
 
 

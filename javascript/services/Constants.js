@@ -21,7 +21,9 @@ define([], function() {
 		
 		UNDO : "UNDO",
         CONFIRM_OK: "CONFIRM_OK",
-        CONFIRM_CANCEL: "CONFIRM_CANCEL"
+        CONFIRM_CANCEL: "CONFIRM_CANCEL",
+
+        SESSION_LOADED: "SESSION_LOADED"
     }
 
 });

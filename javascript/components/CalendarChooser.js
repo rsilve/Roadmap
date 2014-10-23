@@ -17,6 +17,7 @@ function (constants) {
         // Init the component
         setState();
 
+
         // Bind the component to the stores
         $scope.$on(CalendarStore.id, setState);
 
@@ -25,8 +26,9 @@ function (constants) {
           */
         $scope.choose = function(calendar) {
 			$scope.$emit("dispatcher", constants.SET_CALENDAR, { calendar : calendar.id })
-		}
-		
+		};
+
+
 	}
 	
 });

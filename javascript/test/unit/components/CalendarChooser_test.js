@@ -6,11 +6,12 @@ define(['components/CalendarChooser', 'services/Constants', 'app'], function(Cal
 
 		// Load the module which contains the directive
 		beforeEach(function() {
-			var injector = angular.injector(['Roadmap.services', 'Roadmap.stores',
+            var injector = angular.injector(['Roadmap.services', 'Roadmap.stores',
                 'Google.mocks','ng']);
 
             var $controller = injector.get('$controller');
             var CalendarStore = injector.get('CalendarStore');
+            CalendarStore.clear();
             $rootScope = injector.get('$rootScope');
             $scope = $rootScope.$new();
             $controller(CalendarChooser, {$scope: $scope, CalendarStore: CalendarStore});
