@@ -7,6 +7,7 @@ define(["services/Constants"], function (constants) {
 	       $scope.project = ProjectEditorStore.getProject();
 		   $scope.progress = false;
 		   project = angular.copy($scope.project);
+           delete $scope.attendee;
 		}
 		
        	// Init
@@ -32,11 +33,20 @@ define(["services/Constants"], function (constants) {
 			}
 			
 		}
-		
-		// delete project
-		$scope.delete = function() {
-			$scope.progress = true;
-			$scope.$emit("dispatcher", constants.PROJECT_DESTROY, {project : angular.copy($scope.project), from: project})
-		}
+
+        // delete project
+        $scope.delete = function() {
+            $scope.progress = true;
+            $scope.$emit("dispatcher", constants.PROJECT_DESTROY, {project : angular.copy($scope.project), from: project})
+        }
+
+        $scope.addAttendee = function() {
+            $scope.$emit("dispatcher", constants.ADD_ATTENDEE, {attendee : angular.copy($scope.attendee)})
+        }
+
+        $scope.removeAttendee = function(attendee) {
+            $scope.$emit("dispatcher", constants.REMOVE_ATTENDEE, {attendee : attendee})
+        }
+
     };
 });

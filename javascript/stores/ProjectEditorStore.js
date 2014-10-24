@@ -20,28 +20,46 @@ define([
         };
         // helper for setting project in dispatcher
         var setProject = function(p) {
-			console.debug("Edit project " +  p.name)
+			console.info("Edit project " +  p.name)
             project = p;
         };
 		
         // helper for resetting project
         var resetProject = function() {
-			console.debug("Cancel project edit ", project)
+			console.info("Cancel project edit ", project)
 			project = undefined;
         };
 
         // helper for create project
         var createProject = function() {
-			console.debug("Create new project")
-			project = {
-				start : moment(),
-				end : moment().add(1, "month")
-			};
+            console.info("Create new project")
+            project = {
+                start : moment(),
+                end : moment().add(1, "month")
+            };
         };
-		
-		
-		
-		// Store instance
+
+        // helper for add attendee on project
+        var addAttendee = function(attendee) {
+            console.info("Add attendee");
+            project.attendees.push(attendee.trim());
+        };
+
+        // helper for remove attendee on project
+        var removeAttendee = function(attendee) {
+            console.info("Remove attendee "+attendee);
+            var a = [];
+            project.attendees.forEach(function(item) {
+                if (item != attendee) {
+                    a.push(item)
+                }
+            });
+            project.attendees = a;
+        };
+
+
+
+        // Store instance
         var store = new ProjectEditorStore();
 		store.bind(constants.PROJECT_EDIT, function(payload) {
 			return setProject(payload.project)
@@ -58,8 +76,12 @@ define([
         }).bind(constants.PROJECT_CREATE, function() {
 			return createProject()
         }).bind(constants.UNDO, function() {
-			return resetProject()
-		});
+            return resetProject()
+        }).bind(constants.ADD_ATTENDEE, function(payload) {
+            return addAttendee(payload.attendee)
+        }).bind(constants.REMOVE_ATTENDEE, function(payload) {
+            return removeAttendee(payload.attendee)
+        });
         
 		
 		

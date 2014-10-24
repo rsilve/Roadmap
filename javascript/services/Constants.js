@@ -23,7 +23,10 @@ define([], function() {
         CONFIRM_OK: "CONFIRM_OK",
         CONFIRM_CANCEL: "CONFIRM_CANCEL",
 
-        SESSION_LOADED: "SESSION_LOADED"
+        SESSION_LOADED: "SESSION_LOADED",
+
+        ADD_ATTENDEE : "ADD_ATTENDEE",
+        REMOVE_ATTENDEE: "REMOVE_ATTENDEE"
     }
 
 });
