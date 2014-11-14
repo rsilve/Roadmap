@@ -8,7 +8,7 @@ define(["services/Constants"], function (constants) {
 		   $scope.progress = false;
 		   project = angular.copy($scope.project);
            delete $scope.attendee;
-		}
+		};
 		
        	// Init
 		setState();
@@ -21,7 +21,7 @@ define(["services/Constants"], function (constants) {
 		// cancel edition
 		$scope.cancel = function() {
 			$scope.$emit("dispatcher", constants.PROJECT_EDIT_CANCEL)
-		}
+		};
 		
 		// save project
 		$scope.save = function() {
@@ -32,21 +32,21 @@ define(["services/Constants"], function (constants) {
 				$scope.$emit("dispatcher", constants.PROJECT_INSERT, {project : angular.copy($scope.project)})
 			}
 			
-		}
+		};
 
         // delete project
         $scope.delete = function() {
             $scope.progress = true;
             $scope.$emit("dispatcher", constants.PROJECT_DESTROY, {project : angular.copy($scope.project), from: project})
-        }
+        };
 
         $scope.addAttendee = function() {
             $scope.$emit("dispatcher", constants.ADD_ATTENDEE, {attendee : angular.copy($scope.attendee)})
-        }
+        };
 
         $scope.removeAttendee = function(attendee) {
             $scope.$emit("dispatcher", constants.REMOVE_ATTENDEE, {attendee : attendee})
-        }
+        };
 
     };
 });

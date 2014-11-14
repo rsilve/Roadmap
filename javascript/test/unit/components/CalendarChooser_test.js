@@ -11,7 +11,7 @@ define(['components/CalendarChooser', 'services/Constants', 'app'], function(Cal
 
             var $controller = injector.get('$controller');
             var CalendarStore = injector.get('CalendarStore');
-            CalendarStore.clear();
+            //CalendarStore.clear();
             $rootScope = injector.get('$rootScope');
             $scope = $rootScope.$new();
             $controller(CalendarChooser, {$scope: $scope, CalendarStore: CalendarStore});

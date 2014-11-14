@@ -1,19 +1,21 @@
 define(['services/Constants'], function (constants) {
 
 
-    return function ($scope, CalendarStore, ProjectStore) {
+    return function ($scope, CalendarStore, ProjectStore, TimeStore) {
 		var setState = function() {
-	       $scope.calendar = CalendarStore.getCalendar();
-		   $scope.loading = ProjectStore.isLoading();
-		}
+	       	$scope.calendar = CalendarStore.getCalendar();
+		   	$scope.loading = ProjectStore.isLoading();
+			$scope.timeScale = TimeStore.getZoom();
+		};
 		
        	// Init
 		setState();
 		
 		// Binding 
-		$scope.$on(CalendarStore.id, setState)
-		$scope.$on(ProjectStore.loadingEvent(), setState)
-		
+		$scope.$on(CalendarStore.id, setState);
+		$scope.$on(ProjectStore.loadingEvent(), setState);
+		$scope.$on(TimeStore.id, setState);
+
 		// Interaction handlers
 		
 		// unselect current calendar
@@ -41,6 +43,18 @@ define(['services/Constants'], function (constants) {
 		$scope.zoomMonths = function() {
 			$scope.$emit("dispatcher", constants.TIME_MONTHS)
 		}
-		
-    };
+
+		$scope.isDaysScale = function() {
+			return $scope.timeScale === TimeStore.ZOOM_DAYS ? "daysScale" : '';
+		}
+
+		$scope.isWeeksScale = function() {
+			return $scope.timeScale === TimeStore.ZOOM_WEEKS ? "weeksScale" : '';
+		}
+
+		$scope.isMonthsScale = function() {
+			return $scope.timeScale === TimeStore.ZOOM_MONTHS ? "monthsScale" : '';
+		}
+
+	};
 });

@@ -92,6 +92,7 @@ define([], function () {
          * @returns {promise}
          */
         var updateEvent = function(calendar, id, data) {
+            console.log(data)
             return request({
                 method: 'PUT',
                 path: "/calendars/"+calendar+"/events/"+id,

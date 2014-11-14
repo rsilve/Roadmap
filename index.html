@@ -30,8 +30,8 @@
 				<span class="clickable" pikaday="project.end">{{project.end.format("DD/MM/YYYY")}}</span>
 			</div>
             <div>Atttendees<br>
-                <input type="text" ng-model="attendee"><i class="fa fa-plus clickable" ng-click="addAttendee()"></i><br>
-                <span ng-repeat="a in project.attendees" class="Project-Attendee ">{{a}}
+				<input type="text" ng-model="attendee"><i class="fa fa-plus clickable" ng-click="addAttendee()"></i><br>
+                <span ng-repeat="a in project.attendees" class="Project-Attendee ">{{a.email}}
                     <i class="fa fa-remove clickable" ng-click="removeAttendee(a)"></i></span>
             </div>
 			<div class="ProjectEditor-Button">
@@ -50,9 +50,9 @@
 					<span class="clickable" ng-click="createProject()">Add a project</span>
 					<span class="toolbar-separator"></span>
 					<i class="fa fa-search-plus muted"></i>
-					<span class="clickable" ng-click="zoomDays()">Days</span>&nbsp;
-					<span class="clickable" ng-click="zoomWeeks()">Weeks</span>&nbsp;
-					<span class="clickable" ng-click="zoomMonths()">Months</span>&nbsp;
+					<span class="clickable" ng-click="zoomDays()" ng-class="isDaysScale()">Days</span>&nbsp;
+					<span class="clickable" ng-click="zoomWeeks()" ng-class="isWeeksScale()">Weeks</span>&nbsp;
+					<span class="clickable" ng-click="zoomMonths()" ng-class="isMonthsScale()">Months</span>&nbsp;
 				</div>
 			</div>
         </div>

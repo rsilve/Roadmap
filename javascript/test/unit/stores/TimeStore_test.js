@@ -17,7 +17,7 @@ define(['moment', 'services/Constants', 'app'], function(moment, constants) {
         });
 
         it('should have a getZoom method', function () {
-            expect(timestore.getZoom()).toEqual("month");
+            expect(timestore.getZoom()).toEqual("months");
         });
 
         it('should have a getTicks method', function () {
@@ -36,7 +36,7 @@ define(['moment', 'services/Constants', 'app'], function(moment, constants) {
             $rootScope.$digest();
             var start = timestore.getStart();
             var zoom = timestore.getZoom();
-            expect(zoom).toEqual("day");
+            expect(zoom).toEqual("days");
             var ticks = timestore.getTicks();
             for (var i = 0; i < 24; i ++) {
                 var d = start.clone().add(i, zoom).startOf(zoom);
@@ -50,7 +50,7 @@ define(['moment', 'services/Constants', 'app'], function(moment, constants) {
             $rootScope.$digest();
             var start = timestore.getStart();
             var zoom = timestore.getZoom();
-            expect(zoom).toEqual("week");
+            expect(zoom).toEqual("weeks");
             var ticks = timestore.getTicks();
             for (var i = 0; i < 24; i ++) {
                 var d = start.clone().add(i, zoom).startOf(zoom);
@@ -64,7 +64,7 @@ define(['moment', 'services/Constants', 'app'], function(moment, constants) {
             $rootScope.$digest();
             var start = timestore.getStart();
             var zoom = timestore.getZoom();
-            expect(zoom).toEqual("month");
+            expect(zoom).toEqual("months");
             var ticks = timestore.getTicks();
             for (var i = 0; i < 24; i ++) {
                 var d = start.clone().add(i, zoom).startOf(zoom);

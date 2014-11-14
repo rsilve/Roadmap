@@ -32,7 +32,7 @@ define([
 
         // helper for create project
         var createProject = function() {
-            console.info("Create new project")
+            console.info("Create new project");
             project = {
                 start : moment(),
                 end : moment().add(1, "month")
@@ -42,7 +42,16 @@ define([
         // helper for add attendee on project
         var addAttendee = function(attendee) {
             console.info("Add attendee");
-            project.attendees.push(attendee.trim());
+            var email = attendee.trim();
+            var add = true;
+            project.attendees.forEach(function(item) {
+                if (item.email === email) {
+                    add = false;
+                    return;
+                }
+            });
+            if (add)
+                project.attendees.push({email : email});
         };
 
         // helper for remove attendee on project
@@ -50,7 +59,7 @@ define([
             console.info("Remove attendee "+attendee);
             var a = [];
             project.attendees.forEach(function(item) {
-                if (item != attendee) {
+                if (item.email != attendee.email) {
                     a.push(item)
                 }
             });
