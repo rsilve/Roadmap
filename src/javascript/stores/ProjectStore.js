@@ -5,11 +5,11 @@ define([
 ], function (Store,  projectHelper, constants) {
 
 	
-    return function (scope, dispatcher, google, CalendarStore, ConfirmStore) {
+    return function (scope, dispatcher, google, CalendarStore, ConfirmStore, HistoryStore) {
 		
 		// store projects here
 		var _projects = {};
-		var loading = false
+		var loading = false;
         
 		// factory for google client
 		function googleCalendar() {
@@ -67,12 +67,12 @@ define([
 		
 		var undoHandler = {}
 		undoHandler[constants.PROJECT_SAVE] = function(payload, ec) {
-			var p = payload.from
+			var p = payload.from;
 			if (p.id) {
 				p.sequence ++;
 				return saveProject(p)
 			} else {
-				return ec.when() // deleteProject(payload.project)
+				return ec.when(); // deleteProject(payload.project)
 			}			
 		};
 		undoHandler[constants.PROJECT_DESTROY] = function(payload, ec) {
@@ -88,7 +88,7 @@ define([
 		var undo = function(payload, ec) {
 			console.debug("Undo", payload.data.payload)
 			if (undoHandler[payload.data.payload.actionType])
-			  return undoHandler[payload.data.payload.actionType](payload.data.payload)
+			  return undoHandler[payload.data.payload.actionType](payload.data.payload);
 			else 
 			  return ec.when()
 		};
@@ -97,7 +97,7 @@ define([
 		// Store Object 
         function ProjectStore() {}
 		// inherit from Store for events method
-        ProjectStore.prototype = new Store(scope, dispatcher)
+        ProjectStore.prototype = new Store(scope, dispatcher);
 		
 		// get the projects list
         ProjectStore.prototype.getProjects = function() {

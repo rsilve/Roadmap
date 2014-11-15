@@ -18,10 +18,10 @@
   "scripts": {
     "postinstall": "bower install",
     "prestart": "npm install",
-    "start": "http-server -a localhost -p 8000",
+    "start": "http-server -a localhost -p 8000 src/",
     "pretest": "npm install",
-    "test": "./node_modules/.bin/karma start karma.conf.js ",
-    "test-single-run": "./node_modules/.bin/karma start karma.conf.js --single-run --browsers PhantomJS"
+    "test": "./node_modules/.bin/karma start src/karma.conf.js ",
+    "test-single-run": "./node_modules/.bin/karma start src/karma.conf.js --single-run --browsers PhantomJS"
   },
   "repository": {
     "type": "git",

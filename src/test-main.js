@@ -2,7 +2,7 @@ var allTestFiles = [];
 var TEST_REGEXP = /_test\.js$/i;
 
 var pathToModule = function(path) {
-  return path.replace(/^\/base\/javascript\//, '').replace(/\.js$/, '');
+  return path.replace(/^\/base\/src\/javascript\//, '').replace(/\.js$/, '');
 };
 
 
@@ -18,7 +18,7 @@ Object.keys(window.__karma__.files).forEach(function(file) {
 
 require.config({
   // Karma serves files under /base/javascript, which is the basePath from your config file
-  baseUrl: '/base/javascript/',
+  baseUrl: '/base/src/javascript/',
   paths: {
 	  "angular": 		'../bower_components/angular/angular',
       "angular-mocks":  '../bower_components/angular-mocks/angular-mocks',

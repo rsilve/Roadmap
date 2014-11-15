@@ -12,12 +12,20 @@ define([
         function HistoryStore() {}
 		// inherit from Store for events method
         HistoryStore.prototype = new Store(scope, dispatcher);
-		
+
 		// get the history
 		HistoryStore.prototype.getHistory = function() {
 			return history;
 		};
-		
+
+		// get the last history item
+		HistoryStore.prototype.last = function() {
+			return history.slice(0,1).shift();
+		};
+
+
+
+
 		var push = function(payload) {
 			return function() { 
 				history.unshift({payload : payload, timestamp: moment()}) 
@@ -33,7 +41,6 @@ define([
 		
 		// bind to dispatcher
 		store.bind(constants.PROJECT_SAVE, function(payload, ec) {
-			console.error(ProjectStore)
 			return ec.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_SAVE]]).
 			then(push(payload))
         }).bind(constants.PROJECT_DESTROY, function(payload, ec ) {

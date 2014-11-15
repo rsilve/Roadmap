@@ -1,5 +1,5 @@
 define([
-    'angular', 
+    'angular',
 	'directives/pikaday',
 	'directives/timebar',
     'directives/sessionAware',

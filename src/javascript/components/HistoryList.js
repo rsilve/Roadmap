@@ -1,17 +1,23 @@
 define(['services/Constants'], 
 function (constants) {
 
+	/**
+	 * Factory method for the HistoryList component
+	 */
 	return function($scope, HistoryStore, $interval) {
-		
+
+		/**
+		 * Helper to set component state on each Stores notification
+		 */
 		var setState = function() {
 	        $scope.history = HistoryStore.getHistory();
 			$scope.progress = false;
 		};
-		
-		// Initial state
+
+		// Init the component
 		setState();
-		
-		// Binding
+
+		// Bind the component to the stores
 		$scope.$on(HistoryStore.id, setState);
 
 		// refresh the view every minute
@@ -19,10 +25,11 @@ function (constants) {
 		$interval(function() {}, 10000);
 
 
-		// Interaction handlers
-		
+		/**
+		 * scope handler to start an undo action
+		 */
 		$scope.undo = function() {
-			$scope.$emit("dispatcher", constants.PROJECT_SAVE, {data : $scope.history.slice(0,1).shift() } );
+			$scope.$emit("dispatcher", constants.UNDO, {data : HistoryStore.last()} );
 			$scope.progress = true;
 		}
 	}

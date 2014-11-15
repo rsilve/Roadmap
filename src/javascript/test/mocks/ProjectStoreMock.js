@@ -1,5 +1,14 @@
 define(['angular', 'services/Constants', 'stores/Store'], function (angular, constants, Store) {
 
+    /**
+     * Mock provider for projectStore
+     *
+     * @param scope
+     * @param dispatcher
+     * @returns {*}
+     * @constructor
+     */
+
     function ProjectStoreProvider (scope, dispatcher) {
         console.info("Loading ProjectStore mock");
 
