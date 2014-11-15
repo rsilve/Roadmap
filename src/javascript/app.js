@@ -14,17 +14,20 @@ define([
     'stores/ProjectEditorStore',
     'stores/HistoryStore',
     'stores/ConfirmStore',
-    'components/CalendarChooser',
-	'components/ProjectToolbar',
-	'components/Timebar',
-    'components/ProjectList', 
-    'components/ProjectEditor', 
-    'components/HistoryList',
-    'components/Confirm'
+    'components/planning/CalendarChooser',
+	'components/planning/ProjectToolbar',
+	'components/planning/Timebar',
+    'components/planning/ProjectList',
+    'components/planning/ProjectEditor',
+    'components/planning/HistoryList',
+    'components/planning/Confirm',
+    'components/user/UserProjects'
 ], function (angular, PikadayDirective, TimebarDirective, SessionAwareDirective,
              ExecutionContext, Dispatcher, GoogleAuth, Google, SessionStore,
 	CalendarStore, ProjectStore , TimeStore, ProjectEditorStore, HistoryStore, ConfirmStore,
-	CalendarChooser, ProjectToolbar, Timebar, ProjectList, ProjectEditor, HistoryList, Confirm) {
+	CalendarChooser, ProjectToolbar, Timebar, ProjectList, ProjectEditor, HistoryList, Confirm,
+    UserProjects
+) {
 
     // Declare app level module which depends on filters, and services
 
@@ -43,22 +46,29 @@ define([
 	.factory("HistoryStore", ['$rootScope','dispatcher', 'ProjectStore', HistoryStore])
     .factory("SessionStore",['$rootScope','dispatcher', 'TimeStore', SessionStore]);
 
-    angular.module('Roadmap.components', ['Roadmap.stores'])
-    .controller('ProjectEditor', ['$scope', 'ProjectEditorStore',  ProjectEditor])
-    .controller('ProjectList', ['$scope',  'ProjectStore','CalendarStore', 'ConfirmStore', ProjectList])
-    .controller('ProjectToolbar', ['$scope', 'CalendarStore', 'ProjectStore', 'TimeStore', ProjectToolbar])
-    .controller('CalendarChooser', ['$scope', 'CalendarStore', CalendarChooser])
-    .controller('Timebar', ['$scope', 'TimeStore', Timebar])
-    .controller('HistoryList', ['$scope', 'HistoryStore', '$interval', HistoryList])
-    .controller('Confirm', ['$scope', 'ConfirmStore', '$interval', Confirm]);
+    angular.module('Roadmap.components.planning', ['Roadmap.stores'])
+        .controller('ProjectEditor', ['$scope', 'ProjectEditorStore',  ProjectEditor])
+        .controller('ProjectList', ['$scope',  'ProjectStore','CalendarStore', 'ConfirmStore', ProjectList])
+        .controller('ProjectToolbar', ['$scope', 'CalendarStore', 'ProjectStore', 'TimeStore', ProjectToolbar])
+        .controller('CalendarChooser', ['$scope', 'CalendarStore', CalendarChooser])
+        .controller('Timebar', ['$scope', 'TimeStore', Timebar])
+        .controller('HistoryList', ['$scope', 'HistoryStore', '$interval', HistoryList])
+        .controller('Confirm', ['$scope', 'ConfirmStore', '$interval', Confirm]);
+
+    angular.module('Roadmap.components.user', ['Roadmap.stores'])
+        .controller('UserProjects', ['$scope', 'ProjectStore', UserProjects])
+        ;
 
     angular.module('Roadmap.directives', [])
 	.directive('pikaday', PikadayDirective)
     .directive('timebar', ['TimeStore', TimebarDirective])
     .directive('sessionAware', ['SessionStore', SessionAwareDirective]);
 
-    return angular.module('Roadmap', 
-		['Roadmap.services', 'Roadmap.stores', "Roadmap.components", 'Roadmap.directives'])
+    return angular.module('Roadmap', [
+        'Roadmap.services', 'Roadmap.stores',
+        "Roadmap.components.planning",  "Roadmap.components.user",
+        'Roadmap.directives'
+    ])
 
     
 	

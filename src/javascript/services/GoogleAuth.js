@@ -15,7 +15,7 @@ define([], function () {
 			// for this method work
 	        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, function (result) {
 	            if (result && !result.error) {
-	                deferred.resolve(gapi.auth.getToken());
+					deferred.resolve(gapi.auth.getToken());
 	            } else {
 					console.warn(result);
 	                deferred.reject("Google said : Not authorized")

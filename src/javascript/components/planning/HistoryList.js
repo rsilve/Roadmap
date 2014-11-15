@@ -1,4 +1,4 @@
-define(['services/Constants'], 
+define(['services/Constants'],
 function (constants) {
 
 	/**

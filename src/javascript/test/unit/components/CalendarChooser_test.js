@@ -1,4 +1,4 @@
-define(['components/CalendarChooser', 'services/Constants', 'app'], function(CalendarChooser, constants) {
+define(['components/planning/CalendarChooser', 'services/Constants', 'app'], function(CalendarChooser, constants) {
 
     describe('CalendarChooser component', function () {
         var $rootScope;

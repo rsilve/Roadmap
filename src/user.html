@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Roadmap</title>
+        <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+        <link rel="stylesheet" href='bower_components/normalize.css/normalize.css'/>
+        <link rel="stylesheet" href='bower_components/font-awesome/css/font-awesome.css'/>
+        <link rel="stylesheet" href='bower_components/pikaday/css/pikaday.css'/>
+        <link rel="stylesheet" media="screen" href="stylesheets/main.css">
+
+        <!-- Needed for google api -->
+        <script type="text/javascript" src="//apis.google.com/js/client.js"></script>
+
+    </head>
+    <body class="ng-cloak" session-aware>
+
+		
+        <div>
+            <div  ng-controller="UserProjects">
+                <ul>
+					<li ng-repeat="project in projects track by project.id" class="Project" >
+						{{project.name}}
+						<span style="color: #999; font-size: 0.8em">{{project.start.format("DD/MM/YYYY")}} 
+							<i class="fa fa-long-arrow-right"></i> 
+							{{project.end.format("DD/MM/YYYY")}}</span>
+					</li>
+				</ul>
+            </div>
+		</div>
+
+
+		<script data-main="javascript/roadmap" src="bower_components/requirejs/require.js"></script>
+
+		
+    </body>
+</html>
+

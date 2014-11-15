@@ -1,4 +1,4 @@
-define(['components/Timebar', 'services/Constants', 'moment',  'app'], function(Timebar, constants, moment) {
+define(['components/planning/Timebar', 'services/Constants', 'moment',  'app'], function(Timebar, constants, moment) {
 
     describe('Timebar component', function () {
         var $rootScope;

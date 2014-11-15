@@ -1,4 +1,4 @@
-define(['components/Confirm', 'services/Constants', 'app'], function(Confirm, constants) {
+define(['components/planning/Confirm', 'services/Constants', 'app'], function(Confirm, constants) {
 
     describe('Confirm component', function () {
         var $rootScope;

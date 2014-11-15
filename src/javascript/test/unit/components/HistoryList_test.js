@@ -1,8 +1,9 @@
-define(['components/HistoryList', 'services/Constants', 'app', 'test/mocks/ProjectStoreMock'], function(HistoryList, constants) {
+define(['components/planning/HistoryList', 'services/Constants', 'app', 'test/mocks/ProjectStoreMock'], function(HistoryList, constants) {
 
     describe('HistoryList component', function () {
         var $rootScope;
 		var $scope;
+        var HistoryStore;
 
 		// Load the module which contains the directive
 		beforeEach(function() {
@@ -10,7 +11,7 @@ define(['components/HistoryList', 'services/Constants', 'app', 'test/mocks/Proje
                 'Google.mocks', 'ProjectStore.mock', 'ng']);
 
             var $controller = injector.get('$controller');
-            var HistoryStore = injector.get('HistoryStore');
+            HistoryStore = injector.get('HistoryStore');
             $rootScope = injector.get('$rootScope');
             $scope = $rootScope.$new();
             $controller(HistoryList, {$scope: $scope, HistoryStore: HistoryStore});
@@ -36,7 +37,7 @@ define(['components/HistoryList', 'services/Constants', 'app', 'test/mocks/Proje
             $scope.$emit("dispatcher", constants.PROJECT_SAVE, { name: 'projectB' });
             $rootScope.$digest();
             expect($scope.history.length).toEqual(2);
-            $scope.$emit("dispatcher", constants.UNDO, {data : $scope.history.slice(0,1).shift() } );
+            $scope.$emit("dispatcher", constants.UNDO, {data : HistoryStore.last() } );
             $rootScope.$digest();
             expect($scope.history.length).toEqual(1);
             expect($scope.history[0].payload.name).toEqual("projectA");
