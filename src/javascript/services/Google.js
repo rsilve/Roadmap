@@ -23,8 +23,9 @@ define([], function () {
 			console.debug("Send request " + c.path);
             c = c || {};
             c.method = c.method || "GET";
-            c.url = google_api +  c.path;
-            
+            if (!c.url) {
+                c.url = google_api + c.path;
+            }
 			return auth.then(function (auth) {
 				console.debug("Got Google auth "+auth.access_token);
                 c.headers = {
@@ -92,7 +93,6 @@ define([], function () {
          * @returns {promise}
          */
         var updateEvent = function(calendar, id, data) {
-            console.log(data)
             return request({
                 method: 'PUT',
                 path: "/calendars/"+calendar+"/events/"+id,
@@ -112,6 +112,12 @@ define([], function () {
             });
         };
 
+        var me = function() {
+            return request({
+                method : 'GET',
+                url : "https://www.googleapis.com/plus/v1/people/me"
+            })
+        };
 
         /**
          * Expose the API
@@ -122,7 +128,8 @@ define([], function () {
                     events: function() { return events(calendar) },
                     createEvent: function(data) { return createEvent(calendar, data) },
                     deleteEvent: function(id) { return deleteEvent(calendar, id) },
-                    updateEvent: function(id, data) { return updateEvent(calendar, id, data) }
+                    updateEvent: function(id, data) { return updateEvent(calendar, id, data) },
+                    me: function() { return me() }
                 };
             else
                 return {
@@ -130,7 +137,8 @@ define([], function () {
                     createEvent:  function() { return $q.reject("Calendar ID needed") },
                     deleteEvent:  function() { return $q.reject("Calendar ID needed") },
                     updateEvent:  function() { return $q.reject("Calendar ID needed") },
-                    calendarList:  function() { return calendarList() }
+                    calendarList:  function() { return calendarList() },
+                    me: function() { return me() }
                 };
         };
 

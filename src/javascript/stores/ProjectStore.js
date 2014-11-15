@@ -5,7 +5,7 @@ define([
 ], function (Store,  projectHelper, constants) {
 
 	
-    return function (scope, dispatcher, google, CalendarStore, ConfirmStore, HistoryStore) {
+    return function (scope, dispatcher, google, CalendarStore, ConfirmStore) {
 		
 		// store projects here
 		var _projects = {};
@@ -98,12 +98,25 @@ define([
         function ProjectStore() {}
 		// inherit from Store for events method
         ProjectStore.prototype = new Store(scope, dispatcher);
-		
+
 		// get the projects list
-        ProjectStore.prototype.getProjects = function() {
-        	return _projects;
-        };
-		
+		ProjectStore.prototype.getProjects = function(filter) {
+			var p = _projects;
+			if (filter && _projects) {
+				p = [];
+				for (var id in _projects) {
+					var project = _projects[id];
+					if (filter(project)) {
+						p.push(project);
+					}
+				}
+			}
+			return p;
+		};
+
+
+
+
 		// get loading status
         ProjectStore.prototype.isLoading = function() {
         	return loading;

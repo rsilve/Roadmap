@@ -13,10 +13,10 @@ define(["angular", "services/Constants"], function (angular, constants) {
 		};
 
 		var filter = function(project) {
-			var match = false;
+			var match = true;
 			project.attendees.forEach(function (attendee) {
 				if (attendee.email === profileEmail()) {
-					match = true;
+					match = false;
 					return;
 				}
 			})

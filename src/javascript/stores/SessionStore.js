@@ -1,6 +1,6 @@
 define(['stores/Store', 'services/Constants'], function (Store, constants) {
 
-    return function (scope, dispatcher, TimeStore) {
+    return function (scope, dispatcher, TimeStore, ProfileStore) {
 
         var session = sessionStorage;
 

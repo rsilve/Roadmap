@@ -26,7 +26,8 @@ define([], function() {
         SESSION_LOADED: "SESSION_LOADED",
 
         ADD_ATTENDEE : "ADD_ATTENDEE",
-        REMOVE_ATTENDEE: "REMOVE_ATTENDEE"
+        REMOVE_ATTENDEE: "REMOVE_ATTENDEE",
+        PROFILE_LOADED: "PROFILE_LOADED"
     }
 
 });

@@ -13,12 +13,13 @@
         <script type="text/javascript" src="//apis.google.com/js/client.js"></script>
 
     </head>
-    <body class="ng-cloak" session-aware>
+    <body class="ng-cloak" session-aware profile-aware>
 
-		
+		<div>{{profile.displayName}}</div>
         <div>
-            <div  ng-controller="UserProjects">
-                <ul>
+			<div ng-controller="UserProjects" class="my-projects">
+				My projects
+				<ul>
 					<li ng-repeat="project in projects track by project.id" class="Project" >
 						{{project.name}}
 						<span style="color: #999; font-size: 0.8em">{{project.start.format("DD/MM/YYYY")}} 
@@ -26,9 +27,19 @@
 							{{project.end.format("DD/MM/YYYY")}}</span>
 					</li>
 				</ul>
-            </div>
+			</div>
+			<div ng-controller="OtherProjects" class="my-projects">
+				Other projects
+				<ul>
+					<li ng-repeat="project in projects track by project.id" class="Project" >
+						{{project.name}}
+						<span style="color: #999; font-size: 0.8em">{{project.start.format("DD/MM/YYYY")}}
+							<i class="fa fa-long-arrow-right"></i>
+							{{project.end.format("DD/MM/YYYY")}}</span>
+					</li>
+				</ul>
+			</div>
 		</div>
-
 
 		<script data-main="javascript/roadmap" src="bower_components/requirejs/require.js"></script>
 
