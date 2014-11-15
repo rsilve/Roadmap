@@ -40,7 +40,7 @@ define([
     .factory("ProjectEditorStore", ['$rootScope','dispatcher', 'ProjectStore', ProjectEditorStore])
     .factory("ProjectStore", ['$rootScope','dispatcher', 'Google', 'CalendarStore', 'ConfirmStore', ProjectStore])
 	.factory("TimeStore", ['$rootScope','dispatcher', TimeStore])
-	.factory("HistoryStore", ['$rootScope','dispatcher', 'ProjectStore', '$interval', HistoryStore])
+	.factory("HistoryStore", ['$rootScope','dispatcher', 'ProjectStore', HistoryStore])
     .factory("SessionStore",['$rootScope','dispatcher', 'TimeStore', SessionStore]);
 
     angular.module('Roadmap.components', ['Roadmap.stores'])
@@ -49,7 +49,7 @@ define([
     .controller('ProjectToolbar', ['$scope', 'CalendarStore', 'ProjectStore', 'TimeStore', ProjectToolbar])
     .controller('CalendarChooser', ['$scope', 'CalendarStore', CalendarChooser])
     .controller('Timebar', ['$scope', 'TimeStore', Timebar])
-    .controller('HistoryList', ['$scope', 'HistoryStore', HistoryList])
+    .controller('HistoryList', ['$scope', 'HistoryStore', '$interval', HistoryList])
     .controller('Confirm', ['$scope', 'ConfirmStore', '$interval', Confirm]);
 
     angular.module('Roadmap.directives', [])

@@ -19,9 +19,8 @@ define(['services/Constants'], function (constants) {
 		$scope.$on(ConfirmStore.id, setState);
 
         // refresh the view every minute
-        //$interval(function() {
-        //    $scope.$apply()
-        //}, 60000);
+        // to update time display
+        $interval(function() {}, 10000);
 
         /**
          * notify for a confirm accept
