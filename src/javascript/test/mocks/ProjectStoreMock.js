@@ -20,6 +20,8 @@ define(['angular', 'services/Constants', 'stores/Store'], function (angular, con
 
         store.bind(constants.PROJECT_SAVE, function(payload, ec) {
             return 1; // do nothing
+        }).bind(constants.PROJECT_DESTROY, function(payload, ec) {
+            return 1; // do nothing
         }).bind(constants.UNDO, function(payload, ec) {
             return 1; // do nothing
         });
