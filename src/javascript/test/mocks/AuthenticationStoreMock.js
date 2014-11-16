@@ -9,12 +9,16 @@ define(['angular', 'services/Constants', 'stores/Store'], function (angular, con
      * @constructor
      */
 
-    function AuthenticationStoreProvider (scope, dispatcher) {
+    function AuthenticationStoreProvider (scope, $q, dispatcher) {
         console.info("Loading AuthenticationStore mock");
 
+        var bearer = $q.defer();
+
         function AuthenticationStore() {}
-        // inherit from Store for events method
         AuthenticationStore.prototype = new Store(scope, dispatcher);
+        AuthenticationStore.prototype.getAuth = function() {return bearer.promise};
+        AuthenticationStore.prototype.resolve = function() {bearer.resolve()};
+        AuthenticationStore.prototype.reject = function() {bearer.reject()};
 
         var store = new AuthenticationStore();
 
@@ -32,7 +36,7 @@ define(['angular', 'services/Constants', 'stores/Store'], function (angular, con
      * Load the mocks as providers
      */
     angular.module('AuthenticationStore.mock', [])
-        .provider('AuthenticationStore', function() { this.$get = ["$rootScope", "dispatcher", AuthenticationStoreProvider] });
+        .provider('AuthenticationStore', function() { this.$get = ["$rootScope", "$q", "dispatcher", AuthenticationStoreProvider] });
 
 
 

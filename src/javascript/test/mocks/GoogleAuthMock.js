@@ -31,7 +31,7 @@ define(['angular'], function (angular) {
         var d = $q.defer();
         var auth = d.promise;
         auth.resolve = function(value) {
-            value = value || {access_token : "access_token", token_type : "bearer"}
+            value = value || {access_token : "access_token", token_type : "bearer"};
             d.resolve(value);
         };
 

@@ -44,7 +44,7 @@ define([
         .factory("dispatcher", ['$rootScope', '$q', "ExecutionContext", Dispatcher]);
 
     angular.module('Roadmap.stores', [])
-        .factory("AuthenticationStore", ['$rootScope', 'dispatcher', "GoogleAuth", AuthenticationStore])
+        .factory("AuthenticationStore", ['$rootScope', '$q','dispatcher', "GoogleAuth", AuthenticationStore])
         .factory("ConfirmStore", ['$rootScope', 'dispatcher', ConfirmStore])
         .factory("CalendarStore", ['$rootScope', 'dispatcher', 'Google', CalendarStore])
         .factory("ProjectEditorStore", ['$rootScope', 'dispatcher', 'ProjectStore', ProjectEditorStore])

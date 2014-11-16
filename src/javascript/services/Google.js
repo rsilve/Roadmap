@@ -37,13 +37,15 @@ define([], function () {
         }
 
         function setAuthentication(c) {
-            //console.log(AuthenticationStore.getAuth());
-            c.headers = {
-                // this header is required by google api
-                "Authorization": AuthenticationStore.getAuth(),
-                "Content-Type" : "application/json"
-            };
-            return $http(c)
+            return AuthenticationStore.getAuth().then(function(bearer) {
+                c.headers = {
+                    // this header is required by google api
+                    "Authorization": bearer,
+                    "Content-Type" : "application/json"
+                };
+                return $http(c)
+            })
+
         }
 
         /**

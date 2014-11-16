@@ -40,10 +40,10 @@ define(['stores/Store', 'services/Constants'], function (Store, constants) {
             console.info("Store time scale in session");
             session.timeScale = TimeStore.ZOOM_MONTHS;
         }).bind(constants.AUTHENTICATION_COMPLETED, function() {
-            if (AuthenticationStore.getAuth()) {
+             AuthenticationStore.getAuth().then(function(bearer) {
                 console.info("Store auth token in session");
-                session.auth = AuthenticationStore.getAuth();
-            }
+                session.auth = bearer;
+             });
 
         }).bind(constants.LOGOUT, function() {
             console.info("Reset auth session");
