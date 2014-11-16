@@ -76,17 +76,13 @@ define([
         }).bind(constants.RESET_CALENDAR, function(payload) {
             return resetCalendar()
         }).bind(constants.SESSION_LOADED, function(payload) {
-            console.info("Load session calendar")
+            console.info("Load session calendar");
             return setCalendar(payload.session.calendar)
+        }).bind(constants.AUTHENTICATION_COMPLETED, function() {
+            return google().calendarList()
+                .then(setCalendarList)
         });
 
-
-        // finally do some call for init
-        google().calendarList()
-		.then(setCalendarList)
-		.then(store.emitChange())
-		.catch(function(err) { console.warn(err) });
-		
         console.info("Loading CalendarStore Service "+store.id);
 		
         return store;

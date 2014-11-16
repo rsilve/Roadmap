@@ -1,6 +1,6 @@
 define(['stores/Store', 'services/Constants'], function (Store, constants) {
 
-    return function (scope, dispatcher, TimeStore, auth) {
+    return function (scope, dispatcher, TimeStore, AuthenticationStore) {
 
         var session = sessionStorage;
 
@@ -39,19 +39,18 @@ define(['stores/Store', 'services/Constants'], function (Store, constants) {
         }).bind(constants.TIME_MONTHS, function() {
             console.info("Store time scale in session");
             session.timeScale = TimeStore.ZOOM_MONTHS;
+        }).bind(constants.AUTHENTICATION_COMPLETED, function() {
+            if (AuthenticationStore.getAuth()) {
+                console.info("Store auth token in session");
+                session.auth = AuthenticationStore.getAuth();
+            }
+
+        }).bind(constants.LOGOUT, function() {
+            console.info("Reset auth session");
+            delete session.auth;
         });
 
-        /**
-         * Store the auth token to be reused
-         */
-        if (! session.auth) {
-            auth().then(function (auth) {
-                console.info("Store auth token in session");
-                session.auth = auth.token_type + " " + auth.access_token;
-            });
-        }
-
-        console.info("Loading Session Service");
+        console.info("Loading Session Service " + store.id);
         return session;
 
     };

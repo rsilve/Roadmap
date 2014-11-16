@@ -13,8 +13,14 @@
         <script type="text/javascript" src="//apis.google.com/js/client.js"></script>
 
     </head>
-    <body class="ng-cloak" session-aware profile-aware>
-
+    <body class="ng-cloak" session-aware profile-aware authentication-aware>
+		<div class="chooser" ng-controller="CalendarChooser">
+			<div id="chooser" class="calendar-chooser" ng-hide="calendar">
+				<ul class="calendar-list" >
+					<li ng-repeat="calendar in list" class="calendar" ng-click="choose(calendar)">{{calendar.summary}}</li>
+				</ul>
+			</div>
+		</div>
 		<div class="toolbar">
 			<div class="toolbar-container" ng-controller="ProjectToolbar">
 				<div id="project-toolbar">
@@ -24,6 +30,7 @@
 					{{profile.displayName}}
 					<span class="toolbar-separator"></span>
 					<a href="/"><i class="fa fa-navicon"></i></a>
+					<a ng-click="poweroff()"><i class="fa fa-power-off"></i></a>
 				</div>
 			</div>
 		</div>

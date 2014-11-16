@@ -13,7 +13,7 @@
         <script type="text/javascript" src="//apis.google.com/js/client.js"></script>
 
     </head>
-    <body class="ng-cloak" session-aware profile-aware>
+    <body class="ng-cloak" session-aware profile-aware authentication-aware>
         <div class="chooser" ng-controller="CalendarChooser">
             <div id="chooser" class="calendar-chooser" ng-hide="calendar">
 				<ul class="calendar-list" >
@@ -56,6 +56,7 @@
 					<span class="toolbar-separator"></span>
 					{{profile.displayName}}&nbsp;
 					<a href="user.html"><i class="fa fa-user"></i></a>
+					<a ng-click="poweroff()"><i class="fa fa-power-off"></i></a>
 				</div>
 			</div>
         </div>

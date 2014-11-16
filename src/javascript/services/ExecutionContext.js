@@ -1,5 +1,17 @@
 define([], function () {
 
+    var guid = (function() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return function() {
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+        };
+    })();
+
     /**
      * Factory definition for the ExecutionContext service
      */
@@ -16,6 +28,7 @@ define([], function () {
          */
         function ExecutionContext() {
             this.promises = [];
+            this.id = guid();
         }
 
         /**

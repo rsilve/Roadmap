@@ -56,5 +56,8 @@ define(['services/Constants'], function (constants) {
 			return $scope.timeScale === TimeStore.ZOOM_MONTHS ? "monthsScale" : '';
 		}
 
+		$scope.poweroff = function() {
+			$scope.$emit("dispatcher", constants.LOGOUT)
+		}
 	};
 });

@@ -30,8 +30,9 @@ define(['stores/Store', 'services/Constants'], function (Store, constants) {
 
 
         var store = new ProfileStore();
-
-        google().me().then(setProfile).then(store.emitChange());
+        store.bind(constants.AUTHENTICATION_COMPLETED, function() {
+            return  google().me().then(setProfile)
+        });
 
 
         console.info("Loading ProfileStore Service");

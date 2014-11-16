@@ -43,14 +43,14 @@ define([
 		
         // helper for saving a  project in dispatcher
         var saveProject = function(p) {
-            console.info("Save project " +  p.name)
+            console.info("Save project " +  p.name);
 			return googleCalendar()
 				.updateEvent(p.id, projectHelper.serialize(p))
 				.then(function() { return getProjects() })
         };
         // helper for saving a  project in dispatcher
         var insertProject = function(p) {
-            console.info("insert project " +  p.name)
+            console.info("insert project " +  p.name);
 			return googleCalendar()
 				.createEvent(projectHelper.serialize(p))
 				.then(function() { return getProjects() })
@@ -59,7 +59,7 @@ define([
         
         // helper for delete a  project 
         var deleteProject = function(p) {
-            console.info("Delete project ", p)
+            console.info("Delete project ", p);
 			return googleCalendar()
 			.deleteEvent(p.id)
 			.then(function() { return getProjects() })				
@@ -169,7 +169,7 @@ define([
 			return undo(payload)
         }).bindWithLoading(constants.PROJECT_REFRESH_LIST, function(payload) {
 			return getProjects()
-        }).bindWithLoading(constants.SESSION_LOADED, function(payload) {
+        }).bindWithLoading(constants.AUTHENTICATION_COMPLETED, function(payload) {
             console.info("Load session calendar projects");
             return getProjects();
         });

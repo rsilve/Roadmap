@@ -1,9 +1,8 @@
 define([], function () {
 
-    return function ($q, auth, $http) {
+    return function ($q, $http, AuthenticationStore) {
 		console.info("Loading Google Service");
 
-        var session = sessionStorage;
 
         /**
          * Constant used to construct all google api request
@@ -28,8 +27,8 @@ define([], function () {
                 c.url = google_api + c.path;
             }
             console.debug("Send request " + c.url);
-            return authOrSession(c).then(function(r) {
-				console.debug("request result", r);
+            return setAuthentication(c).then(function(r) {
+				//console.debug("request result", r);
 				return r.data 
 			}).catch(function(err) {
 				console.warn("Google", err);
@@ -37,25 +36,14 @@ define([], function () {
 			});
         }
 
-        function authOrSession(c) {
-            if (session.auth) {
-                c.headers = {
-                    // this header is required by google api
-                    "Authorization": session.auth,
-                    "Content-Type" : "application/json"
-                };
-                return $http(c)
-            } else {
-                return auth().then(function (auth) {
-                    console.debug("Got Google auth "+auth.access_token);
-                    c.headers = {
-                        // this header is required by google api
-                        "Authorization": auth.token_type + " " + auth.access_token,
-                        "Content-Type" :  "application/json"
-                    };
-                    return $http(c)
-                })
-            }
+        function setAuthentication(c) {
+            //console.log(AuthenticationStore.getAuth());
+            c.headers = {
+                // this header is required by google api
+                "Authorization": AuthenticationStore.getAuth(),
+                "Content-Type" : "application/json"
+            };
+            return $http(c)
         }
 
         /**

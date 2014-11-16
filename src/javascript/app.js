@@ -4,6 +4,7 @@ define([
     'directives/timebar',
     'directives/sessionAware',
     'directives/profileAware',
+    'directives/authAware',
     'services/ExecutionContext',
     'services/dispatcher',
     'services/GoogleAuth',
@@ -16,6 +17,7 @@ define([
     'stores/HistoryStore',
     'stores/ConfirmStore',
     'stores/ProfileStore',
+    'stores/AuthenticationStore',
     'components/planning/CalendarChooser',
     'components/planning/ProjectToolbar',
     'components/planning/Timebar',
@@ -26,9 +28,10 @@ define([
     'components/user/UserProjects',
     'components/user/OtherProjects'
 ], function (angular,
-             PikadayDirective, TimebarDirective, SessionAwareDirective, ProfileAwareDirective,
+             PikadayDirective, TimebarDirective, SessionAwareDirective, ProfileAwareDirective, AuthenticationAwareDirective,
              ExecutionContext, Dispatcher, GoogleAuth, Google, SessionStore,
              CalendarStore, ProjectStore, TimeStore, ProjectEditorStore, HistoryStore, ConfirmStore, ProfileStore,
+             AuthenticationStore,
              CalendarChooser, ProjectToolbar, Timebar, ProjectList, ProjectEditor, HistoryList, Confirm,
              UserProjects, OtherProjects) {
 
@@ -36,11 +39,12 @@ define([
 
     angular.module('Roadmap.services', [])
         .factory("GoogleAuth", ['$q', GoogleAuth])
-        .factory("Google", ['$q', "GoogleAuth", '$http', Google])
+        .factory("Google", ['$q', '$http', 'AuthenticationStore', Google])
         .factory("ExecutionContext", ['$q', ExecutionContext])
         .factory("dispatcher", ['$rootScope', '$q', "ExecutionContext", Dispatcher]);
 
     angular.module('Roadmap.stores', [])
+        .factory("AuthenticationStore", ['$rootScope', 'dispatcher', "GoogleAuth", AuthenticationStore])
         .factory("ConfirmStore", ['$rootScope', 'dispatcher', ConfirmStore])
         .factory("CalendarStore", ['$rootScope', 'dispatcher', 'Google', CalendarStore])
         .factory("ProjectEditorStore", ['$rootScope', 'dispatcher', 'ProjectStore', ProjectEditorStore])
@@ -48,7 +52,7 @@ define([
         .factory("TimeStore", ['$rootScope', 'dispatcher', TimeStore])
         .factory("HistoryStore", ['$rootScope', 'dispatcher', 'ProjectStore', HistoryStore])
         .factory("ProfileStore", ['$rootScope', 'dispatcher', 'Google', ProfileStore])
-        .factory("SessionStore", ['$rootScope', 'dispatcher', 'TimeStore', 'GoogleAuth', SessionStore]);
+        .factory("SessionStore", ['$rootScope', 'dispatcher', 'TimeStore', 'AuthenticationStore', SessionStore]);
 
     angular.module('Roadmap.components.planning', ['Roadmap.stores'])
         .controller('ProjectEditor', ['$scope', 'ProjectEditorStore', ProjectEditor])
@@ -67,6 +71,7 @@ define([
     angular.module('Roadmap.directives', [])
         .directive('pikaday', PikadayDirective)
         .directive('timebar', ['TimeStore', TimebarDirective])
+        .directive('authenticationAware', ['AuthenticationStore', AuthenticationAwareDirective])
         .directive('sessionAware', ['SessionStore', SessionAwareDirective])
         .directive('profileAware', ['ProfileStore', ProfileAwareDirective]);
 
