@@ -6,7 +6,6 @@ define(['services/Constants'], function (constants) {
 		return {
 			controller: function($scope) {
 				$scope.$on(AuthenticationStore.id, function() { $scope.$emit("dispatcher", constants.AUTHENTICATION_COMPLETED) })
-
 			}
 		};
     };

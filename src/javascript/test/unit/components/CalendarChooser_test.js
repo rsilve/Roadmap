@@ -3,14 +3,14 @@ define(['components/planning/CalendarChooser', 'services/Constants', 'app'], fun
     describe('CalendarChooser component', function () {
         var $rootScope;
 		var $scope;
-
-		// Load the module which contains the directive
+        var CalendarStore
+        // Load the module which contains the directive
 		beforeEach(function() {
             var injector = angular.injector(['Roadmap.services', 'Roadmap.stores',
                 'Google.mocks','ng']);
 
             var $controller = injector.get('$controller');
-            var CalendarStore = injector.get('CalendarStore');
+            CalendarStore = injector.get('CalendarStore');
             //CalendarStore.clear();
             $rootScope = injector.get('$rootScope');
             $scope = $rootScope.$new();
@@ -21,21 +21,21 @@ define(['components/planning/CalendarChooser', 'services/Constants', 'app'], fun
 		});
 
         it('should have an initial state ', function () {
-            expect($scope.list).toEqual(["A","B"]);
+            expect($scope.list).toEqual([]);
             expect($scope.calendar).toBeUndefined();
-
         });
 
         it('should notify for setting calendar ', function () {
-            $scope.$emit("dispatcher", constants.SET_CALENDAR, { calendar : 'id' });
+            $scope.choose({id : 'id'});
             $rootScope.$digest();
-            expect($scope.list).toEqual(["A","B"]);
-            expect($scope.calendar).toEqual('id');
+            expect(CalendarStore.getCalendar()).toEqual('id');
         });
 
-
-
-
+        it('should be notified on CalendarStore change', function () {
+            $scope.$emit("dispatcher", constants.SET_CALENDAR, { calendar : 'calendar' });
+            $rootScope.$digest();
+            expect($scope.calendar).toEqual("calendar");
+        });
 
     });
 
