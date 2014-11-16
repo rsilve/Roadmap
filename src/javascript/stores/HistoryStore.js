@@ -3,43 +3,63 @@ define([
 	'services/Constants',
 	'moment'
 ], function (Store, constants, moment) {
-	
+
+	/**
+	 * Factory definition for the TimeStore service
+	 */
 	return function (scope, dispatcher, ProjectStore) {
-		
+
+		// init the history data
 		var history = [];
 
-		// Store Object 
+		/**
+		 * Contructor of the HistoryStore
+		 * This service manage the history list accross application
+		 * @constructor
+		 */
         function HistoryStore() {}
-		// inherit from Store for events method
-        HistoryStore.prototype = new Store(scope, dispatcher);
+		HistoryStore.prototype = new Store(scope, dispatcher);
 
-		// get the history
+		/**
+		 * Get the history
+		 * @returns {Array}
+		 */
 		HistoryStore.prototype.getHistory = function() {
 			return history;
 		};
 
-		// get the last history item
+		/**
+		 * Get the last item history
+		 * @returns {T}
+		 */
 		HistoryStore.prototype.last = function() {
 			return history.slice(0,1).shift();
 		};
 
-
-
-
+		/**
+		 * helper to add an item in history
+		 * @param payload
+		 * @returns {Function}
+		 */
 		var push = function(payload) {
 			return function() { 
 				history.unshift({payload : payload, timestamp: moment()}) 
 			}
 		};
-		
+
+		/**
+		 * helper to remove last item history on undo action
+		 */
 		var undo = function() {
 			history.shift();
 		};
-		
-		// Create instance
+
+		/*
+		 * here whe create an instance of the store
+		 * and we register some actions in the dispatcher
+		 */
         var store = new HistoryStore();
 		
-		// bind to dispatcher
 		store.bind(constants.PROJECT_SAVE, function(payload, ec) {
 			return ec.waitFor([ProjectStore.dispatchIndex[constants.PROJECT_SAVE]]).
 			then(push(payload))
