@@ -3,6 +3,8 @@ define([], function () {
     return function ($q, auth, $http) {
 		console.info("Loading Google Service");
 
+        var session = sessionStorage;
+
         /**
          * Constant used to construct all google api request
          * @type {string}
@@ -20,27 +22,40 @@ define([], function () {
          * @returns {promise}
          */
         function request(c) {
-			console.debug("Send request " + c.path);
-            c = c || {};
+			c = c || {};
             c.method = c.method || "GET";
             if (!c.url) {
                 c.url = google_api + c.path;
             }
-			return auth.then(function (auth) {
-				console.debug("Got Google auth "+auth.access_token);
-                c.headers = {
-                    // this header is required by google api
-                    "Authorization": auth.token_type + " " + auth.access_token,
-                    "Content-Type" :  "application/json"
-                };
-                return $http(c)
-            }).then(function(r) { 
-				console.debug("request result", r)
+            console.debug("Send request " + c.url);
+            return authOrSession(c).then(function(r) {
+				console.debug("request result", r);
 				return r.data 
 			}).catch(function(err) {
 				console.warn("Google", err);
                 return $q.reject(err)
 			});
+        }
+
+        function authOrSession(c) {
+            if (session.auth) {
+                c.headers = {
+                    // this header is required by google api
+                    "Authorization": session.auth,
+                    "Content-Type" : "application/json"
+                };
+                return $http(c)
+            } else {
+                return auth().then(function (auth) {
+                    console.debug("Got Google auth "+auth.access_token);
+                    c.headers = {
+                        // this header is required by google api
+                        "Authorization": auth.token_type + " " + auth.access_token,
+                        "Content-Type" :  "application/json"
+                    };
+                    return $http(c)
+                })
+            }
         }
 
         /**

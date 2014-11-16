@@ -9,7 +9,7 @@ define([], function () {
         // auth object is deferred
         // use it before each request to be sure that
         // auth process is completed
-		return  (function() {
+		return  function() {
 			var deferred = $q.defer();
 			// User need to unblock authorization popup
 			// for this method work
@@ -22,7 +22,7 @@ define([], function () {
 	            }
 	        });
 	        return deferred.promise
-		})();
+		};
 
     };
 });

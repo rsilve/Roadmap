@@ -48,7 +48,7 @@ define([
         .factory("TimeStore", ['$rootScope', 'dispatcher', TimeStore])
         .factory("HistoryStore", ['$rootScope', 'dispatcher', 'ProjectStore', HistoryStore])
         .factory("ProfileStore", ['$rootScope', 'dispatcher', 'Google', ProfileStore])
-        .factory("SessionStore", ['$rootScope', 'dispatcher', 'TimeStore', 'ProfileStore', SessionStore]);
+        .factory("SessionStore", ['$rootScope', 'dispatcher', 'TimeStore', 'GoogleAuth', SessionStore]);
 
     angular.module('Roadmap.components.planning', ['Roadmap.stores'])
         .controller('ProjectEditor', ['$scope', 'ProjectEditorStore', ProjectEditor])

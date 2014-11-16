@@ -1,6 +1,6 @@
 define(['stores/Store', 'services/Constants'], function (Store, constants) {
 
-    return function (scope, dispatcher, TimeStore, ProfileStore) {
+    return function (scope, dispatcher, TimeStore, auth) {
 
         var session = sessionStorage;
 
@@ -13,7 +13,10 @@ define(['stores/Store', 'services/Constants'], function (Store, constants) {
         SessionStore.prototype = new Store(scope, dispatcher);
 
 
-
+        /**
+         * Create an instance and bind it on some events
+         * @type {SessionStore}
+         */
         var store = new SessionStore();
         store.bind(constants.SET_CALENDAR, function(payload) {
             console.info("Store calendar in session");
@@ -37,6 +40,16 @@ define(['stores/Store', 'services/Constants'], function (Store, constants) {
             console.info("Store time scale in session");
             session.timeScale = TimeStore.ZOOM_MONTHS;
         });
+
+        /**
+         * Store the auth token to be reused
+         */
+        if (! session.auth) {
+            auth().then(function (auth) {
+                console.info("Store auth token in session");
+                session.auth = auth.token_type + " " + auth.access_token;
+            });
+        }
 
         console.info("Loading Session Service");
         return session;

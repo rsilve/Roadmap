@@ -15,8 +15,30 @@
     </head>
     <body class="ng-cloak" session-aware profile-aware>
 
-		<div>{{profile.displayName}}</div>
-        <div>
+		<div class="toolbar">
+			<div class="toolbar-container" ng-controller="ProjectToolbar">
+				<div id="project-toolbar">
+					<i class="fa fa-refresh fa-lg pull-right clickable" ng-class="loading ? 'fa-spin' : ''" ng-show="calendar" ng-click="reload()"></i>
+					<i class="fa fa-list-ul fa-lg clickable calendar-reset" ng-click="calendarReset()"></i>
+					<span class="toolbar-separator"></span>
+					{{profile.displayName}}
+					<span class="toolbar-separator"></span>
+					<a href="/"><i class="fa fa-navicon"></i></a>
+				</div>
+			</div>
+		</div>
+		<div class="timebar" ng-controller="Timebar">
+			<div id="time-bar">
+				<div class="clearfix">
+					<div class="TimeBar-Prev" ng-click="previousQuarter()"><i class="fa fa-backward"></i></div>
+					<div class="TimeBar-Next" ng-click="nextQuarter()"><i class="fa fa-forward"></i></div>
+				</div>
+				<div class="TimeBar-Ticks clearfix">
+					<div ng-repeat="month in months" class="TimeBar-Month month" ng-class="month.meta">{{month.label}}</div>
+				</div>
+			</div>
+		</div>
+		<div class="content">
 			<div ng-controller="UserProjects" class="my-projects">
 				My projects
 				<ul>
@@ -36,6 +58,7 @@
 						<span style="color: #999; font-size: 0.8em">{{project.start.format("DD/MM/YYYY")}}
 							<i class="fa fa-long-arrow-right"></i>
 							{{project.end.format("DD/MM/YYYY")}}</span>
+						<div class="pull-right"><i class="fa fa-sign-in"></i></div>
 					</li>
 				</ul>
 			</div>

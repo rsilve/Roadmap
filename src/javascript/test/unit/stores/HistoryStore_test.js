@@ -42,7 +42,7 @@ define(['services/Constants', 'app', 'test/mocks/GoogleMockForCalendar', 'test/m
         it('should be notified of undo action', function () {
             $rootScope.$emit("dispatcher", constants.PROJECT_SAVE, { name: 'projectB' });
             $rootScope.$digest();
-            expect(historyStore.getHistory().length).toEqual(1)
+            expect(historyStore.getHistory().length).toEqual(1);
             $rootScope.$emit("dispatcher", constants.UNDO, {data : historyStore.last() });
             $rootScope.$digest();
             expect(historyStore.getHistory().length).toEqual(0)

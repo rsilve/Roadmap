@@ -39,7 +39,7 @@ define(['angular'], function (angular) {
             d.reject(value);
         };
 
-        return auth
+        return function() {return auth};
 
     }
 

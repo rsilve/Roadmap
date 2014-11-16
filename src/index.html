@@ -13,7 +13,7 @@
         <script type="text/javascript" src="//apis.google.com/js/client.js"></script>
 
     </head>
-    <body class="ng-cloak" session-aware>
+    <body class="ng-cloak" session-aware profile-aware>
         <div class="chooser" ng-controller="CalendarChooser">
             <div id="chooser" class="calendar-chooser" ng-hide="calendar">
 				<ul class="calendar-list" >
@@ -53,6 +53,9 @@
 					<span class="clickable" ng-click="zoomDays()" ng-class="isDaysScale()">Days</span>&nbsp;
 					<span class="clickable" ng-click="zoomWeeks()" ng-class="isWeeksScale()">Weeks</span>&nbsp;
 					<span class="clickable" ng-click="zoomMonths()" ng-class="isMonthsScale()">Months</span>&nbsp;
+					<span class="toolbar-separator"></span>
+					{{profile.displayName}}&nbsp;
+					<a href="user.html"><i class="fa fa-user"></i></a>
 				</div>
 			</div>
         </div>
@@ -67,7 +70,7 @@
 				</div>
             </div>
         </div>
-        <div class="grid-content">
+        <div class="grid-content content">
             <div id="project-list" ng-controller="ProjectList">
                 <ul class="ProjectList">
 					<li ng-repeat="project in projects track by project.id" class="Project" >
