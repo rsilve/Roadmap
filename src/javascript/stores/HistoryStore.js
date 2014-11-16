@@ -13,8 +13,8 @@ define([
 		var history = [];
 
 		/**
-		 * Contructor of the HistoryStore
-		 * This service manage the history list accross application
+		 * Constructor of the HistoryStore
+		 * This service manage the history list across application
 		 * @constructor
 		 */
         function HistoryStore() {}
